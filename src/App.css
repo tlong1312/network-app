@@ -1,8 +1,143 @@
-
 body {
   margin: 0;
   padding: 0;
 }
+
 .main-color {
-  background-color: #d9b2f3 ;
-  }
+  background-color: #d9b2f3;
+}
+
+
+.search-form {
+  position: relative;
+  width: 100%;
+  /* Điều chỉnh độ rộng tối đa */
+}
+
+.search-input {
+  width: 100%;
+  height: 50px;
+  padding-left: 45px;
+  /* Để chừa khoảng trống cho icon */
+  border-radius: 25px;
+  /* Làm tròn góc */
+  border: 1px solid #ccc;
+  outline: none;
+  transition: 0.3s;
+}
+
+.search-input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.search-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: #555;
+}
+
+.btn-custom {
+  background-color: #d9b2f3;
+  color: white;
+}
+
+.btn-custom:hover {
+  background-color: #c991ee;
+}
+
+
+
+/* Sidebar */
+.sidebar {
+  background: white;
+  border-right: 1px solid #dee2e6;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar h2 {
+  color: #333;
+}
+
+.list-menu-search li {
+  transition: background 0.3s ease-in-out;
+  border-radius: 8px;
+}
+
+.list-menu-search li a {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.3s ease-in-out;
+}
+
+.list-menu-search li a:hover,
+.list-menu-search li a.active {
+  background: #b885da;
+  color: white !important;
+}
+
+.list-menu-search li a i {
+  color: #c07bed;
+  transition: color 0.3s ease-in-out;
+}
+
+.list-menu-search li a:hover i,
+.list-menu-search li a.active i {
+  color: white;
+}
+
+/* Main Content */
+.p-4 {
+  padding: 20px;
+}
+
+.btn-add-friend,
+.btn-comment {
+  border: 1px solid #c07bed;
+  color: #c07bed;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-add-friend:hover,
+.btn-comment:hover {
+  color: white;
+  background-color: #c07bed;
+}
+
+.border-content {
+  border-radius: 5px;
+  border: 2px solid #dbdbdbb6;
+}
+
+.info-user {
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.info-user:hover {
+  color: #c07bed;
+}
+
+.list-user {
+  border: 1px solid #f5e6ff98;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.form-content {
+  background-color: #f8e5f870;
+}
+
+.content,
+.sidebar {
+  background-color: white;
+  border-radius: 8px;
+}

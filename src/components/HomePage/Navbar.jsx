@@ -1,9 +1,20 @@
-import React from 'react'
-import logo from '../../assets/logo.png'
-import avatar from '../../assets/avatar.png'
-import notification from '../../assets/notification.png'
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import logo from '../../assets/logo.png';
+import avatar from '../../assets/avatar.png';
+import notification from '../../assets/notification.png';
+
 
 const Navbar = () => {
+    const [query, setQuery] = useState('');
+    const navigate = useNavigate();
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        if (query.trim()) {
+            navigate(`/search?q=${query}`);
+        }
+    };
     return (
         <div className='navbar navbar-expand-lg navbar-light main-color py-3'>
             <div className='container-fluid'>
@@ -26,12 +37,16 @@ const Navbar = () => {
                 <div className='collapse navbar-collapse' id='navbarNavDropdown'>
                      <ul className='navbar-nav mx-auto w-100 d-flex justify-content-center'>
                         <li className='nav-item w-100 mb-3 mb-lg-0 mt-3 mt-lg-0' style={{ maxWidth: '600px' }}>
-                            <input 
-                                type='search' 
-                                className='form-control' 
-                                placeholder='Search Posts, Friends...' 
-                                style={{ height: '50px' }} 
-                            />
+                            <form className="search-form d-flex" onSubmit={handleSubmit}>
+                                <i className="fa fa-search search-icon"></i>
+                                <input
+                                    type="search"
+                                    className="form-control search-input"
+                                    placeholder="Tìm kiếm bài viết, bạn bè, ..."
+                                    value={query}
+                                    onChange={(e) => setQuery(e.target.value)}
+                                />
+                            </form>
                         </li>
                     </ul>
                     <ul className='navbar-nav ms-auto'>
