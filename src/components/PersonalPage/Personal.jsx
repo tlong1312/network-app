@@ -29,10 +29,10 @@ const Personal = () => {
      
       <div className='container-fluid card p-4 shadow'>
         <div className='container-fluid d-flex gap-4'>
-          <div className='sidebar p-5 shadow' style={{width: "20%", height: "100vh"}}>
+          <div className='sidebar p-4 shadow' style={{width: "20%", height: "100vh"}}>
             <h2 className='d-flex justify-content-center'>Giới thiệu</h2>
-            <h5>Học tại trường Đại học Sài Gòn</h5>
-            <h5>Mối quan hệ: Hẹn hò</h5>
+            <h6>Học tại trường Đại học Sài Gòn</h6>
+            <h6>Mối quan hệ: Hẹn hò</h6>
             <button type="submit" className="btn btn-secondary w-100 main-color search-input">Cập nhật tiểu sử</button>
           </div>
        
@@ -49,8 +49,24 @@ const Personal = () => {
                 <input type="text" className="form-control search-input " placeholder="Bạn đang nghĩ gì" />
               </div>
             </div>
-            <div className='card mt-4 p-3 shadow' style={{width: "90%", height: "90%"}}>
-
+            <div className='card mt-4 p-3 shadow d-flex' style={{width: "90%", height: "90%"}}>
+              <div className='d-flex mt-3 ms-3'>
+                <img 
+                  src={avatar}
+                  alt="avatar"
+                  style={{ width: "50px", height: "50px" }}
+                />
+                <div className='d-flex flex-column ms-3 mt-1'>
+                  <h6>TieuLong Dang</h6>
+                  <small className='text-muted'>2 giờ trước</small>
+                </div>
+              </div>
+              <p className='mt-1 mb-1'>Đây là một bài viết mẫu.</p>
+              <img
+                src="https://placehold.co/600x300"
+                alt="Post"
+                className='img-fluid rounded mb-2'
+              />
             </div>
           </div>
         </div>
