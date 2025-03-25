@@ -9,6 +9,9 @@ import PersonalPage from './components/PersonalPage/Personal';
 function App() {
   return (
     <Router>
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+      </Routes>
       <Navbar />
       <Routes>
         <Route path="/" element={<HomePage />} />
@@ -18,9 +21,6 @@ function App() {
       </Routes>
       <Routes>
         <Route path="/personal" element={<PersonalPage />} />
-      </Routes>
-      <Routes>
-        <Route path="/login" element={<LoginPage />} />
       </Routes>
     </Router>
   );
