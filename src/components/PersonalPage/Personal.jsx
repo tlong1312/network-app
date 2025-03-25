@@ -33,6 +33,7 @@ const Personal = () => {
             <h2 className='d-flex justify-content-center'>Giới thiệu</h2>
             <h6>Học tại trường Đại học Sài Gòn</h6>
             <h6>Mối quan hệ: Hẹn hò</h6>
+            <h6>Đang sống tại Thành phố Hồ Chí Minh</h6>
             <button type="submit" className="btn btn-secondary w-100 main-color search-input">Cập nhật tiểu sử</button>
           </div>
        
@@ -63,10 +64,35 @@ const Personal = () => {
               </div>
               <p className='mt-1 mb-1'>Đây là một bài viết mẫu.</p>
               <img
-                src="https://placehold.co/600x300"
+                src="https://placehold.co/800x300"
                 alt="Post"
-                className='img-fluid rounded mb-2'
+                className='img-fluid rounded '
               />
+
+
+              <div className='mt-3 d-flex'>
+                <img
+                  src="https://placehold.co/50x50"
+                  alt="Post"
+                />
+                <div className='flex-column'>
+                  <h5 className='ms-2'>TieuLong Dang</h5>
+                  <h6 className='ms-4 mt-2'>So cool</h6>
+                </div>
+              </div>
+
+
+              <div className="mt-auto d-flex align-items-end">
+                <img 
+                  src={avatar}
+                  alt="avatar"
+                  className='ms-2'
+                  style={{ width: "50px", height: "50px" }}
+                />
+                <label className="form-label"></label>
+                <input type="text" className="form-control ms-3" style={{width:"90%"}} placeholder="Bình luận" />
+                <button type="submit" className="btn btn-secondary ms-3 main-color">Đăng</button>
+              </div>
             </div>
           </div>
         </div>
