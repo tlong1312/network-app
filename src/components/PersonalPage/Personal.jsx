@@ -74,6 +74,8 @@ const Personal = () => {
                 <img
                   src="https://placehold.co/50x50"
                   alt="Post"
+                  className='rounded-circle'
+                  style={{ width: "50px", height: "50px" }}
                 />
                 <div className='flex-column'>
                   <h5 className='ms-2'>TieuLong Dang</h5>
