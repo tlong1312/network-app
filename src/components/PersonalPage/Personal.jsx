@@ -22,7 +22,7 @@ const Personal = () => {
         src={avatar} 
         alt="avatar"
         className='mb-3 mt-3'
-        style = {{width: '100px', height: '100px'}}
+        style = {{width: '70px', height: '70px'}}
         />
         <h3 className='text-center ms-4'>TieuLong Dang</h3>
       </div>
@@ -34,7 +34,7 @@ const Personal = () => {
             <h6>Học tại trường Đại học Sài Gòn</h6>
             <h6>Mối quan hệ: Hẹn hò</h6>
             <h6>Đang sống tại Thành phố Hồ Chí Minh</h6>
-            <button type="submit" className="btn btn-secondary w-100 main-color search-input">Cập nhật tiểu sử</button>
+            <button type="submit" className="btn btn-secondary w-100 main-color rounded-pill">Cập nhật tiểu sử</button>
           </div>
        
           <div className='sidebar p-3 d-flex flex-column align-items-center shadow' style={{width: "80%", height: "100vh"}}>
@@ -51,7 +51,7 @@ const Personal = () => {
               </div>
             </div>
             <div className='card mt-4 p-3 shadow d-flex' style={{width: "90%", height: "90%"}}>
-              <div className='d-flex mt-3 ms-3'>
+              <div className='d-flex ms-3'>
                 <img 
                   src={avatar}
                   alt="avatar"
@@ -64,7 +64,7 @@ const Personal = () => {
               </div>
               <p className='mt-1 mb-1'>Đây là một bài viết mẫu.</p>
               <img
-                src="https://placehold.co/800x300"
+                src="https://placehold.co/1000x300"
                 alt="Post"
                 className='img-fluid rounded '
               />
