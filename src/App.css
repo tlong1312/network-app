@@ -212,6 +212,27 @@ body {
 .register-form button:hover {
   background-color: #8c3390;
 }
+/* Nút quay lại */
+.btn-back {
+  background-color: #a53db0;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.btn-back:hover {
+  background-color: #8c3390;
+  transform: scale(1.05);
+}
+
+.btn-back:active {
+  background-color: #721e75;
+  transform: scale(0.95);
+}
 
 /* Sóng màu tím */
 .wave-top,

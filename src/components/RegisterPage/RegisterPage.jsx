@@ -40,6 +40,7 @@ const RegisterPage = () => {
         <input type="password" name="password" placeholder="Mật khẩu" onChange={handleChange} required />
         <input type="password" name="confirmPassword" placeholder="Xác nhận mật khẩu" onChange={handleChange} required />
         <button type="submit">Đăng ký</button>
+        <button type="button">Quay lại</button>
       </form>
 
       {/* Sóng tím dưới */}
