@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
 import Post from './Post';
+import PostModal from './PostModal';
 
 const MainContent = () => {
 
-    const [comment, setComment] = useState('');
-    const [postContent, setPostContent] = useState('');
     const [posts, setPosts] = useState([
         {
             id: 1,
@@ -18,47 +17,24 @@ const MainContent = () => {
             comments: []
         },
     ]);
+    const [showModal, setShowModal] = useState(false);
 
-    // const handlePost = () => {
-    //     if (postContent.trim() !== '') {
-    //         const newPost = {
-    //             id: Date.now(),
-    //             author: 'TieuLong Dang',
-    //             avatar: 'https://placehold.co/40x40',
-    //             timestamp: 'Just now',
-    //             content: postContent,
-    //             image: null,
-    //             likes: 0,
-    //             comments: 0,
-    //         };
-    //         setPosts([newPost, ...posts]);
-    //         setPostContent(''); // Reset nội dung sau khi đăng
-    //     }
-    // };
-
-    const handleAddComment = (postId) => {
-        if (comment.trim() !== '') {
-            const newComment = {
+    const handlePost = (content, image) => {
+            const newPost = {
                 id: Date.now(),
-                author: 'Anonymous',
+                author: 'TieuLong Dang',
                 avatar: 'https://placehold.co/40x40',
-                content: comment,
                 timestamp: 'Just now',
+                content,
+                image: image ? URL.createObjectURL(image) : null,
+                likes: 0,
+                commentsCount: 0,
+                comments: [],
             };
-            setPosts(
-                posts.map((post) => 
-                    post.id === postId
-                    ? {
-                        ...post,
-                        comments: [...post.comments, newComment],
-                        commentsCount: post.commentsCount + 1,
-                    }
-                    : post
-                )
-            );
-            setComment('');
-        }
+            setPosts([newPost, ...posts]);
     };
+
+    
 
     return (
         <div className="col-lg-7 bg-white p-3">
@@ -92,22 +68,26 @@ const MainContent = () => {
             </div>
 
             <div className="mb-4">
-                <div className="d-flex align-items-center">
-                    <textarea
+                <div className="d-flex align-items-center justify-content-between">
+                    <input
+                        type="text"
+                        readOnly
                         className="form-control me-3"
                         rows="1"
                         placeholder="What do you have in mind?"
-                        value={postContent}
-                        onChange={(e) => setPostContent(e.target.value)}
-                    ></textarea>
-                    {/* <button className="btn btn-primary" onClick={handlePost}> */}
-                    <button className="btn btn-primary">
-                        <i className="fas fa-image"></i>
-                    </button>
+                        onFocus={() => setShowModal(true)}
+                    ></input>
                 </div>
             </div>
 
-            <Post posts={posts} handleAddComment={handleAddComment} comment={comment} setComment={setComment}/>
+            {showModal && (
+                <PostModal 
+                    onClose={() => setShowModal(false)}
+                    onPost={handlePost}
+                />
+            )}
+
+            <Post posts={posts} setPosts={setPosts} />
 
         </div>
     )

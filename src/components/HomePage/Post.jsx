@@ -1,8 +1,34 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 const Post = (props) => {
 
-    const { posts, handleAddComment, comment, setComment } = props;
+    const { posts, setPosts} = props;
+
+    const [comment, setComment] = useState('');
+    
+    const handleAddComment = (postId) => {
+        if (comment.trim() !== '') {
+            const newComment = {
+                id: Date.now(),
+                author: 'Anonymous',
+                avatar: 'https://placehold.co/40x40',
+                content: comment,
+                timestamp: 'Just now',
+            };
+            setPosts(
+                posts.map((post) => 
+                    post.id === postId
+                    ? {
+                        ...post,
+                        comments: [...post.comments, newComment],
+                        commentsCount: post.commentsCount + 1,
+                    }
+                    : post
+                )
+            );
+            setComment('');
+        }
+    };
 
   return (
     <div className='card shadow p-3 mb-4'>
@@ -27,6 +53,7 @@ const Post = (props) => {
                                 src={post.image}
                                 alt="Post"
                                 className='img-fluid rounded mb-2'
+                                style={{ width: '800px', height: '300px' }}
                             />
                         )}
                         <div className="d-flex mb-3">
