@@ -7,6 +7,8 @@ import avatar from '../../assets/icon/avatar.png';
 
 const MainContent = () => {
 
+    const [currentStoryIndex, setCurrentStoryIndex] = useState(0);
+
     const [currentUser] = useState({
         id: 1,
         name: 'TieuLong Dang',
@@ -16,9 +18,21 @@ const MainContent = () => {
     const [stories, setStories] = useState([
         {
             id: 1,
-            image: 'https://placehold.co/80x80',
             avatar: currentUser.avatar,
             authorName: currentUser.name,
+            stories: [
+                { id: 1, image: 'https://placehold.co/800x300' },
+                { id: 2, image: 'https://placehold.co/300x300' },
+            ],
+        },
+        {
+            id: 2,
+            avatar: 'https://placehold.co/80x80',
+            authorName: 'John Doe',
+            stories: [
+                { id: 1, image: 'https://placehold.co/500x500' },
+                { id: 2, image: 'https://placehold.co/600x600' },
+            ],
         },
     ]);
 
@@ -28,10 +42,14 @@ const MainContent = () => {
         const newStory = {
             id: Date.now(),
             image: image ? URL.createObjectURL(image) : null,
-            avatar: currentUser.avatar,
-            authorName: currentUser.name,
         };
-        setStories([newStory, ...stories]);
+        setStories((prevStories) =>
+            prevStories.map((story) =>
+                story.id === currentUser.id
+                    ? { ...story, stories: [...story.stories, newStory] }
+                    : story
+            )
+        );
     }
 
     const [showModalStory, setShowModalStory] = useState(false);
@@ -52,21 +70,21 @@ const MainContent = () => {
     const [showModalPost, setShowModalPost] = useState(false);
 
     const handlePost = (content, image) => {
-            const newPost = {
-                id: Date.now(),
-                author: 'TieuLong Dang',
-                avatar: 'https://placehold.co/40x40',
-                timestamp: 'Just now',
-                content,
-                image: image ? URL.createObjectURL(image) : null,
-                likes: 0,
-                commentsCount: 0,
-                comments: [],
-            };
-            setPosts([newPost, ...posts]);
+        const newPost = {
+            id: Date.now(),
+            author: 'TieuLong Dang',
+            avatar: 'https://placehold.co/40x40',
+            timestamp: 'Just now',
+            content,
+            image: image ? URL.createObjectURL(image) : null,
+            likes: 0,
+            commentsCount: 0,
+            comments: [],
+        };
+        setPosts([newPost, ...posts]);
     };
 
-    
+
 
     return (
         <div className="col-lg-7 bg-white p-3">
@@ -90,8 +108,8 @@ const MainContent = () => {
                         </div>
                     </div>
                     {stories.map((story) => (
-                        <div 
-                            className='me-3' 
+                        <div
+                            className='me-3'
                             key={story.id}
                             style={{ cursor: 'pointer' }}
                             onClick={() => setSelectedStory(story)}
@@ -107,18 +125,47 @@ const MainContent = () => {
                 </div>
             </div>
 
-            {selectedStory && ( 
+            {selectedStory && (
                 <div className="modal-overlay">
                     <div className="modal-content">
-                        <h5>{selectedStory.authorName}</h5>
-                        <img
-                            src={selectedStory.image}
-                            alt={selectedStory.authorName}
-                            style={{ width: '100%', height: 'auto', borderRadius: '8px' }}
-                        />
+                        <h5>{selectedStory.authorName}'s Stories</h5>
+                        <div className="position-relative">
+                            <img
+                                src={selectedStory.stories[currentStoryIndex].image}
+                                alt={`Story ${currentStoryIndex + 1}`}
+                                style={{ width: '100%', height: 'auto', borderRadius: '8px' }}
+                            />
+
+                            <button
+                                className="btn btn-secondary position-absolute start-0 top-50 translate-middle-y rounded-circle custom-btn"
+                                style={{ zIndex: 1 }}
+                                onClick={() =>
+                                    setCurrentStoryIndex((prevIndex) =>
+                                        prevIndex > 0 ? prevIndex - 1 : selectedStory.stories.length - 1
+                                    )
+                                }
+                            >
+                                <i className="fas fa-chevron-left"></i> 
+                            </button>
+
+                            <button
+                                className="btn btn-secondary position-absolute end-0 top-50 translate-middle-y rounded-circle custom-btn"
+                                style={{ zIndex: 1 }}
+                                onClick={() =>
+                                    setCurrentStoryIndex((prevIndex) =>
+                                        prevIndex < selectedStory.stories.length - 1 ? prevIndex + 1 : 0
+                                    )
+                                }
+                            >
+                                <i className="fas fa-chevron-right"></i> 
+                            </button>
+                        </div>
                         <button
                             className="btn btn-secondary mt-3"
-                            onClick={() => setSelectedStory(null)} 
+                            onClick={() => {
+                                setSelectedStory(null);
+                                setCurrentStoryIndex(0);
+                            }}
                         >
                             Close
                         </button>
@@ -127,7 +174,7 @@ const MainContent = () => {
             )}
 
             {showModalStory && (
-                <StoryModal 
+                <StoryModal
                     onClose={() => setShowModalStory(false)}
                     onStory={handStory}
                 />
@@ -147,13 +194,13 @@ const MainContent = () => {
             </div>
 
             {showModalPost && (
-                <PostModal 
+                <PostModal
                     onClose={() => setShowModalPost(false)}
                     onPost={handlePost}
                 />
             )}
 
-            <Post posts={posts} setPosts={setPosts} />
+            <Post posts={posts} setPosts={setPosts} currentUser={currentUser}/>
 
         </div>
     )

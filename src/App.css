@@ -162,3 +162,24 @@ body {
   width: 600px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
+
+.custom-btn {
+  width: 40px; 
+  height: 40px;
+  background-color: rgba(0, 0, 0, 0.2); 
+  color: white; 
+  border: none; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+  transition: background-color 0.3s ease; 
+}
+
+.custom-btn:hover {
+  background-color: rgba(0, 0, 0, 0.5); 
+}
+
+.custom-btn:focus {
+  outline: none; 
+}

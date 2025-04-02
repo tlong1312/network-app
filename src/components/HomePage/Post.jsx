@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 const Post = (props) => {
 
-    const { posts, setPosts} = props;
+    const { posts, setPosts, currentUser} = props;
 
     const [comment, setComment] = useState('');
     
@@ -10,8 +10,8 @@ const Post = (props) => {
         if (comment.trim() !== '') {
             const newComment = {
                 id: Date.now(),
-                author: 'Anonymous',
-                avatar: 'https://placehold.co/40x40',
+                author: currentUser.name,
+                avatar: currentUser.avatar,
                 content: comment,
                 timestamp: 'Just now',
             };
@@ -74,7 +74,7 @@ const Post = (props) => {
                                             src={cmt.avatar}
                                             alt={cmt.author}
                                             className="me-3 rounded-circle"
-                                            style={{ width: '30px', height: '30px' }}
+                                            style={{ width: '50px', height: '50px' }}
                                         />
                                         <div className="card p-2 rounded shadow w-100">
                                             <div className="fw-bold">{cmt.author}</div>
