@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
 const PostStatistics = () => {
-  const [showTable, setShowTable] = useState(false); // Hiển thị bảng thống kê
-  const [selectedPost, setSelectedPost] = useState(null); // Bài viết đang chọn để hiển thị chi tiết
+  const [showTable, setShowTable] = useState(false);
+  const [selectedPost, setSelectedPost] = useState(null);
   const [showTotal, setShowTotal] = useState(true);
 
   const users = [
