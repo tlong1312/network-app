@@ -3,6 +3,7 @@ import React, { useState } from "react";
 const PostStatistics = () => {
   const [showTable, setShowTable] = useState(false); // Hiển thị bảng thống kê
   const [selectedPost, setSelectedPost] = useState(null); // Bài viết đang chọn để hiển thị chi tiết
+  const [showTotal, setShowTotal] = useState(true);
 
   const users = [
     { id: 1, hoTen: "Trần Hoàng Long", soBaiViet: 12, soLuotTuongTac: 150 },
@@ -20,6 +21,24 @@ const PostStatistics = () => {
     5: { id: 105, likes: 20, comments: 10, shares: 3 }
   };
 
+  const handleShowTotal = () => {
+    setShowTotal(true);
+    setShowTable(false);
+  };
+  
+  const handleShowTable = () =>   {
+    setShowTotal(false);
+    setShowTable(true);
+  };
+
+  const total = {
+    soBaiDaDang: 1200,
+    soBaiViPham: 45,
+    soBaiChoDuyet: 80,
+    soTaiKhoanDaDangKy: 5000
+  };
+  
+
   return (
     <div>
       {/* Header */}
@@ -30,10 +49,10 @@ const PostStatistics = () => {
       {/* Nút chuyển đổi */}
       <div className="container-fluid" style={{ height: "20%", backgroundColor: "black" }}>
         <div className="d-flex justify-content-center">
-          <button type="button" className="btn w-50">
+          <button type="button" className="btn w-50"onClick={handleShowTotal}>
             <h5 style={{ color: "white" }}>Tổng quan</h5>
           </button>
-          <button type="button" className="btn w-50" onClick={() => setShowTable(!showTable)}>
+          <button type="button" className="btn w-50" onClick={handleShowTable}>
             <h5 style={{ color: "white" }}>Thống kê theo người dùng</h5>
           </button>
         </div>
@@ -70,6 +89,17 @@ const PostStatistics = () => {
           </table>
         </div>
       )}
+
+      {showTotal && (
+          <div className="col-lg-8 d-flex flex-column justify-content-center container-fluid" style={{height:"80vh"}}>
+            <div>
+              <h5>Số bài đã đăng trên hệ thống: {total.soBaiDaDang}</h5>
+              <h5>Số bài vi phạm: {total.soBaiViPham}</h5>
+              <h5>Số bài chờ duyệt: {total.soBaiChoDuyet}</h5>
+              <h5>Số tài khoản đã đăng ký: {total.soTaiKhoanDaDangKy}</h5>
+            </div>
+          </div>
+      )}  
 
       {/* Form chi tiết bài viết */}
       {selectedPost && (
