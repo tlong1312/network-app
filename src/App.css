@@ -142,7 +142,6 @@ body {
   border-radius: 8px;
 }
 
-<<<<<<< HEAD
 /* Định dạng chung */
 body {
   font-family: Arial, sans-serif;
@@ -252,6 +251,7 @@ body {
   bottom: 0;
 }
 
+
 /* Admin Header */
 .admin-header {
   height: 60px;
@@ -284,7 +284,6 @@ body {
   min-height: calc(100vh - 60px);
 }
 
-=======
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -326,4 +325,3 @@ body {
 .custom-btn:focus {
   outline: none; 
 }
->>>>>>> tlong
