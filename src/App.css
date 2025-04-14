@@ -142,6 +142,7 @@ body {
   border-radius: 8px;
 }
 
+<<<<<<< HEAD
 /* Định dạng chung */
 body {
   font-family: Arial, sans-serif;
@@ -283,3 +284,46 @@ body {
   min-height: calc(100vh - 60px);
 }
 
+=======
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 600px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.custom-btn {
+  width: 40px; 
+  height: 40px;
+  background-color: rgba(0, 0, 0, 0.2); 
+  color: white; 
+  border: none; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+  transition: background-color 0.3s ease; 
+}
+
+.custom-btn:hover {
+  background-color: rgba(0, 0, 0, 0.5); 
+}
+
+.custom-btn:focus {
+  outline: none; 
+}
+>>>>>>> tlong

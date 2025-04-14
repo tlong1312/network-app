@@ -1,12 +1,19 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+
+import React from 'react'
+import LeftMenu from './LeftMenu'
+import MainContent from './MainContent'
+import RightMenu from './RightMenu'
+
 const HomePage = () => {
-    return (
-        <div className="homepage">
+  return (
+    <div className="container-fluid">
+      <div className="row min-vh-100">
+        <LeftMenu />
+        <MainContent />
+        <RightMenu />
+      </div>
+    </div>
+  )
+}
 
-
-        </div>
-    );
-};
-
-export default HomePage;
+export default HomePage

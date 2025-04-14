@@ -2,7 +2,11 @@ import './App.css';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 <<<<<<< HEAD
 import SearchPage from "./components/SearchPage/searchPage";
+<<<<<<< HEAD
 import RegisterPage from './components/RegisterPage/RegisterPage';
+=======
+import HomePage from './components/HomePage/HomePage';
+>>>>>>> tlong
 
 
 =======
@@ -22,6 +26,12 @@ function App() {
     <Router>
       <Routes>
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+        <Route path="/" element={<HomePage />} />
+      </Routes>
+      <Routes>
+>>>>>>> tlong
         <Route path="/search" element={<SearchPage />} />
         <Route path="/register" element={<RegisterPage />} />
 =======

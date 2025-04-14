@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo.png';
-import avatar from '../../assets/avatar.png';
+import avatar from '../../assets/icon/avatar.png';
 import notification from '../../assets/notification.png';
 
 
