@@ -325,3 +325,41 @@ body {
 .custom-btn:focus {
   outline: none; 
 }
+/* admin post */
+/* Căn chỉnh toàn bộ trang PostManagement */
+.admin-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f8f9fa;
+  padding: 20px;
+}
+
+.admin-header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  margin-bottom: 20px;
+}
+
+.back-button {
+  font-size: 18px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: #007bff;
+}
+
+.post-item {
+  background: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.post-item p {
+  margin: 0;
+}
