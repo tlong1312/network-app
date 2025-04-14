@@ -141,6 +141,7 @@ body {
   background-color: white;
   border-radius: 8px;
 }
+
 /* Định dạng chung */
 body {
   font-family: Arial, sans-serif;
@@ -249,3 +250,36 @@ body {
 .wave-bottom {
   bottom: 0;
 }
+
+/* Admin Header */
+.admin-header {
+  height: 60px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Admin Sidebar */
+.admin-sidebar {
+  border-right: 1px solid #dee2e6;
+}
+
+.sidebar-menu .nav-link {
+  padding: 10px 15px;
+  border-radius: 4px;
+  transition: all 0.3s;
+}
+
+.sidebar-menu .nav-link:hover {
+  background-color: #f8f9fa;
+}
+
+.sidebar-menu .nav-link.active {
+  background-color: #e9f5ff;
+  font-weight: 500;
+}
+
+/* Admin Content */
+.admin-content {
+  background-color: #f8f9fa;
+  min-height: calc(100vh - 60px);
+}
+
