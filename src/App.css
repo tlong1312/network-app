@@ -162,7 +162,7 @@ body {
 
 /* Form đăng ký */
 .register-form {
-  background: white;
+  background: rgb(231, 224, 231);
   padding: 30px;
   border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
@@ -185,7 +185,7 @@ body {
   margin: 8px 0;
   border: 1px solid #ddd;
   border-radius: 5px;
-  background-color: white;
+  background-color: rgb(162, 110, 190);
   outline: none;
   transition: border 0.3s ease;
 }

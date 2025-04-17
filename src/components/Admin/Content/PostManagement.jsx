@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Table, InputGroup, FormControl, Button, Modal } from "react-bootstrap";
 import { FaSearch, FaArrowLeft } from "react-icons/fa";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "../../App.css"; // Import your CSS file for styling
+import "../../../App.css"; // Import your CSS file for styling
 // Phải có export default
 // components/Admin/Dashboard.jsx
 const PostManagement = () => {

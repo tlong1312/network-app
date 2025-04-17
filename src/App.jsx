@@ -1,7 +1,5 @@
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
-
 import MainLayout from "./components/Layouts/MainLayout";
 import AdminLayout from "./components/Layouts/AdminLayout";
 import SearchPage from "./components/HomePage/SearchPage/searchPage";
@@ -12,15 +10,16 @@ import HomePage from "./components/HomePage/HomePage";
 import StatisticalManagement from "./components/Admin/Content/StatisticalManagement";
 import UserManagement from "./components/Admin/Content/UserManagement";
 import PostManagement from "./components/Admin/Content/PostManagement";
+import LoginPage from "./components/HomePage/LoginPage/RegisterPage";
 function App() {
   return (
     <Router>
       <Routes>
-
         {/* Public Routes */}
         <Route element={<MainLayout />}>
           <Route index element={<HomePage />} />
           <Route path="search" element={<SearchPage />} />
+          <Route path="RegisterPage" element={<LoginPage />} />
         </Route>
 
         {/* Admin Routes */}
@@ -35,6 +34,7 @@ function App() {
             <Route path="post-management" element={<PostManagement />} />
           </Route>
         </Route>
+
       </Routes>
     </Router>
   );
