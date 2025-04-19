@@ -11,6 +11,8 @@ import StatisticalManagement from "./components/Admin/Content/StatisticalManagem
 import UserManagement from "./components/Admin/Content/UserManagement";
 import PostManagement from "./components/Admin/Content/PostManagement";
 import LoginPage from "./components/HomePage/LoginPage/RegisterPage";
+import Login from './components/HomePage/LoginPage/login';
+import InfoUser from './components/HomePage/InfoUser/InfoUser';
 function App() {
   return (
     <Router>
@@ -20,8 +22,10 @@ function App() {
           <Route index element={<HomePage />} />
           <Route path="search" element={<SearchPage />} />
           <Route path="RegisterPage" element={<LoginPage />} />
+          <Route path="login" element={<Login />} />
+          <Route path="info-user" element={<InfoUser />} />
         </Route>
-
+        
         {/* Admin Routes */}
         <Route path="admin/login" element={<AdminLogin />} />
         <Route path="admin" element={<AdminLayout />}>
