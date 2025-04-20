@@ -4,7 +4,7 @@ import { useState } from 'react';
 // Phải có export default
 // components/Admin/Dashboard.jsx
 const StatisticalManagement = () => {
-    const [showTable, setShowTable] = useState(true);
+    // const [showTable, setShowTable] = useState(true);
     const [selectedPost, setSelectedPost] = useState(null);
     const users = [
         { id: 1, hoTen: "Trần Hoàng Long", soBaiViet: 12, soLuotTuongTac: 150 },
@@ -23,10 +23,10 @@ const StatisticalManagement = () => {
     return (
         <div className="dashboard">
             <h1>Quản lý bài đăng người dùng</h1>
-                <button className="btn btn-primary" onClick={() => setShowTable(true)}>
+                {/* <button className="btn btn-primary" onClick={() => setShowTable(true)}>
                     Hiển thị bảng
-                </button>
-            {showTable && (
+                </button> */}
+            {/* {showTable && ( */}
                 <div className="container mt-3">
                     <table className="table text-center">
                         <thead>
@@ -55,7 +55,7 @@ const StatisticalManagement = () => {
                         </tbody>
                     </table>
                 </div>
-            )}
+            {/* )} */}
 
             {selectedPost && (
             <div className="container mt-3 p-3 border border-primary rounded bg-light">
