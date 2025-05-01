@@ -13,7 +13,7 @@ import PostManagement from "./components/Admin/Content/PostManagement";
 import LoginPage from "./components/HomePage/LoginPage/RegisterPage";
 import Login from './components/HomePage/LoginPage/login';
 import InfoUser from './components/HomePage/InfoUser/InfoUser';
-function App() {
+function App() {  
   return (
     <Router>
       <Routes>
