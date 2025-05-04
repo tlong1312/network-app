@@ -2,7 +2,7 @@ import React from "react";
 import Loginicon from "../../../assets/icon/login.png";
 import { useNavigate } from "react-router-dom";
 
-const Login = ({onLoginSuccess = () => {} }) => {
+const Login = () => {
 
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -29,10 +29,10 @@ const Login = ({onLoginSuccess = () => {} }) => {
         localStorage.setItem("role", data.role);
         if (data.role === "ROLE_ADMIN") {
           naviage("/admin/dashboard");
-        }else if (data.role === "ROLE_USER") {
+        } else if (data.role === "ROLE_USER") {
           naviage("/");
         }
-        onLoginSuccess(data.token);
+
       }else {
         setError("Đăng nhập không thành công. Vui lòng kiểm tra lại thông tin.");
       }
@@ -87,7 +87,7 @@ const Login = ({onLoginSuccess = () => {} }) => {
               </form>
               
               {/* Nút Đăng Ký */}
-              <button className="btn btn-outline-secondary w-100 mt-3">Đăng Ký</button>
+              <button className="btn btn-outline-secondary w-100 mt-3" onClick={() => naviage("/RegisterPage")}>Đăng Ký</button>
             </div>
           </div>
         </div>

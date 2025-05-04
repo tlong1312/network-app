@@ -1,7 +1,6 @@
 // components/Layouts/MainLayout.jsx
 import { Outlet } from 'react-router-dom';
-import Navbar from "../HomePage/Navbar";
-
+import Navbar from '../HomePage/Navbar';
 const MainLayout = () => {
     return (
         <>

@@ -5,9 +5,9 @@ const AdminHeader = () => {
     const adminData = JSON.parse(localStorage.getItem('adminUser'));
 
     const handleLogout = () => {
-        localStorage.removeItem('adminToken');
-        localStorage.removeItem('adminUser');
-        navigate('/admin/login');
+        localStorage.removeItem('token');
+        localStorage.removeItem('role');
+        navigate('/login');
     };
 
     return (
