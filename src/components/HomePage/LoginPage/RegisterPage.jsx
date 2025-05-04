@@ -4,9 +4,7 @@ import "../../../App.css";
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
     username: "",
-    fullname: "",
     email: "",
-    phone: "",
     password: "",
     confirmPassword: "",
   });
@@ -15,9 +13,55 @@ const RegisterPage = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("User Registered:", formData);
+
+    if (!formData.username || formData.username.length < 3) {
+      alert("Tên đăng nhập phải có ít nhất 3 ký tự!");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      alert("Email không hợp lệ. Phải có định dạng như: abc@abc.abc");
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      alert("Mật khẩu phải có ít nhất 6 ký tự!");
+      return;
+    }
+
+    if(formData.password !== formData.confirmPassword) {
+      alert("Mật khẩu không khớp!");
+      return;
+    }
+
+    const userData = {
+      username: formData.username,
+      email: formData.email,
+      password: formData.password,
+    }
+
+    try {
+      const response = await fetch("http://localhost:8081/api/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+
+      if (response.ok) {
+        alert("Đăng ký thành công!");
+      } else {
+        const errorData = await response.text();
+        alert(`Đăng ký không thành công: ${errorData}`);;
+      }
+    } catch (error) {
+      alert("Đã xảy ra lỗi. Vui lòng thử lại sau.");
+      console.error("Lỗi khi đăng ký:", error);
+    }
   };
 
   return (
@@ -34,14 +78,14 @@ const RegisterPage = () => {
       <form className="register-form" onSubmit={handleSubmit}>
         <h2>ĐĂNG KÝ</h2>
         <input type="text" name="username" placeholder="Tên đăng nhập" onChange={handleChange} required />
-        <input type="text" name="fullname" placeholder="Tên người dùng" onChange={handleChange} required />
         <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
-        <input type="tel" name="phone" placeholder="Số điện thoại" onChange={handleChange} required />
         <input type="password" name="password" placeholder="Mật khẩu" onChange={handleChange} required />
         <input type="password" name="confirmPassword" placeholder="Xác nhận mật khẩu" onChange={handleChange} required />
         <button type="submit">Đăng ký</button>
         <button type="button">Quay lại</button>
       </form>
+
+      
 
       {/* Sóng tím dưới */}
       <svg className="wave-bottom" viewBox="0 0 1440 320">
