@@ -1,7 +1,10 @@
 import { useState } from "react";
 import "../../../App.css";
+import { useNavigate } from "react-router-dom";
 
 const RegisterPage = () => {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -82,7 +85,7 @@ const RegisterPage = () => {
         <input type="password" name="password" placeholder="Mật khẩu" onChange={handleChange} required />
         <input type="password" name="confirmPassword" placeholder="Xác nhận mật khẩu" onChange={handleChange} required />
         <button type="submit">Đăng ký</button>
-        <button type="button">Quay lại</button>
+        <button type="button" onClick={() => navigate("/login")}>Quay lại</button>
       </form>
 
       
