@@ -2,31 +2,46 @@ import React, { useState } from 'react'
 
 const Post = (props) => {
 
-    const { posts, setPosts, currentUser} = props;
+    const { posts, setPosts} = props;
 
     const [comment, setComment] = useState('');
     
-    const handleAddComment = (postId) => {
+    const handleAddComment = async (postId) => {
         if (comment.trim() !== '') {
-            const newComment = {
-                id: Date.now(),
-                author: currentUser.name,
-                avatar: currentUser.avatar,
-                content: comment,
-                timestamp: 'Just now',
-            };
-            setPosts(
-                posts.map((post) => 
-                    post.id === postId
-                    ? {
-                        ...post,
-                        comments: [...post.comments, newComment],
-                        commentsCount: post.commentsCount + 1,
-                    }
-                    : post
-                )
-            );
-            setComment('');
+
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch(`http://localhost:8081/api/comments/${postId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({
+                        content: comment,
+                    }),    
+                });
+
+                if (response.ok) {
+                    const newComment = await response.json();
+                    setPosts(
+                        posts.map((post) => 
+                            post.id === postId
+                            ? {
+                                ...post,
+                                comments: [...post.comments, newComment],
+                                commentsCount: post.commentsCount + 1,
+                            }
+                            : post
+                        )
+                    );
+                    setComment('');
+                } else {
+                    console.error('Failed to add comment:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error adding comment:', error);
+            }
         }
     };
 
@@ -37,37 +52,37 @@ const Post = (props) => {
                         <div className='d-flex align-items-center mb-2'>
                             <img 
                                 src={post.avatar} 
-                                alt={post.author} 
+                                alt={post.username} 
                                 className='me-3 rounded-circle'
                                 style={{ width: '40px', height: '40px' }}    
                             />
                             <div>
-                                <span className='fw-bold'>{post.author}</span>
+                                <span className='fw-bold'>{post.username}</span>
                                 <br />
-                                <small className='text-muted'>{post.timestamp}</small>
+                                <small className='text-muted'>{post.createdAt}</small>
                             </div>
                         </div>
                         <p>{post.content}</p>
                         {post.mediaUrl && (
                             <>
-                            {post.mediaUrl.startsWith('data:video') ? (
-                                <video
-                                    controls
-                                    className="img-fluid rounded mb-2"
-                                    style={{ width: '100%', maxWidth: '1000px', height: '550px' }}
-                                >
-                                    <source src={post.mediaUrl} type="video/mp4" />
-                                    Your browser does not support the video tag.
-                                </video>
-                            ) : (
-                                <img
-                                    src={post.mediaUrl}
-                                    alt="Post"
-                                    className="img-fluid rounded mb-2"
-                                    style={{ width: '100%', maxWidth: '1000px', height: 'auto' }}
-                                />
-                            )}
-                        </>
+                                {post.mediaUrl.startsWith('data:video') ? (
+                                    <video
+                                        controls
+                                        className="img-fluid rounded mb-2"
+                                        style={{ width: '100%', maxWidth: '1000px', height: '550px' }}
+                                    >
+                                        <source src={post.mediaUrl} type="video/mp4" />
+                                        Your browser does not support the video tag.
+                                    </video>
+                                ) : (
+                                    <img
+                                        src={post.mediaUrl}
+                                        alt="Post"
+                                        className="img-fluid rounded mb-2"
+                                        style={{ width: '100%', maxWidth: '1000px', height: 'auto' }}
+                                    />
+                                )}
+                            </>
                         )}
                         <div className="d-flex mb-3">
                             <div>
@@ -84,15 +99,15 @@ const Post = (props) => {
                                 post.comments.map((cmt) => (
                                     <div key={cmt.id} className="d-flex align-items-center mb-2">
                                         <img
-                                            src={cmt.avatar}
-                                            alt={cmt.author}
+                                            src={cmt.user.avatar}
+                                            alt={cmt.user.username}
                                             className="me-3 rounded-circle"
                                             style={{ width: '50px', height: '50px' }}
                                         />
                                         <div className="card p-2 rounded shadow w-100">
-                                            <div className="fw-bold">{cmt.author}</div>
+                                            <div className="fw-bold">{cmt.user.username}</div>
                                             <p className="mb-0">{cmt.content}</p>
-                                            <small className="text-muted">{cmt.timestamp}</small>
+                                            <small className="text-muted">{cmt.createdAt}</small>
                                         </div>
                                     </div>
                                 ))
