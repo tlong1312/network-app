@@ -48,13 +48,26 @@ const Post = (props) => {
                             </div>
                         </div>
                         <p>{post.content}</p>
-                        {post.image && (
-                            <img
-                                src={post.image}
-                                alt="Post"
-                                className='img-fluid rounded mb-2'
-                                style={{ width: '800px', height: '300px' }}
-                            />
+                        {post.mediaUrl && (
+                            <>
+                            {post.mediaUrl.startsWith('data:video') ? (
+                                <video
+                                    controls
+                                    className="img-fluid rounded mb-2"
+                                    style={{ width: '100%', maxWidth: '1000px', height: '550px' }}
+                                >
+                                    <source src={post.mediaUrl} type="video/mp4" />
+                                    Your browser does not support the video tag.
+                                </video>
+                            ) : (
+                                <img
+                                    src={post.mediaUrl}
+                                    alt="Post"
+                                    className="img-fluid rounded mb-2"
+                                    style={{ width: '100%', maxWidth: '1000px', height: 'auto' }}
+                                />
+                            )}
+                        </>
                         )}
                         <div className="d-flex mb-3">
                             <div>
