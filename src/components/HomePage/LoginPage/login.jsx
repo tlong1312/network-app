@@ -27,6 +27,7 @@ const Login = () => {
         const data = await reponse.json();
         localStorage.setItem("token", data.token);
         localStorage.setItem("role", data.role);
+        localStorage.setItem("user", JSON.stringify(data.user));
         if (data.role === "ROLE_ADMIN") {
           naviage("/admin/dashboard");
         } else if (data.role === "ROLE_USER") {

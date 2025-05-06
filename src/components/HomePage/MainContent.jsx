@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Post from './Post';
 import PostModal from './PostModal';
 import storyIcon from '../../assets/icon/story-icon.png';
@@ -54,34 +54,102 @@ const MainContent = () => {
 
     const [showModalStory, setShowModalStory] = useState(false);
 
-    const [posts, setPosts] = useState([
-        {
-            id: 1,
-            author: 'TieuLong Dang',
-            avatar: 'https://placehold.co/40x40',
-            timestamp: 'Just now',
-            content: 'This is a nice picture from this #weekend.',
-            image: 'https://placehold.co/800x300',
-            likes: 0,
-            commentsCount: 0,
-            comments: []
-        },
-    ]);
+    const [posts, setPosts] = useState([]);
     const [showModalPost, setShowModalPost] = useState(false);
 
-    const handlePost = (content, image) => {
-        const newPost = {
-            id: Date.now(),
-            author: 'TieuLong Dang',
-            avatar: 'https://placehold.co/40x40',
-            timestamp: 'Just now',
-            content,
-            image: image ? URL.createObjectURL(image) : null,
-            likes: 0,
-            commentsCount: 0,
-            comments: [],
+
+    useEffect(() => {
+        const fetchPosts = async () => {
+            try {
+                const token = localStorage.getItem('token'); 
+                const response = await fetch('http://localhost:8081/api/posts', {
+                    method: 'GET',
+                    headers: {
+                        Authorization: `Bearer ${token}`, 
+                    },
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    setPosts(data.map(post => ({
+                        id: post.id,
+                        author: post.user.username,
+                        avatar: post.user.avatar,
+                        content: post.content,
+                        mediaUrl: post.mediaUrl,
+                        timestamp: post.createdAt,
+                        comments: post.comments,
+                        commentsCount: post.commentsCount,
+                        likes: post.likeCount,
+                    })));
+                    console.log(data);
+                } else {
+                    console.error('Failed to fetch posts:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error fetching posts:', error);
+            }
         };
-        setPosts([newPost, ...posts]);
+    
+        fetchPosts();
+    }, []);
+
+    const handlePost = async (content, mediaFile) => {
+        try {
+
+            const convertToBase64 = (file) => {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onload = () => resolve(reader.result); 
+                    reader.onerror = (error) => reject(error);
+                });
+            };
+    
+            let mediaUrl = null;
+            if (mediaFile) {
+                mediaUrl = await convertToBase64(mediaFile); 
+            }
+            
+            const payload = {
+                content,
+                mediaUrl,
+            };
+    
+            console.log('Payload gửi lên server:', payload);
+    
+            const response = await fetch('http://localhost:8081/api/posts', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', 
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+                body: JSON.stringify(payload), 
+            });
+    
+            if (response.ok) {
+                const newPost = await response.json();
+                console.log('Bài viết mới:', newPost);
+    
+                setPosts([
+                    {
+                        id: newPost.id,
+                        author: newPost.user.username,
+                        avatar: newPost.user.avatar,
+                        content: newPost.content,
+                        mediaUrl: newPost.mediaUrl,
+                        timestamp: newPost.createdAt,
+                        comments: newPost.comments,
+                        commentsCount: newPost.commentCount,
+                        likes: newPost.likeCount,
+                    },
+                    ...posts,
+                ]);
+            } else {
+                console.error('Lỗi khi đăng bài viết:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Đã xảy ra lỗi:', error);
+        }
     };
 
 
