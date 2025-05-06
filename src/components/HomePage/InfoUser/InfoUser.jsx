@@ -1,70 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import avatar from '../../../assets/icon/avatar.png';
-
-const PostModal = ({ onClose, onPost }) => {
-  const [content, setContent] = useState('');
-  const [image, setImage] = useState(null);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onPost(content, image);
-    onClose();
-  };
-
-  return (
-    <div className="modal d-flex justify-content-center align-items-center">
-      <div className="card p-4" style={{ width: '400px' }}>
-        <h5>Tạo bài viết</h5>
-        <textarea
-          className="form-control mb-2"
-          placeholder="Bạn đang nghĩ gì?"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-        />
-        <input
-          type="file"
-          className="form-control mb-2"
-          onChange={(e) => setImage(e.target.files[0])}
-        />
-        <div className="d-flex justify-content-end">
-          <button className="btn btn-secondary me-2" onClick={onClose}>
-            Hủy
-          </button>
-          <button className="btn btn-primary" onClick={handleSubmit}>
-            Đăng
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const Post = ({ posts }) => (
-  <div style={{ width: '100%', overflowY: 'auto' }}>
-    {posts.map((post) => (
-      <div key={post.id} className="card mb-3 p-3">
-        <div className="d-flex align-items-center mb-2">
-          <img
-            src={post.avatar}
-            alt="avatar"
-            style={{ width: '40px', height: '40px' }}
-            className="me-2 rounded-circle"
-          />
-          <div>
-            <h6 className="mb-0">{post.author}</h6>
-            <small className="text-muted">{post.timestamp}</small>
-          </div>
-        </div>
-        <p>{post.content}</p>
-        {post.image && <img src={post.image} alt="Post" className="img-fluid rounded" />}
-        <div className="d-flex justify-content-between mt-2">
-          <span>❤️ {post.likes}</span>
-          <span>💬 {post.commentsCount}</span>
-        </div>
-      </div>
-    ))}
-  </div>
-);
+import Post from '../Post';
+import PostModal from '../PostModal';
 
 const InfoUser = () => {
   const [currentUser] = useState({
@@ -74,21 +11,101 @@ const InfoUser = () => {
   });
   const [posts, setPosts] = useState([]);
   const [showModalPost, setShowModalPost] = useState(false);
-
-  const handlePost = (content, image) => {
-    const newPost = {
-      id: Date.now(),
-      author: currentUser.name,
-      avatar: currentUser.avatar,
-      timestamp: 'Vừa xong',
-      content,
-      image: image ? URL.createObjectURL(image) : null,
-      likes: 0,
-      commentsCount: 0,
-      comments: [],
-    };
-    setPosts([newPost, ...posts]);
-  };
+  
+  useEffect(() => {
+          const fetchPosts = async () => {
+              try {
+                  const token = localStorage.getItem('token'); 
+                  const response = await fetch('http://localhost:8081/api/posts', {
+                      method: 'GET',
+                      headers: {
+                          Authorization: `Bearer ${token}`, 
+                      },
+                  });
+                  if (response.ok) {
+                      const data = await response.json();
+                      setPosts(data.map(post => ({
+                          id: post.id,
+                          author: post.user.username,
+                          avatar: post.user.avatar,
+                          content: post.content,
+                          mediaUrl: post.mediaUrl,
+                          timestamp: post.createdAt,
+                          comments: post.comments,
+                          commentsCount: post.commentCount,
+                          likes: post.likeCount,
+                          isLiked: post.liked,
+                      })));
+                      console.log(data);
+                  } else {
+                      console.error('Failed to fetch posts:', response.statusText);
+                  }
+              } catch (error) {
+                  console.error('Error fetching posts:', error);
+              }
+          };
+      
+          fetchPosts();
+      }, []);
+  
+      const handlePost = async (content, mediaFile) => {
+          try {
+  
+              const convertToBase64 = (file) => {
+                  return new Promise((resolve, reject) => {
+                      const reader = new FileReader();
+                      reader.readAsDataURL(file);
+                      reader.onload = () => resolve(reader.result); 
+                      reader.onerror = (error) => reject(error);
+                  });
+              };
+      
+              let mediaUrl = null;
+              if (mediaFile) {
+                  mediaUrl = await convertToBase64(mediaFile); 
+              }
+              
+              const payload = {
+                  content,
+                  mediaUrl,
+              };
+      
+              console.log('Payload gửi lên server:', payload);
+      
+              const response = await fetch('http://localhost:8081/api/posts', {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json', 
+                      Authorization: `Bearer ${localStorage.getItem('token')}`,
+                  },
+                  body: JSON.stringify(payload), 
+              });
+      
+              if (response.ok) {
+                  const newPost = await response.json();
+                  console.log('Bài viết mới:', newPost);
+      
+                  setPosts([
+                      {
+                          id: newPost.id,
+                          author: newPost.user.username,
+                          avatar: newPost.user.avatar,
+                          content: newPost.content,
+                          mediaUrl: newPost.mediaUrl,
+                          timestamp: newPost.createdAt,
+                          comments: newPost.comments,
+                          commentsCount: newPost.commentCount,
+                          likes: newPost.likeCount,
+                      },
+                      ...posts,
+                  ]);
+              } else {
+                  console.error('Lỗi khi đăng bài viết:', response.statusText);
+              }
+          } catch (error) {
+              console.error('Đã xảy ra lỗi:', error);
+          }
+      };
 
   return (
     <div className="container-fluid">
@@ -130,12 +147,13 @@ const InfoUser = () => {
           </div>
 
           {showModalPost && (
-            <PostModal onClose={() => setShowModalPost(false)} onPost={handlePost} />
-          )}
+                <PostModal
+                    onClose={() => setShowModalPost(false)}
+                    onPost={handlePost}
+                />
+            )}
 
-          <div style={{ overflowY: 'auto' }}>
-            <Post posts={posts} />
-          </div>
+            <Post posts={posts} setPosts={setPosts} currentUser={currentUser}/>
         </div>
       </div>
     </div>

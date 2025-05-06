@@ -1,19 +1,10 @@
-import React, { useState } from 'react'
-import icon from '../../assets/icon/avatar.png'
-import friendIcon from '../../assets/icon/friends.png'
-import groupIcon from '../../assets/icon/groups.png'
-import settingIcon from '../../assets/icon/setting.png'
-import { useNavigate } from 'react-router-dom'
-import 'bootstrap/dist/css/bootstrap.min.css';
-<<<<<<< HEAD
-import { Link } from 'react-router-dom'; // Import Link từ react-router-dom
+import React, { useState } from 'react';
 import icon from '../../assets/icon/avatar.png';
 import friendIcon from '../../assets/icon/friends.png';
 import groupIcon from '../../assets/icon/groups.png';
 import settingIcon from '../../assets/icon/setting.png';
-=======
-
->>>>>>> 9a94150710bbf9ebc4fa4955abe3bbe0995409b2
+import { useNavigate, Link } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const LeftMenu = () => {
     const [showFriendsPopup, setShowFriendsPopup] = useState(false);

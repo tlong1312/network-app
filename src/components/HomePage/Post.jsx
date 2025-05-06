@@ -132,7 +132,7 @@ const Post = (props) => {
                                         src={post.mediaUrl}
                                         alt="Post"
                                         className="img-fluid rounded mb-2"
-                                        style={{ width: '100%', maxWidth: '1000px', height: 'auto' }}
+                                        style={{ width: '100%', maxWidth: '1000px', height: '100vh' }}
                                     />
                                 )}
                             </>
