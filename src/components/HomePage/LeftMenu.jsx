@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import { Link } from 'react-router-dom'; // Import Link từ react-router-dom
 import icon from '../../assets/icon/avatar.png';
 import friendIcon from '../../assets/icon/friends.png';
 import groupIcon from '../../assets/icon/groups.png';
@@ -23,16 +23,16 @@ const LeftMenu = () => {
             <ul className="list-unstyled">
                 {/* Profile */}
                 <li className="d-flex align-items-center mb-3">
-                    <a href="#" className="text-decoration-none text-dark cursor-pointer">
-                        <img
-                            src={icon}
-                            alt="profile"
-                            className="me-3"
-                            style={{ width: '40px', height: '40px' }}
-                        />
-                        <span>{userName}</span>
-                    </a>
-                </li>
+    <Link to="/info-user" className="text-decoration-none text-dark cursor-pointer">
+        <img
+            src={icon}
+            alt="profile"
+            className="me-3"
+            style={{ width: '40px', height: '40px' }}
+        />
+        <span>{userName}</span>
+    </Link>
+</li>
 
                 {/* Friends */}
                 <li className="d-flex align-items-center mb-3">
@@ -90,8 +90,8 @@ const LeftMenu = () => {
             position: 'fixed', // Cố định pop-up
             top: '50%',
             left: '50%',
-            transform: 'translate(-50%, -50%)', // Căn giữa pop-up
-            zIndex: 1050, // Đảm bảo pop-up nằm trên các thành phần khác
+            transform: 'translate(-50%, -50%)',
+            zIndex: 1050,
         }}
     >
         <div
@@ -99,8 +99,8 @@ const LeftMenu = () => {
             role="document"
             style={{
                 width: '600px', // Cố định chiều rộng
-                height: '800px', // Cố định chiều cao
-                maxWidth: '75%', // Đảm bảo không vượt quá màn hình
+                height: '800px',
+                maxWidth: '75%', 
             }}
         >
             <div className="modal-content" style={{ height: '100%' }}>

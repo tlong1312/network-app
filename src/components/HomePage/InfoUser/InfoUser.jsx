@@ -7,16 +7,12 @@ const PostModal = ({ onClose, onPost }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!content.trim()) {
-      alert('Nội dung bài viết không được để trống!');
-      return;
-    }
     onPost(content, image);
     onClose();
   };
 
   return (
-    <div className="modal d-flex justify-content-center align-items-center" style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+    <div className="modal d-flex justify-content-center align-items-center">
       <div className="card p-4" style={{ width: '400px' }}>
         <h5>Tạo bài viết</h5>
         <textarea
