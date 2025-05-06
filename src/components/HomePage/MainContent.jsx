@@ -78,8 +78,9 @@ const MainContent = () => {
                         mediaUrl: post.mediaUrl,
                         timestamp: post.createdAt,
                         comments: post.comments,
-                        commentsCount: post.commentsCount,
+                        commentsCount: post.commentCount,
                         likes: post.likeCount,
+                        isLiked: post.liked,
                     })));
                     console.log(data);
                 } else {

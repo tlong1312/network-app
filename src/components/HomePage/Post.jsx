@@ -5,6 +5,59 @@ const Post = (props) => {
     const { posts, setPosts} = props;
 
     const [comment, setComment] = useState('');
+
+    const handleLike = async (postId) => {
+        const postIndex = posts.findIndex((post) => post.id === postId);
+        if (postIndex === -1) return;
+    
+        const currentLiked = posts[postIndex].isLiked;
+    
+        const updatedPosts = [...posts];
+        updatedPosts[postIndex] = {
+            ...updatedPosts[postIndex],
+            isLiked: !currentLiked, 
+            likes: currentLiked
+                ? updatedPosts[postIndex].likes - 1 
+                : updatedPosts[postIndex].likes + 1, 
+        };
+        setPosts(updatedPosts);
+    
+        
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch(`http://localhost:8081/api/posts/${postId}/like`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+    
+            if (!response.ok) {
+                console.error('Failed to like/unlike post:', response.statusText);
+    
+                updatedPosts[postIndex] = {
+                    ...updatedPosts[postIndex],
+                    isLiked: currentLiked,
+                    likes: currentLiked
+                        ? updatedPosts[postIndex].likes + 1
+                        : updatedPosts[postIndex].likes - 1,
+                };
+                setPosts(updatedPosts);
+            }
+        } catch (error) {
+            console.error('Error liking/unliking post:', error);
+    
+            updatedPosts[postIndex] = {
+                ...updatedPosts[postIndex],
+                isLiked: currentLiked,
+                likes: currentLiked
+                    ? updatedPosts[postIndex].likes + 1
+                    : updatedPosts[postIndex].likes - 1,
+            };
+            setPosts(updatedPosts);
+        }
+    };
     
     const handleAddComment = async (postId) => {
         if (comment.trim() !== '') {
@@ -52,12 +105,12 @@ const Post = (props) => {
                         <div className='d-flex align-items-center mb-2'>
                             <img 
                                 src={post.avatar} 
-                                alt={post.username} 
+                                alt={post.author} 
                                 className='me-3 rounded-circle'
                                 style={{ width: '40px', height: '40px' }}    
                             />
                             <div>
-                                <span className='fw-bold'>{post.username}</span>
+                                <span className='fw-bold'>{post.author}</span>
                                 <br />
                                 <small className='text-muted'>{post.createdAt}</small>
                             </div>
@@ -86,7 +139,11 @@ const Post = (props) => {
                         )}
                         <div className="d-flex mb-3">
                             <div>
-                                <i className="far fa-heart me-2"></i>
+                                <i
+                                    className={post.isLiked ? "fas fa-heart me-2 text-danger" : "far fa-heart me-2"}
+                                    style={{ cursor: 'pointer' }}
+                                    onClick={() => handleLike(post.id)}
+                                ></i>
                                 {post.likes}
                             </div>
                             <div>

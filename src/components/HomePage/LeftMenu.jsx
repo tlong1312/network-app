@@ -1,14 +1,29 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import icon from '../../assets/icon/avatar.png'
 import friendIcon from '../../assets/icon/friends.png'
 import groupIcon from '../../assets/icon/groups.png'
 import settingIcon from '../../assets/icon/setting.png'
+import { useNavigate } from 'react-router-dom'
 
 
 const LeftMenu = () => {
 
+    const navigate = useNavigate();
     const userName = 'TieuLong Dang';
+    const [showLogout, setShowLogout] = useState(false);
+
+    const handleSettingsClick = () => {
+        setShowLogout(!showLogout);
+    }
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('role');
+        localStorage.removeItem('user');
+        navigate('/login');
+    }
+
 
     return (
         <div className="col-lg-2 bg-light p-3 d-none d-lg-block">
@@ -56,8 +71,12 @@ const LeftMenu = () => {
                 <hr />
 
                 {/* Setting */}
-                <li className="d-flex align-items-center">
-                    <a href="#" className="text-decoration-none text-dark cursor-pointer">
+                <li className="d-flex align-items-center position-relative">
+                    <a 
+                        href="#" 
+                        className="text-decoration-none text-dark cursor-pointer"
+                        onClick={handleSettingsClick}
+                    >
                         <img
                             src={settingIcon}
                             alt="setting"
@@ -66,6 +85,19 @@ const LeftMenu = () => {
                         />
                         <span>Setting</span>
                     </a>
+                    {showLogout && (
+                        <div
+                            className="position-absolute bg-white shadow rounded p-2"
+                            style={{ top: '50px', left: '0', zIndex: 1000 }}
+                        >
+                            <button
+                                className="btn btn-danger w-100"
+                                onClick={handleLogout} // Xử lý logout khi nhấn
+                            >
+                                Logout
+                            </button>
+                        </div>
+                    )}
                 </li>
             </ul>
         </div>
