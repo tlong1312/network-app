@@ -213,6 +213,7 @@ body {
 .register-form button:hover {
   background-color: #8c3390;
 }
+
 /* Nút quay lại */
 .btn-back {
   background-color: #a53db0;
@@ -256,7 +257,7 @@ body {
 .admin-header {
   height: 60px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  max-width: none!important;
+  max-width: none !important;
 }
 
 /* Admin Sidebar */
@@ -291,18 +292,20 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5); 
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999; /* Đảm bảo overlay nằm trên các thành phần khác */
+  z-index: 9999;
+  /* Đảm bảo overlay nằm trên các thành phần khác */
 }
+
 .modal-content {
   background-color: white;
   padding: 20px;
   border-radius: 8px;
   width: 600px;
-  z-index: 10000; 
+  z-index: 10000;
   position: relative;
 }
 
@@ -310,29 +313,33 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh; /* Đảm bảo modal được căn giữa theo chiều dọc */
-  margin: 0; /* Loại bỏ khoảng cách mặc định của Bootstrap */
+  min-height: 100vh;
+  /* Đảm bảo modal được căn giữa theo chiều dọc */
+  margin: 0;
+  /* Loại bỏ khoảng cách mặc định của Bootstrap */
 }
+
 .custom-btn {
-  width: 40px; 
+  width: 40px;
   height: 40px;
-  background-color: rgba(0, 0, 0, 0.2); 
-  color: white; 
-  border: none; 
+  background-color: rgba(0, 0, 0, 0.2);
+  color: white;
+  border: none;
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
-  transition: background-color 0.3s ease; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease;
 }
 
 .custom-btn:hover {
-  background-color: rgba(0, 0, 0, 0.5); 
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .custom-btn:focus {
-  outline: none; 
+  outline: none;
 }
+
 /* admin post */
 /* Căn chỉnh toàn bộ trang PostManagement */
 .admin-container {
@@ -370,4 +377,78 @@ body {
 
 .post-item p {
   margin: 0;
+}
+
+
+
+
+
+.content-up-story {
+  width: 200px;
+  height: 200px;
+  background-color: #fff;
+  border-radius: 10px;
+  background-color: #b885da;
+}
+
+
+
+.content-up-story h5 {
+  color: white;
+}
+
+.hide {
+  display: none !important;
+}
+
+.image-editor-container {
+  width: 90vw;
+  height: 75vh;
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.story-content {
+  background-color: white !important;
+  margin: 20px;
+  height: 90vh;
+  padding: 0 !important;
+}
+
+.crop-image {
+  /* width: 400px !important; */
+  /* height: 9/16 * 400px !important; */
+  /* max-height: 100vh !important; */
+  min-height: 9/16 * 220px !important;
+  max-height: 90% !important;
+  max-width: 100% !important;
+}
+
+.ReactCrop__child-wrapper {
+  display: flex;
+  height: 100%;
+}
+
+.image-editor-container .btn-close {
+  position: relative;
+  right: 10px;
+  top: 10px;
+  cursor: pointer;
+}
+
+.image-preview-container {
+  margin: auto;
+  max-height: 100%;
+}
+
+.image-editor {
+  width: 100%;
+  height: calc(100% - 90px);
+}
+
+.story-content .modal-header {
+  background-color: #d9b2f3;
+  padding: 15px;
 }
