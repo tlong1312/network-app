@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import Post from './Post';
 import PostModal from './PostModal';
 import storyIcon from '../../assets/icon/story-icon.png';
@@ -6,8 +6,13 @@ import StoryModal from './StoryModal';
 import avatar from '../../assets/icon/avatar.png';
 
 const MainContent = () => {
-
     const [currentStoryIndex, setCurrentStoryIndex] = useState(0);
+    const [progress, setProgress] = useState(0);
+    const [isPaused, setIsPaused] = useState(false);
+    const [selectedStory, setSelectedStory] = useState(null);
+    const [showModalStory, setShowModalStory] = useState(false);
+    const [showModalPost, setShowModalPost] = useState(false);
+    const [posts, setPosts] = useState([]);
 
     const [currentUser] = useState({
         id: 1,
@@ -21,8 +26,8 @@ const MainContent = () => {
             avatar: currentUser.avatar,
             authorName: currentUser.name,
             stories: [
-                { id: 1, image: 'https://placehold.co/800x300' },
-                { id: 2, image: 'https://placehold.co/300x300' },
+                { id: 1, image: 'https://placehold.co/800x300', duration: 5000 },
+                { id: 2, image: 'https://placehold.co/300x300', duration: 5000 },
             ],
         },
         {
@@ -30,18 +35,59 @@ const MainContent = () => {
             avatar: 'https://placehold.co/80x80',
             authorName: 'John Doe',
             stories: [
-                { id: 1, image: 'https://placehold.co/500x500' },
-                { id: 2, image: 'https://placehold.co/600x600' },
+                { id: 1, image: 'https://placehold.co/500x500', duration: 5000 },
+                { id: 2, image: 'https://placehold.co/600x600', duration: 5000 },
             ],
         },
     ]);
 
-    const [selectedStory, setSelectedStory] = useState(null);
+    // Auto-play stories with progress bar
+    useEffect(() => {
+        if (!selectedStory || isPaused) return;
+
+        const storyDuration = selectedStory.stories[currentStoryIndex].duration || 5000;
+        const interval = 100;
+        const totalSteps = storyDuration / interval;
+        let step = 0;
+
+        const progressInterval = setInterval(() => {
+            step += 1;
+            setProgress((step / totalSteps) * 100);
+
+            if (step >= totalSteps) {
+                clearInterval(progressInterval);
+                nextStory();
+            }
+        }, interval);
+
+        return () => clearInterval(progressInterval);
+    }, [selectedStory, currentStoryIndex, isPaused]);
+
+    const nextStory = () => {
+        if (selectedStory) {
+            if (currentStoryIndex < selectedStory.stories.length - 1) {
+                setCurrentStoryIndex(currentStoryIndex + 1);
+            } else {
+                // If it's the last story, close the modal
+                setSelectedStory(null);
+                setCurrentStoryIndex(0);
+            }
+            setProgress(0);
+        }
+    };
+
+    const prevStory = () => {
+        if (currentStoryIndex > 0) {
+            setCurrentStoryIndex(currentStoryIndex - 1);
+            setProgress(0);
+        }
+    };
 
     const handStory = (image) => {
         const newStory = {
             id: Date.now(),
             image: image ? URL.createObjectURL(image) : null,
+            duration: 5000
         };
         setStories((prevStories) =>
             prevStories.map((story) =>
@@ -50,22 +96,17 @@ const MainContent = () => {
                     : story
             )
         );
-    }
+    };
 
-    const [showModalStory, setShowModalStory] = useState(false);
-
-    const [posts, setPosts] = useState([]);
-    const [showModalPost, setShowModalPost] = useState(false);
-
-
+    // Fetch posts from API
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const token = localStorage.getItem('token'); 
+                const token = localStorage.getItem('token');
                 const response = await fetch('http://localhost:8081/api/posts', {
                     method: 'GET',
                     headers: {
-                        Authorization: `Bearer ${token}`, 
+                        Authorization: `Bearer ${token}`,
                     },
                 });
                 if (response.ok) {
@@ -82,7 +123,6 @@ const MainContent = () => {
                         likes: post.likeCount,
                         isLiked: post.liked,
                     })));
-                    console.log(data);
                 } else {
                     console.error('Failed to fetch posts:', response.statusText);
                 }
@@ -90,47 +130,42 @@ const MainContent = () => {
                 console.error('Error fetching posts:', error);
             }
         };
-    
+
         fetchPosts();
     }, []);
 
     const handlePost = async (content, mediaFile) => {
         try {
-
             const convertToBase64 = (file) => {
                 return new Promise((resolve, reject) => {
                     const reader = new FileReader();
                     reader.readAsDataURL(file);
-                    reader.onload = () => resolve(reader.result); 
+                    reader.onload = () => resolve(reader.result);
                     reader.onerror = (error) => reject(error);
                 });
             };
-    
+
             let mediaUrl = null;
             if (mediaFile) {
-                mediaUrl = await convertToBase64(mediaFile); 
+                mediaUrl = await convertToBase64(mediaFile);
             }
-            
+
             const payload = {
                 content,
                 mediaUrl,
             };
-    
-            console.log('Payload gửi lên server:', payload);
-    
+
             const response = await fetch('http://localhost:8081/api/posts', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json', 
+                    'Content-Type': 'application/json',
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
-                body: JSON.stringify(payload), 
+                body: JSON.stringify(payload),
             });
-    
+
             if (response.ok) {
                 const newPost = await response.json();
-                console.log('Bài viết mới:', newPost);
-    
                 setPosts([
                     {
                         id: newPost.id,
@@ -153,16 +188,21 @@ const MainContent = () => {
         }
     };
 
-
-
     return (
         <div className="col-lg-7 bg-white p-3">
+            {/* Stories Section */}
             <div className='mb-4'>
-                <div className='d-flex align-items-center'>
-                    <div className='me-3'>
+                <div className='d-flex align-items-center overflow-auto pb-2'>
+                    {/* Your Story */}
+                    <div className='me-3 text-center'>
                         <div
-                            className="rounded-circle d-flex align-items-center justify-content-center"
-                            style={{ width: '80px', height: '80px', backgroundColor: '#dddddd', cursor: 'pointer', }}
+                            className="rounded-circle d-flex align-items-center justify-content-center border border-primary border-2"
+                            style={{
+                                width: '80px',
+                                height: '80px',
+                                cursor: 'pointer',
+                                backgroundColor: '#dddddd'
+                            }}
                             onClick={() => setShowModalStory(true)}
                         >
                             <img
@@ -175,80 +215,162 @@ const MainContent = () => {
                                 }}
                             />
                         </div>
+                        <div className="small mt-1">Your Story</div>
                     </div>
+
+                    {/* Friends' Stories */}
                     {stories.map((story) => (
-                        <div
-                            className='me-3'
-                            key={story.id}
-                            style={{ cursor: 'pointer' }}
-                            onClick={() => setSelectedStory(story)}
-                        >
-                            <img
-                                src={story.avatar}
-                                alt={story.authorName}
-                                className='rounded-circle'
-                                style={{ width: '80px', height: '80px' }}
-                            />
+                        <div className='me-3 text-center' key={story.id}>
+                            <div
+                                className="rounded-circle border border-primary border-2 p-1"
+                                style={{ cursor: 'pointer' }}
+                                onClick={() => {
+                                    setSelectedStory(story);
+                                    setCurrentStoryIndex(0);
+                                    setProgress(0);
+                                }}
+                            >
+                                <img
+                                    src={story.avatar}
+                                    alt={story.authorName}
+                                    className='rounded-circle'
+                                    style={{
+                                        width: '72px',
+                                        height: '72px',
+                                        objectFit: 'cover'
+                                    }}
+                                />
+                            </div>
+                            <div className="small mt-1 text-truncate" style={{ maxWidth: '80px' }}>
+                                {story.authorName}
+                            </div>
                         </div>
                     ))}
                 </div>
             </div>
 
+            {/* Story Viewer Modal */}
             {selectedStory && (
-                <div className="modal-overlay">
-                    <div className="modal-content">
-                        <h5>{selectedStory.authorName}'s Stories</h5>
+                <div className="modal-overlay" style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    backgroundColor: 'rgba(0,0,0,0.9)',
+                    zIndex: 1000,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}>
+                    <div className="modal-content" style={{
+                        width: '100%',
+                        maxWidth: '500px',
+                        position: 'relative'
+                    }}
+                        onMouseEnter={() => setIsPaused(true)}
+                        onMouseLeave={() => setIsPaused(false)}
+                    >
+                        {/* Progress bars */}
+                        <div className="d-flex mb-2 px-2" style={{ gap: '4px' }}>
+                            {selectedStory.stories.map((_, index) => (
+                                <div key={index} style={{
+                                    height: '3px',
+                                    flex: 1,
+                                    backgroundColor: 'rgba(255,255,255,0.3)',
+                                    borderRadius: '3px',
+                                    overflow: 'hidden'
+                                }}>
+                                    {index === currentStoryIndex && (
+                                        <div style={{
+                                            height: '100%',
+                                            width: `${progress}%`,
+                                            backgroundColor: 'white',
+                                            transition: 'width 0.1s linear'
+                                        }}></div>
+                                    )}
+                                    {index < currentStoryIndex && (
+                                        <div style={{
+                                            height: '100%',
+                                            width: '100%',
+                                            backgroundColor: 'white'
+                                        }}></div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Header with user info and close button */}
+                        <div className="d-flex align-items-center px-3 mb-3" style={{ color: 'white' }}>
+                            <img
+                                src={selectedStory.avatar}
+                                alt={selectedStory.authorName}
+                                className='rounded-circle me-2'
+                                style={{ width: '32px', height: '32px' }}
+                            />
+                            <div className="fw-bold">{selectedStory.authorName}</div>
+                            <div className="ms-auto" style={{ cursor: 'pointer' }}
+                                onClick={() => {
+                                    setSelectedStory(null);
+                                    setCurrentStoryIndex(0);
+                                }}
+                            >
+                                <i className="fas fa-times"></i>
+                            </div>
+                        </div>
+
+                        {/* Story content with navigation controls */}
                         <div className="position-relative">
                             <img
                                 src={selectedStory.stories[currentStoryIndex].image}
                                 alt={`Story ${currentStoryIndex + 1}`}
-                                style={{ width: '100%', height: 'auto', borderRadius: '8px' }}
+                                style={{
+                                    width: '100%',
+                                    height: 'auto',
+                                    maxHeight: '90vh',
+                                    objectFit: 'contain',
+                                    borderRadius: '8px'
+                                }}
                             />
 
-                            <button
-                                className="btn btn-secondary position-absolute start-0 top-50 translate-middle-y rounded-circle custom-btn"
-                                style={{ zIndex: 1 }}
-                                onClick={() =>
-                                    setCurrentStoryIndex((prevIndex) =>
-                                        prevIndex > 0 ? prevIndex - 1 : selectedStory.stories.length - 1
-                                    )
-                                }
-                            >
-                                <i className="fas fa-chevron-left"></i> 
-                            </button>
-
-                            <button
-                                className="btn btn-secondary position-absolute end-0 top-50 translate-middle-y rounded-circle custom-btn"
-                                style={{ zIndex: 1 }}
-                                onClick={() =>
-                                    setCurrentStoryIndex((prevIndex) =>
-                                        prevIndex < selectedStory.stories.length - 1 ? prevIndex + 1 : 0
-                                    )
-                                }
-                            >
-                                <i className="fas fa-chevron-right"></i> 
-                            </button>
+                            {/* Invisible navigation areas */}
+                            <div
+                                style={{
+                                    position: 'absolute',
+                                    left: 0,
+                                    top: 0,
+                                    bottom: 0,
+                                    width: '50%',
+                                    cursor: 'pointer'
+                                }}
+                                onClick={prevStory}
+                            ></div>
+                            <div
+                                style={{
+                                    position: 'absolute',
+                                    right: 0,
+                                    top: 0,
+                                    bottom: 0,
+                                    width: '50%',
+                                    cursor: 'pointer'
+                                }}
+                                onClick={nextStory}
+                            ></div>
                         </div>
-                        <button
-                            className="btn btn-secondary mt-3"
-                            onClick={() => {
-                                setSelectedStory(null);
-                                setCurrentStoryIndex(0);
-                            }}
-                        >
-                            Close
-                        </button>
                     </div>
                 </div>
             )}
 
+            {/* Story Creation Modal */}
             {showModalStory && (
                 <StoryModal
                     onClose={() => setShowModalStory(false)}
                     onStory={handStory}
+                    currentUser={currentUser}
                 />
             )}
 
+            {/* Create Post Input */}
             <div className="mb-4">
                 <div className="d-flex align-items-center justify-content-between">
                     <input
@@ -262,6 +384,7 @@ const MainContent = () => {
                 </div>
             </div>
 
+            {/* Post Creation Modal */}
             {showModalPost && (
                 <PostModal
                     onClose={() => setShowModalPost(false)}
@@ -269,10 +392,10 @@ const MainContent = () => {
                 />
             )}
 
-            <Post posts={posts} setPosts={setPosts} currentUser={currentUser}/>
-
+            {/* Posts List */}
+            <Post posts={posts} setPosts={setPosts} currentUser={currentUser} />
         </div>
-    )
-}
+    );
+};
 
-export default MainContent
+export default MainContent;

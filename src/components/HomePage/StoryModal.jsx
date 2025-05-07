@@ -9,7 +9,7 @@ const DEFAULT_CROP_WIDTH = 220;
 const DEFAULT_CROP_HEIGHT = DEFAULT_CROP_WIDTH / ASPECT_RATIO;
 
 const StoryModal = (props) => {
-  const { onClose, onStory } = props;
+  const { onClose, onStory, currentUser } = props;
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [crop, setCrop,] = useState({ aspect: ASPECT_RATIO });
@@ -62,6 +62,7 @@ const StoryModal = (props) => {
     if (!imagePreview || imageTooSmall) return;
 
     try {
+      // 1. Crop ảnh
       const croppedImage = await getCroppedImg(imgRef.current, completedCrop || {
         x: 0,
         y: 0,
@@ -71,10 +72,27 @@ const StoryModal = (props) => {
         unit: 'px'
       });
 
-      onStory(croppedImage);
+      const timestamp = new Date().getTime();
+      const fileName = `${currentUser.id}_${currentUser.name.replace(/\s+/g, '_')}_${timestamp}.png`;
+
+      // Tạo FormData để gửi lên server
+      const formData = new FormData();
+      const blob = await fetch(croppedImage).then(res => res.blob());
+      formData.append('image', blob, fileName);
+      formData.append('userId', currentUser.id);
+
+      // Gọi API upload
+      const response = await fetch('http://localhost:8081/api/story/upload', {
+        method: 'POST',
+        body: formData
+      });
+
+      const result = await response.json();
+      onStory(result.imageUrl);
       onClose();
+
     } catch (error) {
-      console.error('Error cropping image:', error);
+      console.error('Error saving story:', error);
     }
   };
 
