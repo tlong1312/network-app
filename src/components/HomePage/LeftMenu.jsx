@@ -7,10 +7,13 @@ import { useNavigate, Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const LeftMenu = () => {
+
+    const user = localStorage.getItem('user');
+    console.log(user);
     const [showFriendsPopup, setShowFriendsPopup] = useState(false);
 
     const navigate = useNavigate();
-    const userName = 'TieuLong Dang';
+    const userName = user ? JSON.parse(user).username : 'User'; 
     const [showLogout, setShowLogout] = useState(false);
 
     const handleSettingsClick = () => {

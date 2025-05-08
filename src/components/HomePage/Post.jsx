@@ -118,7 +118,7 @@ const Post = (props) => {
                         <p>{post.content}</p>
                         {post.mediaUrl && (
                             <>
-                                {post.mediaUrl.startsWith('data:video') ? (
+                                {post.mediaUrl.endsWith('.mp4') ? (
                                     <video
                                         controls
                                         className="img-fluid rounded mb-2"

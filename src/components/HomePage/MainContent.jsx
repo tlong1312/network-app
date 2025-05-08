@@ -123,6 +123,7 @@ const MainContent = () => {
                         likes: post.likeCount,
                         isLiked: post.liked,
                     })));
+                    console.log('Posts fetched successfully:', data);
                 } else {
                     console.error('Failed to fetch posts:', response.statusText);
                 }
@@ -134,28 +135,37 @@ const MainContent = () => {
         fetchPosts();
     }, []);
 
+
     const handlePost = async (content, mediaFile) => {
         try {
-            const convertToBase64 = (file) => {
-                return new Promise((resolve, reject) => {
-                    const reader = new FileReader();
-                    reader.readAsDataURL(file);
-                    reader.onload = () => resolve(reader.result);
-                    reader.onerror = (error) => reject(error);
-                });
-            };
-
+            
             let mediaUrl = null;
             if (mediaFile) {
-                mediaUrl = await convertToBase64(mediaFile);
-            }
+                const formData = new FormData();
+                formData.append('file', mediaFile);
+                formData.append('upload_preset', 'upload-y8ouewvx');
 
+                const response = await fetch('https://api.cloudinary.com/v1_1/drbjicnlm/upload', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    mediaUrl = data.secure_url;
+                } else {
+                    console.error('Upload file lên cloud thất bại: ', response.statusText);
+                    return;
+                }
+
+            }
+            
             const payload = {
                 content,
                 mediaUrl,
             };
 
-            const response = await fetch('http://localhost:8081/api/posts', {
+            const apiResponse = await fetch('http://localhost:8081/api/posts', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -164,8 +174,8 @@ const MainContent = () => {
                 body: JSON.stringify(payload),
             });
 
-            if (response.ok) {
-                const newPost = await response.json();
+            if (apiResponse.ok) {
+                const newPost = await apiResponse.json();
                 setPosts([
                     {
                         id: newPost.id,
@@ -181,7 +191,7 @@ const MainContent = () => {
                     ...posts,
                 ]);
             } else {
-                console.error('Lỗi khi đăng bài viết:', response.statusText);
+                console.error('Lỗi khi đăng bài viết:', apiResponse.statusText);
             }
         } catch (error) {
             console.error('Đã xảy ra lỗi:', error);
