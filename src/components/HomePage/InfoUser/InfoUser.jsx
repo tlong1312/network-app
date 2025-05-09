@@ -43,6 +43,7 @@ const InfoUser = () => {
           setUser({
             id: data.id,
             name: data.username,
+            email: data.email,
             avatar: data.avatar,
           });
         } else {
@@ -185,7 +186,7 @@ const InfoUser = () => {
                   <h5 className="mb-3">Update Information</h5>
                     <form>
                       <div className="mb-3">
-                        <label className="form-label">Name</label>
+                        <label className="form-label">Username</label>
                         <input
                           type="text"
                           className="form-control"
@@ -193,24 +194,11 @@ const InfoUser = () => {
                         />
                       </div>
                       <div className="mb-3">
-                        <label className="form-label">Date of Birth</label>
-                        <input
-                          type="date"
-                          className="form-control"
-                        />
-                      </div>
-                      <div className="mb-3">
-                        <label className="form-label">City</label>
+                        <label className="form-label">Email</label>
                         <input
                           type="text"
                           className="form-control"
-                        />
-                      </div>
-                      <div className="mb-3">
-                        <label className="form-label">School</label>
-                        <input
-                          type="text"
-                          className="form-control"
+                          defaultValue={user.email}
                         />
                       </div>
                       <div className="mb-3">
@@ -220,6 +208,7 @@ const InfoUser = () => {
                           className="form-control"
                           id="avatar"
                           defaultValue={user.avatar}
+
                         />
                       </div>
                       <div className="d-flex justify-content-end">
