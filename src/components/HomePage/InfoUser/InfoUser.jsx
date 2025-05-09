@@ -3,13 +3,30 @@ import avatar from '../../../assets/icon/avatar.png';
 import Post from '../Post';
 import PostModal from '../PostModal';
 import { useParams } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
+import settingIcon from '../../../assets/icon/setting.png';
+import friendIcon from '../../../assets/icon/friends.png';
 
 const InfoUser = () => {
   const { userId } = useParams();
   const [user, setUser] = useState({});
   const [posts, setPosts] = useState([]);
   const [showModalPost, setShowModalPost] = useState(false);
-  
+  const handleSettingsClick = () => {setShowLogout(!showLogout);}
+  const [showFriendsPopup, setShowFriendsPopup] = useState(false);
+  const [showInfoUser, setShowInfoUser] = useState(false);
+  const handleLogout = () => {  
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
+    localStorage.removeItem('user');
+    Navigate('/login');
+  }
+  const users = [
+    { id: 1, name: 'Tiểu Long', avatar: 'https://i.pravatar.cc/40?img=1' },
+    { id: 2, name: 'Hoàng Long', avatar: 'https://i.pravatar.cc/40?img=2' },
+    { id: 3, name: 'Nguyễn Thị Ngọc A', avatar: 'https://i.pravatar.cc/40?img=3' },
+  ];
+  const [showLogout, setShowLogout] = useState(false);
   useEffect(() => {
 
     const fetchUser = async () => {
@@ -143,17 +160,174 @@ const InfoUser = () => {
       </div>
 
       <div className="d-flex gap-4">
-        <div className="p-4 shadow" style={{ width: '20%' }}>
-          <h2 className="text-center">Giới thiệu</h2>
-          <h6>Học tại trường Đại học Sài Gòn</h6>
-          <h6>Mối quan hệ: Hẹn hò</h6>
-          <h6>Đang sống tại Thành phố Hồ Chí Minh</h6>
-          <button className="btn btn-secondary w-100 rounded-pill mt-2">
-            Cập nhật tiểu sử
-          </button>
+        <div className="p-4 shadow" style={{ width: '20%', height: 'fit-content'}}>  
+          <h5 className="mb-4">Menu</h5>
+
+              {/* Information */}
+              <li className="d-flex align-items-center mb-3">
+              <a
+                  href="#"
+                  className="text-decoration-none text-dark cursor-pointer"
+                  onClick={() => setShowInfoUser(true)}
+                >
+                  <img
+                    src={friendIcon}
+                    alt="friends"
+                    className="me-3"
+                    style={{ width: '40px', height: '40px' }}
+                  />
+                    <span>Update Information</span>
+              </a>
+              </li>
+              
+              {showInfoUser && (
+                <div className="position-fixed top-50 start-50 translate-middle bg-white shadow rounded p-4" style={{ width: '400px', zIndex: 1050 }}>
+                  <h5 className="mb-3">Update Information</h5>
+                    <form>
+                      <div className="mb-3">
+                        <label className="form-label">Name</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          defaultValue={user.name}
+                        />
+                      </div>
+                      <div className="mb-3">
+                        <label className="form-label">Date of Birth</label>
+                        <input
+                          type="date"
+                          className="form-control"
+                        />
+                      </div>
+                      <div className="mb-3">
+                        <label className="form-label">City</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                        />
+                      </div>
+                      <div className="mb-3">
+                        <label className="form-label">School</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                        />
+                      </div>
+                      <div className="mb-3">
+                        <label className="form-label">Avatar URL</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          id="avatar"
+                          defaultValue={user.avatar}
+                        />
+                      </div>
+                      <div className="d-flex justify-content-end">
+                        <button
+                          type="button"
+                          className="btn btn-secondary me-2"
+                          onClick={() => setShowInfoUser(false)}
+                          >
+                          Cancel
+                        </button>
+                        <button type="submit" className="btn btn-primary">Save</button>
+                      </div>
+                    </form>
+                </div>
+              )}
+
+              {/* Friends */}
+              <li className="d-flex align-items-center mb-3">
+                <a
+                  href="#"
+                  className="text-decoration-none text-dark cursor-pointer"
+                  onClick={() => setShowFriendsPopup(true)}
+                >
+                  <img
+                    src={friendIcon}
+                    alt="friends"
+                    className="me-3"
+                    style={{ width: '40px', height: '40px' }}
+                  />
+                    <span>Friends</span>
+                </a>
+              </li>
+
+
+              {/* Setting */}
+              <li className="d-flex align-items-center position-relative">
+                <a 
+                  href="#" 
+                  className="text-decoration-none text-dark cursor-pointer"
+                  onClick={handleSettingsClick}
+                >
+                  <img
+                    src={settingIcon}
+                    alt="setting"
+                    className="me-3"
+                    style={{ width: '40px', height: '40px' }}
+                  />
+                  <span>Setting</span>
+                </a>
+                {showLogout && (
+                  <div className="position-absolute bg-white shadow rounded p-2" style={{ top: '50px', left: '0', zIndex: 1000 }}>
+                    <button className="btn btn-danger w-100" onClick={handleLogout}>
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </li>
+
+              {showFriendsPopup && (
+                <div className="container-fluid d-flex flex-column modal show d-block shadow"
+                    tabIndex="-1"
+                    role="dialog"
+                    style={{
+                        position: 'fixed', // Cố định pop-up
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        zIndex: 1050,
+                    }}>
+                    <div className="modal-dialog"
+                        role="document"
+                        style={{
+                            width: '600px', // Cố định chiều rộng
+                            height: '800px',
+                            maxWidth: '75%', 
+                        }}>
+                            <div className="modal-content" style={{ height: '100%' }}>
+                                <div className="modal-header">
+                                    <h5 className="modal-title">Friends List</h5>
+                                    <button
+                                        type="button"
+                                        className="btn-close"
+                                        aria-label="Close"
+                                        onClick={() => setShowFriendsPopup(false)}
+                                    ></button>
+                                </div>
+                                <div className="modal-body" style={{ overflowY: 'auto' }}>
+                                    <ul className="list-group">
+                                        {users.map((user) => (
+                                            <li key={user.id} className="list-group-item d-flex align-items-center">
+                                                <img
+                                                    src={user.avatar}
+                                                    alt={user.name}
+                                                    className="me-3 rounded-circle"
+                                                    style={{ width: '40px', height: '40px' }}
+                                                />
+                                                {user.name}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            )}
         </div>
 
-        <div className="p-3 shadow d-flex flex-column" style={{ width: '80%', height: '80vh' }}>
+        <div className="p-3 shadow d-flex flex-column" style={{ width: '80%'}}>
           <div className="d-flex align-items-center mb-3">
             <img
               src={avatar}
