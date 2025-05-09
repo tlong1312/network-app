@@ -13,7 +13,8 @@ const LeftMenu = () => {
     const [showFriendsPopup, setShowFriendsPopup] = useState(false);
 
     const navigate = useNavigate();
-    const userName = user ? JSON.parse(user).username : 'User'; 
+    const userName = user ? JSON.parse(user).username : 'User';
+    const userId = user ? JSON.parse(user).id : null; 
     const [showLogout, setShowLogout] = useState(false);
 
     const handleSettingsClick = () => {
@@ -40,7 +41,7 @@ const LeftMenu = () => {
             <ul className="list-unstyled">
                 {/* Profile */}
                 <li className="d-flex align-items-center mb-3">
-    <Link to="/info-user" className="text-decoration-none text-dark cursor-pointer">
+    <Link to={`/info-user/${userId}`} className="text-decoration-none text-dark cursor-pointer">
         <img
             src={icon}
             alt="profile"

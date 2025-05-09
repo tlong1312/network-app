@@ -2,52 +2,75 @@ import React, { useEffect, useState } from 'react';
 import avatar from '../../../assets/icon/avatar.png';
 import Post from '../Post';
 import PostModal from '../PostModal';
+import { useParams } from 'react-router-dom';
 
 const InfoUser = () => {
-  const [currentUser] = useState({
-    id: 1,
-    name: 'TieuLong Dang',
-    avatar: avatar,
-  });
+  const { userId } = useParams();
+  const [user, setUser] = useState({});
   const [posts, setPosts] = useState([]);
   const [showModalPost, setShowModalPost] = useState(false);
   
   useEffect(() => {
-          const fetchPosts = async () => {
-              try {
-                  const token = localStorage.getItem('token'); 
-                  const response = await fetch('http://localhost:8081/api/posts', {
-                      method: 'GET',
-                      headers: {
-                          Authorization: `Bearer ${token}`, 
-                      },
-                  });
-                  if (response.ok) {
-                      const data = await response.json();
-                      setPosts(data.map(post => ({
-                          id: post.id,
-                          author: post.user.username,
-                          avatar: post.user.avatar,
-                          content: post.content,
-                          mediaUrl: post.mediaUrl,
-                          timestamp: post.createdAt,
-                          comments: post.comments,
-                          commentsCount: post.commentCount,
-                          likes: post.likeCount,
-                          isLiked: post.liked,
-                      })));
-                      console.log(data);
-                  } else {
-                      console.error('Failed to fetch posts:', response.statusText);
-                  }
-              } catch (error) {
-                  console.error('Error fetching posts:', error);
-              }
-          };
-      
-          fetchPosts();
-      }, []);
-  
+
+    const fetchUser = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`http://localhost:8081/api/users/${userId}`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setUser({
+            id: data.id,
+            name: data.username,
+            avatar: data.avatar,
+          });
+        } else {
+          console.error('Failed to fetch user:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error fetching user:', error);
+      }
+    };
+
+    const fetchPosts = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('http://localhost:8081/api/posts', {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setPosts(data.map(post => ({
+            id: post.id,
+            author: post.user.username,
+            avatar: post.user.avatar,
+            content: post.content,
+            mediaUrl: post.mediaUrl,
+            timestamp: post.createdAt,
+            comments: post.comments,
+            commentsCount: post.commentCount,
+            likes: post.likeCount,
+            isLiked: post.liked,
+          })));
+          console.log(data);
+        } else {
+          console.error('Failed to fetch posts:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+      }
+    };
+    fetchUser();
+    fetchPosts();
+  }, [userId]);
+
       const handlePost = async (content, mediaFile) => {
           try {
   
@@ -116,7 +139,7 @@ const InfoUser = () => {
           style={{ width: '70px', height: '70px' }}
           className="me-3"
         />
-        <h3>{currentUser.name}</h3>
+        <h3>{user.name}</h3>
       </div>
 
       <div className="d-flex gap-4">
@@ -153,7 +176,7 @@ const InfoUser = () => {
                 />
             )}
 
-            <Post posts={posts} setPosts={setPosts} currentUser={currentUser}/>
+            <Post posts={posts} setPosts={setPosts} currentUser={user}/>
         </div>
       </div>
     </div>

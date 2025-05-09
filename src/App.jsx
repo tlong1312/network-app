@@ -31,6 +31,7 @@ function App() {
                         <Route index element={<HomePage />} />
                         <Route path="search" element={<SearchPage />} />
                         <Route path="info-user" element={<InfoUser />} />
+                        <Route path="info-user/:userId" element={<InfoUser />} />
                     </Route>
                 </Route>
 
