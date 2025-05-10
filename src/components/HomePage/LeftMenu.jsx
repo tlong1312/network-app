@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import icon from '../../assets/icon/avatar.png';
 import friendIcon from '../../assets/icon/friends.png';
 import groupIcon from '../../assets/icon/groups.png';
@@ -9,13 +9,37 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 const LeftMenu = () => {
 
     const user = localStorage.getItem('user');
-    console.log(user);
     const [showFriendsPopup, setShowFriendsPopup] = useState(false);
     const navigate = useNavigate();
     const userName = user ? JSON.parse(user).username : 'User';
-    const userId = user ? JSON.parse(user).id : null; 
-
+    const currentUserId = user ? JSON.parse(user).id : null;
     const [showLogout, setShowLogout] = useState(false);
+    const [friends, setFriends] = useState([]);
+
+    useEffect(() => {
+        const fetchFriends = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch(`http://localhost:8081/api/friends?userId=${currentUserId}`, {
+                    method: 'GET',
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setFriends(data);
+                } else {
+                    console.error('Failed to fetch friends:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error fetching friends:', error);
+            }
+        };
+
+        fetchFriends();
+    }, [currentUserId]);
 
     const handleSettingsClick = () => {
         setShowLogout(!showLogout);
@@ -29,29 +53,22 @@ const LeftMenu = () => {
     }
 
 
-    // Danh sách người dùng mẫu
-    const users = [
-        { id: 1, name: 'Tiểu Long', avatar: 'https://i.pravatar.cc/40?img=1' },
-        { id: 2, name: 'Hoàng Long', avatar: 'https://i.pravatar.cc/40?img=2' },
-        { id: 3, name: 'Nguyễn Thị Ngọc A', avatar: 'https://i.pravatar.cc/40?img=3' },
-    ];
-
     return (
         <div className="col-lg-2 bg-light p-3 d-none d-lg-block">
             <ul className="list-unstyled">
                 {/* Profile */}
                 <li className="d-flex align-items-center mb-3">
 
-    <Link to={`/info-user/${userId}`} className="text-decoration-none text-dark cursor-pointer">
-        <img
-            src={icon}
-            alt="profile"
-            className="me-3"
-            style={{ width: '40px', height: '40px' }}
-        />
-        <span>{userName}</span>
-    </Link>
-</li>
+                    <Link to={`/info-user/${currentUserId}`} className="text-decoration-none text-dark cursor-pointer">
+                        <img
+                            src={icon}
+                            alt="profile"
+                            className="me-3"
+                            style={{ width: '40px', height: '40px' }}
+                        />
+                        <span>{userName}</span>
+                    </Link>
+                </li>
 
 
                 {/* Friends */}
@@ -88,8 +105,8 @@ const LeftMenu = () => {
 
                 {/* Setting */}
                 <li className="d-flex align-items-center position-relative">
-                    <a 
-                        href="#" 
+                    <a
+                        href="#"
                         className="text-decoration-none text-dark cursor-pointer"
                         onClick={handleSettingsClick}
                     >
@@ -119,24 +136,42 @@ const LeftMenu = () => {
 
             {/* Pop-up hiển thị danh sách bạn bè */}
             {showFriendsPopup && (
-                <div className="container-fluid d-flex flex-column modal show d-block shadow"
-                    tabIndex="-1"
-                    role="dialog"
+                <div
+                    className="modal-overlay"
                     style={{
-                        position: 'fixed', // Cố định pop-up
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        zIndex: 1050,
-                    }}>
-                    <div className="modal-dialog"
-                        role="document"
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                        zIndex: 1040,
+                    }}
+                    onClick={() => setShowFriendsPopup(false)}
+                >
+                    <div
+                        className="container-fluid d-flex flex-column modal show d-block shadow"
+                        tabIndex="-1"
+                        role="dialog"
                         style={{
-                            width: '600px', // Cố định chiều rộng
-                            height: '800px',
-                            maxWidth: '75%', 
-                        }}>
-                            <div className="modal-content" style={{ height: '100%' }}>
+                            position: 'fixed',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            zIndex: 1050,
+                        }}
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div
+                            className="modal-dialog"
+                            role="document"
+                            style={{
+                                width: '600px',
+                                height: '800px',
+                                maxWidth: '75%',
+                            }}
+                        >
+                            <div className="modal-content">
                                 <div className="modal-header">
                                     <h5 className="modal-title">Friends List</h5>
                                     <button
@@ -146,22 +181,34 @@ const LeftMenu = () => {
                                         onClick={() => setShowFriendsPopup(false)}
                                     ></button>
                                 </div>
-                                <div className="modal-body" style={{ overflowY: 'auto' }}>
+                                <div
+                                    className="modal-body"
+                                    style={{
+                                        maxHeight: '700px',
+                                        overflowY: 'auto',
+                                    }}
+                                >
                                     <ul className="list-group">
-                                        {users.map((user) => (
-                                            <li key={user.id} className="list-group-item d-flex align-items-center">
+                                        {friends.map((friend) => (
+                                            <li
+                                                key={friend.id}
+                                                className="list-group-item d-flex align-items-center"
+                                                onClick={() => navigate(`/info-user/${friend.id}`)} 
+                                                style={{ cursor: 'pointer' }}
+                                            >
                                                 <img
-                                                    src={user.avatar}
-                                                    alt={user.name}
+                                                    src={friend.avatar}
+                                                    alt={friend.username}
                                                     className="me-3 rounded-circle"
                                                     style={{ width: '40px', height: '40px' }}
                                                 />
-                                                {user.name}
+                                                {friend.username}
                                             </li>
                                         ))}
                                     </ul>
                                 </div>
                             </div>
+                        </div>
                     </div>
                 </div>
             )}

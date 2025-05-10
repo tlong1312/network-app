@@ -14,6 +14,17 @@ body {
   /* Điều chỉnh độ rộng tối đa */
 }
 
+.scrollable {
+    max-height: 270px; /* Giới hạn chiều cao */
+    overflow-y: auto; /* Cho phép cuộn dọc */
+    scrollbar-width: none; /* Ẩn thanh cuộn trên Firefox */
+    -ms-overflow-style: none; /* Ẩn thanh cuộn trên IE và Edge */
+}
+
+.scrollable::-webkit-scrollbar {
+    display: none; /* Ẩn thanh cuộn trên Chrome, Safari */
+}
+
 .search-input {
   width: 100%;
   height: 50px;
