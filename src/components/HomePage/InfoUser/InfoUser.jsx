@@ -60,9 +60,9 @@ const InfoUser = () => {
 
     const checkFriendStatus = async () => {
       if (userId === currentUserId) {
-        setFriendStatus("none"); // Không cần kiểm tra trạng thái bạn bè nếu là trang cá nhân của chính mình
+        setFriendStatus("none");
         return;
-    }
+      }
       try {
         const token = localStorage.getItem('token');
         const response = await fetch(`http://localhost:8081/api/friends/friendship-status?userId=${currentUserId}&friendId=${userId}`, {
@@ -73,9 +73,9 @@ const InfoUser = () => {
         });
         if (response.ok) {
           const data = await response.json();
-            setFriendStatus(data.status); // Cập nhật trạng thái bạn bè
-            setIsReceiver(data.isReceiver); // Cập nhật vai trò (người nhận hay không)
-            console.log('Friend status:', data.status);
+          setFriendStatus(data.status);
+          setIsReceiver(data.isReceiver);
+          console.log('Friend status:', data.status);
         } else {
           console.error('Failed to check friend status:', response.statusText);
         }
@@ -145,7 +145,7 @@ const InfoUser = () => {
     try {
       const token = localStorage.getItem('token');
       const response = await fetch(`http://localhost:8081/api/friends/unfriend?userId=${currentUserId}&friendId=${userId}`, {
-        method: 'DELETE', 
+        method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -163,23 +163,23 @@ const InfoUser = () => {
 
   const handleAcceptFriend = async () => {
     try {
-        const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:8081/api/friends/accept-request?userId=${currentUserId}&friendId=${userId}`, {
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
+      const token = localStorage.getItem('token');
+      const response = await fetch(`http://localhost:8081/api/friends/accept-request?userId=${currentUserId}&friendId=${userId}`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-        if (response.ok) {
-            setFriendStatus("accepted"); 
-        } else {
-            console.error('Failed to accept friend request:', response.statusText);
-        }
+      if (response.ok) {
+        setFriendStatus("accepted");
+      } else {
+        console.error('Failed to accept friend request:', response.statusText);
+      }
     } catch (error) {
-        console.error('Error accepting friend request:', error);
+      console.error('Error accepting friend request:', error);
     }
-};
+  };
 
 
   const handlePost = async (content, mediaFile) => {
@@ -253,34 +253,34 @@ const InfoUser = () => {
       </div>
 
 
-    <div className="text-center">
-    {parseInt(userId) === parseInt(currentUserId) ? null : (
-        friendStatus === "accepted" ? (
+      <div className="text-center">
+        {parseInt(userId) === parseInt(currentUserId) ? null : (
+          friendStatus === "accepted" ? (
             <button className="btn btn-outline-danger" onClick={handleUnfriend}>
-                Unfriend
+              Unfriend
             </button>
-        ) : friendStatus === "pending" ? (
+          ) : friendStatus === "pending" ? (
             isReceiver ? ( // Nếu là người nhận yêu cầu
-                <div>
-                    <button className="btn btn-outline-success me-2" onClick={handleAcceptFriend}>
-                        Accept Friend
-                    </button>
-                    <button className="btn btn-outline-danger" onClick={handleUnfriend}>
-                        Decline
-                    </button>
-                </div>
-            ) : ( // Nếu là người gửi yêu cầu
-                <button className="btn btn-outline-secondary" disabled>
-                    Pending
+              <div>
+                <button className="btn btn-outline-success me-2" onClick={handleAcceptFriend}>
+                  Accept Friend
                 </button>
+                <button className="btn btn-outline-danger" onClick={handleUnfriend}>
+                  Decline
+                </button>
+              </div>
+            ) : ( // Nếu là người gửi yêu cầu
+              <button className="btn btn-outline-secondary" disabled>
+                Pending
+              </button>
             )
-        ) : (
+          ) : (
             <button className="btn btn-outline-primary" onClick={handleAddFriend}>
-                Add Friend
+              Add Friend
             </button>
-        )
-    )}
-</div>
+          )
+        )}
+      </div>
 
       <div className="d-flex gap-4">
         <div className="p-4 shadow" style={{ width: '20%', height: 'fit-content' }}>
