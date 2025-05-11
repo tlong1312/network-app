@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import avatar from '../../../assets/icon/avatar.png';
 import Post from '../Post';
 import PostModal from '../PostModal';
-import { useParams } from 'react-router-dom';
-import { Navigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import settingIcon from '../../../assets/icon/setting.png';
 import friendIcon from '../../../assets/icon/friends.png';
 
@@ -19,11 +18,12 @@ const InfoUser = () => {
   const currentUserId = currentUser ? JSON.parse(currentUser).id : null;
   const [friendStatus, setFriendStatus] = useState("none");
   const [isReceiver, setIsReceiver] = useState(false);
+  const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('role');
     localStorage.removeItem('user');
-    Navigate('/login');
+    navigate('/login');
   }
   const users = [
     { id: 1, name: 'Tiểu Long', avatar: 'https://i.pravatar.cc/40?img=1' },
