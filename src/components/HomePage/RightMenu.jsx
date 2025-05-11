@@ -26,7 +26,7 @@ const RightMenu = () => {
                     const data = await response.json();
                     setPeople(data.map(user => ({
                         id: user.id,
-                        name: user.username,
+                        name: user.fullName,
                         avatar: user.avatar,
                         isFriend: user.status,
                     })));
@@ -181,12 +181,12 @@ const RightMenu = () => {
             >
                                     <img
                                         src={request.avatar}
-                                        alt={request.username}
+                                        alt={request.fullName}
                                         className='me-3 rounded-circle'
                                         style={{ width: '40px', height: '40px' }}
                                     />
                                     <div>
-                                        <span className='fw-bold d-block'>{request.username}</span>
+                                        <span className='fw-bold d-block'>{request.fullName}</span>
                                     </div>
                                 </div>
                                 <div>

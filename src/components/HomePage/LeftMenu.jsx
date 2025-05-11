@@ -11,7 +11,7 @@ const LeftMenu = () => {
     const user = localStorage.getItem('user');
     const [showFriendsPopup, setShowFriendsPopup] = useState(false);
     const navigate = useNavigate();
-    const userName = user ? JSON.parse(user).username : 'User';
+    const fullName = user ? JSON.parse(user).fullName : 'User';
     const currentUserId = user ? JSON.parse(user).id : null;
     const [showLogout, setShowLogout] = useState(false);
     const [friends, setFriends] = useState([]);
@@ -66,7 +66,7 @@ const LeftMenu = () => {
                             className="me-3"
                             style={{ width: '40px', height: '40px' }}
                         />
-                        <span>{userName}</span>
+                        <span>{fullName}</span>
                     </Link>
                 </li>
 
@@ -198,11 +198,11 @@ const LeftMenu = () => {
                                             >
                                                 <img
                                                     src={friend.avatar}
-                                                    alt={friend.username}
+                                                    alt={friend.fullName}
                                                     className="me-3 rounded-circle"
                                                     style={{ width: '40px', height: '40px' }}
                                                 />
-                                                {friend.username}
+                                                {friend.fullName}
                                             </li>
                                         ))}
                                     </ul>

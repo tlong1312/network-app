@@ -113,7 +113,7 @@ const MainContent = () => {
                     const data = await response.json();
                     setPosts(data.map(post => ({
                         id: post.id,
-                        author: post.user.username,
+                        author: post.user.fullName,
                         avatar: post.user.avatar,
                         content: post.content,
                         mediaUrl: post.mediaUrl,
@@ -179,7 +179,7 @@ const MainContent = () => {
                 setPosts([
                     {
                         id: newPost.id,
-                        author: newPost.user.username,
+                        author: newPost.user.fullName,
                         avatar: newPost.user.avatar,
                         content: newPost.content,
                         mediaUrl: newPost.mediaUrl,

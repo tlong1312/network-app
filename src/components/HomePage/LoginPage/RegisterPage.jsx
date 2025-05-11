@@ -7,6 +7,7 @@ const RegisterPage = () => {
 
   const [formData, setFormData] = useState({
     username: "",
+    fullName: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -21,6 +22,11 @@ const RegisterPage = () => {
 
     if (!formData.username || formData.username.length < 3) {
       alert("Tên đăng nhập phải có ít nhất 3 ký tự!");
+      return;
+    }
+
+    if (!formData.fullName) {
+      alert("Họ tên không được để trống!");
       return;
     }
 
@@ -42,6 +48,7 @@ const RegisterPage = () => {
 
     const userData = {
       username: formData.username,
+      fullName: formData.fullName,
       email: formData.email,
       password: formData.password,
     }
@@ -81,6 +88,7 @@ const RegisterPage = () => {
       <form className="register-form" onSubmit={handleSubmit}>
         <h2>ĐĂNG KÝ</h2>
         <input type="text" name="username" placeholder="Tên đăng nhập" onChange={handleChange} required />
+        <input type="text" name="fullName" placeholder="Họ tên" onChange={handleChange} required />
         <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
         <input type="password" name="password" placeholder="Mật khẩu" onChange={handleChange} required />
         <input type="password" name="confirmPassword" placeholder="Xác nhận mật khẩu" onChange={handleChange} required />

@@ -46,7 +46,7 @@ const InfoUser = () => {
           const data = await response.json();
           setUser({
             id: data.id,
-            name: data.username,
+            name: data.fullName,
             email: data.email,
             avatar: data.avatar,
           });
@@ -59,10 +59,11 @@ const InfoUser = () => {
     };
 
     const checkFriendStatus = async () => {
-      if (userId === currentUserId) {
+      if (friendStatus === "pending") return; 
+    if (parseInt(userId) === parseInt(currentUserId)) {
         setFriendStatus("none");
         return;
-      }
+    }
       try {
         const token = localStorage.getItem('token');
         const response = await fetch(`http://localhost:8081/api/friends/friendship-status?userId=${currentUserId}&friendId=${userId}`, {
@@ -118,7 +119,7 @@ const InfoUser = () => {
     fetchUser();
     fetchPosts();
     checkFriendStatus();
-  }, [userId, currentUserId]);
+  }, [userId, currentUserId, friendStatus]);
 
 
   const handleAddFriend = async () => {
