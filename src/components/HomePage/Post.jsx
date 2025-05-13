@@ -173,7 +173,7 @@ const Post = (props) => {
                             )}
                             <div className='d-flex align-items-center mb-2'>
                                 <img
-                                    src="https://placehold.co/30x30"
+                                    src={post.avatar}
                                     alt="User 1"
                                     className='me-3 rounded-circle'
                                     style={{ width: '30px', height: '30px' }}

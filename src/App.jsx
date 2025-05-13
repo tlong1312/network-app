@@ -6,7 +6,6 @@ import SearchPage from "./components/HomePage/SearchPage/searchPage";
 import ProtectedRoute from "./components/Admin/ProtectedRoute";
 import Dashboard from "./components/Admin/Content/Dashboard";
 import HomePage from "./components/HomePage/HomePage";
-import StatisticalManagement from "./components/Admin/Content/StatisticalManagement";
 import UserManagement from "./components/Admin/Content/UserManagement";
 import PostManagement from "./components/Admin/Content/PostManagement";
 import Login from './components/HomePage/LoginPage/login';
@@ -44,7 +43,6 @@ function App() {
                     >
                         <Route index element={<Dashboard />} />
                         <Route path="dashboard" element={<Dashboard />} />
-                        <Route path="statistical-management" element={<StatisticalManagement />} />
                         <Route path="user-management" element={<UserManagement />} />
                         <Route path="post-management" element={<PostManagement />} />
                     </Route>
