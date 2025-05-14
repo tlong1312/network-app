@@ -10,6 +10,26 @@ const Navbar = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        const handleStorageChange = () => {
+            const user = localStorage.getItem('user');
+            if (user) {
+                const parsedUser = JSON.parse(user);
+                setAvatarUrl(parsedUser.avatar || defaultAvatar);
+            }
+        };
+
+        // Tạo một custom event để các component khác có thể trigger
+        window.addEventListener('user-updated', handleStorageChange);
+        
+        // Cũng fetch dữ liệu khi component mount
+        handleStorageChange();
+
+        return () => {
+            window.removeEventListener('user-updated', handleStorageChange);
+        };
+    }, []);
+
+    useEffect(() => {
         const fetchUser = async () => {
             try {
                 const token = localStorage.getItem('token');

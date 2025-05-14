@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import icon from '../../assets/icon/avatar.png';
 import friendIcon from '../../assets/icon/friends.png';
-import groupIcon from '../../assets/icon/groups.png';
 import settingIcon from '../../assets/icon/setting.png';
 import { useNavigate, Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -87,18 +86,6 @@ const LeftMenu = () => {
                     </a>
                 </li>
 
-                {/* Groups */}
-                <li className="d-flex align-items-center mb-3">
-                    <a href="#" className="text-decoration-none text-dark cursor-pointer">
-                        <img
-                            src={groupIcon}
-                            alt="groups"
-                            className="me-3"
-                            style={{ width: '40px', height: '40px' }}
-                        />
-                        <span>Groups</span>
-                    </a>
-                </li>
 
                 <hr />
 

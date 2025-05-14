@@ -17,6 +17,11 @@ const InfoUser = () => {
   const currentUserId = currentUser ? JSON.parse(currentUser).id : null;
   const [friendStatus, setFriendStatus] = useState("none");
   const [isReceiver, setIsReceiver] = useState(false);
+  const [editedUser, setEditedUser] = useState({
+    name: user.name,
+    email: user.email,
+    avatar: user.avatar,
+  });
   const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -30,60 +35,8 @@ const InfoUser = () => {
     { id: 3, name: 'Nguyễn Thị Ngọc A', avatar: 'https://i.pravatar.cc/40?img=3' },
   ];
   const [showLogout, setShowLogout] = useState(false);
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:8081/api/users/${userId}`, {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        if (response.ok) {
-          const data = await response.json();
-          setUser({
-            id: data.id,
-            name: data.fullName,
-            email: data.email,
-            avatar: data.avatar,
-          });
-        } else {
-          console.error('Failed to fetch user:', response.statusText);
-        }
-      } catch (error) {
-        console.error('Error fetching user:', error);
-      }
-    };
 
-    const checkFriendStatus = async () => {
-      if (friendStatus === "pending") return; 
-    if (parseInt(userId) === parseInt(currentUserId)) {
-        setFriendStatus("none");
-        return;
-    }
-      try {
-        const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:8081/api/friends/friendship-status?userId=${currentUserId}&friendId=${userId}`, {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        if (response.ok) {
-          const data = await response.json();
-          setFriendStatus(data.status);
-          setIsReceiver(data.isReceiver);
-          console.log('Friend status:', data.status);
-        } else {
-          console.error('Failed to check friend status:', response.statusText);
-        }
-      } catch (error) {
-        console.error('Error checking friend status:', error);
-      }
-    };
-
-    const fetchPosts = async () => {
+  const fetchPosts = async () => {
       try {
         const token = localStorage.getItem('token');
         const response = await fetch('http://localhost:8081/api/posts', {
@@ -114,33 +67,111 @@ const InfoUser = () => {
         console.error('Error fetching posts:', error);
       }
     };
+
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`http://localhost:8081/api/users/${userId}`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setUser({
+            id: data.id,
+            name: data.fullName,
+            email: data.email,
+            avatar: data.avatar,
+          });
+        } else {
+          console.error('Failed to fetch user:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error fetching user:', error);
+      }
+    };
+
+    const checkFriendStatus = async () => {
+      if (friendStatus === "pending") return;
+      if (parseInt(userId) === parseInt(currentUserId)) {
+        setFriendStatus("none");
+        return;
+      }
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`http://localhost:8081/api/friends/friendship-status?userId=${currentUserId}&friendId=${userId}`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setFriendStatus(data.status);
+          setIsReceiver(data.isReceiver);
+          console.log('Friend status:', data.status);
+        } else {
+          console.error('Failed to check friend status:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error checking friend status:', error);
+      }
+    };
+
+    
     fetchUser();
     fetchPosts();
     checkFriendStatus();
   }, [userId, currentUserId, friendStatus]);
 
-const handleAvatarUpload = async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
+  useEffect(() => {
+    if (user && user.id) {
+      setEditedUser({
+        name: user.name || '',
+        email: user.email || '',
+        avatar: user.avatar || ''
+      });
+    }
+  }, [user]);
 
-  const formData = new FormData();
-  formData.append('file', file);
-  formData.append('upload_preset', 'upload_jh0b9yxu');
+  const handleAvatarChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
-  try {
-    const response = await fetch(
-      'https://api.cloudinary.com/v1_1/dm8pwfst2/image/upload',
-      {
-        method: 'POST',
-        body: formData,
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'upload_jh0b9yxu');
+
+    try {
+      const response = await fetch(
+        'https://api.cloudinary.com/v1_1/dm8pwfst2/image/upload',
+        {
+          method: 'POST',
+          body: formData,
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        const uploadedUrl = data.secure_url;
+
+        setEditedUser({ ...editedUser, avatar: uploadedUrl });
+      } else {
+        console.error('Failed to upload avatar:', response.statusText);
       }
-    );
+    } catch (error) {
+      console.error('Error uploading avatar:', error);
+    }
+  }
 
-    if (response.ok) {
-      const data = await response.json();
-      const uploadedUrl = data.secure_url;
+  const handleUpdateUserInfo = async (e) => {
+    e.preventDefault();
 
-      // Cập nhật avatar vào backend
+    try {
       const token = localStorage.getItem('token');
       const updateResponse = await fetch(`http://localhost:8081/api/users/${userId}`, {
         method: 'PUT',
@@ -148,26 +179,40 @@ const handleAvatarUpload = async (e) => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ avatar: uploadedUrl }),
+        body: JSON.stringify({
+          fullName: editedUser.name,
+          email: editedUser.email,
+          avatar: editedUser.avatar,
+        }),
       });
 
       if (updateResponse.ok) {
-        setUser((prevUser) => ({
-          ...prevUser,
-          avatar: uploadedUrl, // Cập nhật state
-        }));
-        console.log('Avatar updated successfully!');
+        setUser({
+          ...user,
+          name: editedUser.name,
+          email: editedUser.email,
+          avatar: editedUser.avatar,
+        });
+
+        if (parseInt(userId) === parseInt(currentUserId)) {
+          const currentUserData = JSON.parse(localStorage.getItem('user'));
+          if (currentUserData) {
+            currentUserData.fullName = editedUser.name;
+            currentUserData.avatar = editedUser.avatar;
+            localStorage.setItem('user', JSON.stringify(currentUserData));
+            window.dispatchEvent(new Event('user-updated'));
+          }
+        }
+        fetchPosts()
+        console.log('User information updated successfully!');
         setShowInfoUser(false);
       } else {
-        console.error('Failed to update avatar in backend:', updateResponse.statusText);
+        console.error('Failed to update user information:', await updateResponse.text());
       }
-    } else {
-      console.error('Failed to upload avatar:', response.statusText);
+    } catch (error) {
+      console.error('Error updating user information:', error);
     }
-  } catch (error) {
-    console.error('Error uploading avatar:', error);
-  }
-}
+  };
 
   const handleAddFriend = async () => {
     try {
@@ -231,66 +276,66 @@ const handleAvatarUpload = async (e) => {
 
 
   const handlePost = async (content, mediaFile) => {
-          try {
-              
-              let mediaUrl = null;
-              if (mediaFile) {
-                  const formData = new FormData();
-                  formData.append('file', mediaFile);
-                  formData.append('upload_preset', 'upload-y8ouewvx');
-  
-                  const response = await fetch('https://api.cloudinary.com/v1_1/drbjicnlm/upload', {
-                      method: 'POST',
-                      body: formData,
-                  });
-  
-                  if (response.ok) {
-                      const data = await response.json();
-                      mediaUrl = data.secure_url;
-                  } else {
-                      console.error('Upload file lên cloud thất bại: ', response.statusText);
-                      return;
-                  }
-  
-              }
-              
-              const payload = {
-                  content,
-                  mediaUrl,
-              };
-  
-              const apiResponse = await fetch('http://localhost:8081/api/posts', {
-                  method: 'POST',
-                  headers: {
-                      'Content-Type': 'application/json',
-                      Authorization: `Bearer ${localStorage.getItem('token')}`,
-                  },
-                  body: JSON.stringify(payload),
-              });
-  
-              if (apiResponse.ok) {
-                  const newPost = await apiResponse.json();
-                  setPosts([
-                      {
-                          id: newPost.id,
-                          author: newPost.user.fullName,
-                          avatar: newPost.user.avatar,
-                          content: newPost.content,
-                          mediaUrl: newPost.mediaUrl,
-                          timestamp: newPost.createdAt,
-                          comments: newPost.comments,
-                          commentsCount: newPost.commentCount,
-                          likes: newPost.likeCount,
-                      },
-                      ...posts,
-                  ]);
-              } else {
-                  console.error('Lỗi khi đăng bài viết:', apiResponse.statusText);
-              }
-          } catch (error) {
-              console.error('Đã xảy ra lỗi:', error);
-          }
+    try {
+
+      let mediaUrl = null;
+      if (mediaFile) {
+        const formData = new FormData();
+        formData.append('file', mediaFile);
+        formData.append('upload_preset', 'upload-y8ouewvx');
+
+        const response = await fetch('https://api.cloudinary.com/v1_1/drbjicnlm/upload', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          mediaUrl = data.secure_url;
+        } else {
+          console.error('Upload file lên cloud thất bại: ', response.statusText);
+          return;
+        }
+
+      }
+
+      const payload = {
+        content,
+        mediaUrl,
       };
+
+      const apiResponse = await fetch('http://localhost:8081/api/posts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (apiResponse.ok) {
+        const newPost = await apiResponse.json();
+        setPosts([
+          {
+            id: newPost.id,
+            author: newPost.user.fullName,
+            avatar: newPost.user.avatar,
+            content: newPost.content,
+            mediaUrl: newPost.mediaUrl,
+            timestamp: newPost.createdAt,
+            comments: newPost.comments,
+            commentsCount: newPost.commentCount,
+            likes: newPost.likeCount,
+          },
+          ...posts,
+        ]);
+      } else {
+        console.error('Lỗi khi đăng bài viết:', apiResponse.statusText);
+      }
+    } catch (error) {
+      console.error('Đã xảy ra lỗi:', error);
+    }
+  };
   return (
     <div className="container-fluid" style={{ height: '100%' }}>
       <div className="d-flex justify-content-center align-items-center mb-3">
@@ -357,13 +402,14 @@ const handleAvatarUpload = async (e) => {
           {showInfoUser && (
             <div className="position-fixed top-50 start-50 translate-middle bg-white shadow rounded p-4" style={{ width: '400px', zIndex: 1050 }}>
               <h5 className="mb-3">Update Information</h5>
-              <form>
+              <form onSubmit={handleUpdateUserInfo}>
                 <div className="mb-3">
-                  <label className="form-label">Username</label>
+                  <label className="form-label">Họ Tên</label>
                   <input
                     type="text"
                     className="form-control"
-                    defaultValue={user.name}
+                    value={editedUser.name || ''}
+                    onChange={(e) => setEditedUser({ ...editedUser, name: e.target.value })}
                   />
                 </div>
                 <div className="mb-3">
@@ -371,16 +417,26 @@ const handleAvatarUpload = async (e) => {
                   <input
                     type="text"
                     className="form-control"
-                    defaultValue={user.email}
+                    value={editedUser.email || ''}
+                    onChange={(e) => setEditedUser({ ...editedUser, email: e.target.value })}
                   />
                 </div>
                 <div className="mb-3">
-                  <label className="form-label">Avatar URL</label>
+                  <label className="form-label">Avatar</label>
+                  {editedUser.avatar && (
+                    <div className="mb-2">
+                      <img
+                        src={editedUser.avatar}
+                        alt="Preview Avatar"
+                        style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+                        className="rounded-circle"
+                      />
+                    </div>
+                  )}
                   <input
                     type="file"
                     className="form-control"
-                    id="avatar"
-                    onChange={(e) => handleAvatarUpload(e)}
+                    onChange={handleAvatarChange}
                   />
                 </div>
                 <div className="d-flex justify-content-end">

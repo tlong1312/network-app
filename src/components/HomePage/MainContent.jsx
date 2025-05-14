@@ -13,37 +13,105 @@ const MainContent = () => {
     const [showModalStory, setShowModalStory] = useState(false);
     const [showModalPost, setShowModalPost] = useState(false);
     const [posts, setPosts] = useState([]);
+    const [stories, setStories] = useState([]);
 
-    const [currentUser] = useState({
-        id: 1,
-        name: 'TieuLong Dang',
-        avatar: avatar,
-    });
-
-    const [stories, setStories] = useState([
-        {
+    const [currentUser, setCurrentUser] = useState(() => {
+    const userFromStorage = localStorage.getItem('user');
+    if (userFromStorage) {
+        const parsedUser = JSON.parse(userFromStorage);
+        return {
+            id: parsedUser.id,
+            name: parsedUser.username, // Điều chỉnh tên trường theo dữ liệu thực tế của bạn
+            avatar: parsedUser.avatar || avatar, // Sử dụng avatar mặc định nếu không có
+        };
+    } else {
+        return {
             id: 1,
-            avatar: currentUser.avatar,
-            authorName: currentUser.name,
-            stories: [
-                { id: 1, image: 'https://placehold.co/800x300', duration: 5000 },
-                { id: 2, image: 'https://placehold.co/300x300', duration: 5000 },
-            ],
-        },
-        {
-            id: 2,
-            avatar: 'https://placehold.co/80x80',
-            authorName: 'John Doe',
-            stories: [
-                { id: 1, image: 'https://placehold.co/500x500', duration: 5000 },
-                { id: 2, image: 'https://placehold.co/600x600', duration: 5000 },
-            ],
-        },
-    ]);
+            name: 'Guest User',
+            avatar: avatar,
+        };
+    }
+});
+
+// Thêm useEffect để lắng nghe thay đổi trong localStorage
+useEffect(() => {
+    const handleUserUpdate = () => {
+        const userFromStorage = localStorage.getItem('user');
+        if (userFromStorage) {
+            const parsedUser = JSON.parse(userFromStorage);
+            setCurrentUser({
+                id: parsedUser.id,
+                name: parsedUser.username, // Điều chỉnh tên trường theo dữ liệu thực tế 
+                avatar: parsedUser.avatar || avatar,
+            });
+        }
+    };
+
+    // Lắng nghe sự kiện user-updated
+    window.addEventListener('user-updated', handleUserUpdate);
+    
+    // Cleanup
+    return () => {
+        window.removeEventListener('user-updated', handleUserUpdate);
+    };
+}, []);
+
+
+const fetchStories = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+            
+            const response = await fetch('http://localhost:8081/api/stories', {
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                
+                // Chỉ lấy những người dùng có ít nhất 1 story
+                const formattedStories = data
+                    .filter(user => user.images && user.images.length > 0)
+                    .map(user => ({
+                        id: user.id,
+                        authorName: user.username,
+                        avatar: user.avatar || avatar,
+                        stories: user.images.map((image, index) => ({
+                            id: index,
+                            image: image.url,
+                            duration: image.duration || 5000
+                        }))
+                    }));
+                
+                setStories(formattedStories);
+            } else {
+                console.error('Failed to fetch stories:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error fetching stories:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchStories();
+    }, []);
+
+
+    
 
     // Auto-play stories with progress bar
     useEffect(() => {
         if (!selectedStory || isPaused) return;
+
+        if (!selectedStory.stories || 
+            selectedStory.stories.length === 0 || 
+            !selectedStory.stories[currentStoryIndex]) {
+            setSelectedStory(null);
+            return;
+        }
 
         const storyDuration = selectedStory.stories[currentStoryIndex].duration || 5000;
         const interval = 100;
@@ -83,20 +151,47 @@ const MainContent = () => {
         }
     };
 
-    const handStory = (image) => {
-        const newStory = {
-            id: Date.now(),
-            image: image ? URL.createObjectURL(image) : null,
-            duration: 5000
-        };
-        setStories((prevStories) =>
-            prevStories.map((story) =>
-                story.id === currentUser.id
-                    ? { ...story, stories: [...story.stories, newStory] }
-                    : story
-            )
-        );
+    // Sửa hàm handStory trong MainContent.jsx
+
+const handStory = (imageInput) => {
+    // Kiểm tra xem đầu vào có phải URL string hay không
+    const imageUrl = typeof imageInput === 'string' 
+        ? imageInput  // Nếu là string (URL), sử dụng trực tiếp
+        : URL.createObjectURL(imageInput);  // Nếu là file, tạo URL
+
+    const newStory = {
+        id: Date.now(),
+        image: imageUrl,
+        duration: 5000
     };
+    
+    setStories((prevStories) => {
+        // Kiểm tra xem user đã có trong stories chưa
+        const userStoryIndex = prevStories.findIndex(story => story.id === currentUser.id);
+        
+        if (userStoryIndex !== -1) {
+            // Nếu user đã có story, thêm vào mảng stories của user đó
+            const updatedStories = [...prevStories];
+            updatedStories[userStoryIndex] = {
+                ...updatedStories[userStoryIndex],
+                stories: [...updatedStories[userStoryIndex].stories, newStory]
+            };
+            return updatedStories;
+        } else {
+            // Nếu user chưa có story, tạo mới
+            return [
+                ...prevStories,
+                {
+                    id: currentUser.id,
+                    authorName: currentUser.name,
+                    avatar: currentUser.avatar,
+                    stories: [newStory]
+                }
+            ];
+        }
+    });
+    fetchStories(); // Gọi lại hàm fetchStories để cập nhật danh sách stories
+};
 
     // Fetch posts from API
     useEffect(() => {
@@ -331,17 +426,23 @@ const MainContent = () => {
 
                         {/* Story content with navigation controls */}
                         <div className="position-relative">
-                            <img
-                                src={selectedStory.stories[currentStoryIndex].image}
-                                alt={`Story ${currentStoryIndex + 1}`}
-                                style={{
-                                    width: '100%',
-                                    height: 'auto',
-                                    maxHeight: '90vh',
-                                    objectFit: 'contain',
-                                    borderRadius: '8px'
-                                }}
-                            />
+    {selectedStory.stories && selectedStory.stories[currentStoryIndex] ? (
+        <img
+            src={selectedStory.stories[currentStoryIndex].image}
+            alt={`Story ${currentStoryIndex + 1}`}
+            style={{
+                width: '100%',
+                height: 'auto',
+                maxHeight: '90vh',
+                objectFit: 'contain',
+                borderRadius: '8px'
+            }}
+        />
+    ) : (
+        <div className="text-center p-5 text-white">
+            <p>No story content available</p>
+        </div>
+    )}
 
                             {/* Invisible navigation areas */}
                             <div
