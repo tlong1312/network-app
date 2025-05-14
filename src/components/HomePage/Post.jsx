@@ -118,7 +118,7 @@ const Post = (props) => {
                         <p>{post.content}</p>
                         {post.mediaUrl && (
                             <>
-                                {post.mediaUrl.startsWith('data:video') ? (
+                                {post.mediaUrl.endsWith('.mp4') ? (
                                     <video
                                         controls
                                         className="img-fluid rounded mb-2"
@@ -157,12 +157,12 @@ const Post = (props) => {
                                     <div key={cmt.id} className="d-flex align-items-center mb-2">
                                         <img
                                             src={cmt.user.avatar}
-                                            alt={cmt.user.username}
+                                            alt={cmt.user.fullName}
                                             className="me-3 rounded-circle"
                                             style={{ width: '50px', height: '50px' }}
                                         />
                                         <div className="card p-2 rounded shadow w-100">
-                                            <div className="fw-bold">{cmt.user.username}</div>
+                                            <div className="fw-bold">{cmt.user.fullName}</div>
                                             <p className="mb-0">{cmt.content}</p>
                                             <small className="text-muted">{cmt.createdAt}</small>
                                         </div>
@@ -173,7 +173,7 @@ const Post = (props) => {
                             )}
                             <div className='d-flex align-items-center mb-2'>
                                 <img
-                                    src="https://placehold.co/30x30"
+                                    src={post.avatar}
                                     alt="User 1"
                                     className='me-3 rounded-circle'
                                     style={{ width: '30px', height: '30px' }}

@@ -12,6 +12,8 @@
   "dependencies": {
     "axios": "^1.9.0",
     "bootstrap": "^5.3.5",
+    "cloudinary": "^2.6.1",
+    "date-fns": "^4.1.0",
     "network-app": "file:",
     "react": "^19.0.0",
     "react-bootstrap": "^2.10.9",
