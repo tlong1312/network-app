@@ -15,7 +15,7 @@ const AdminLogin = () => {
     useEffect(() => {
         const token = localStorage.getItem('adminToken');
         if (token) {
-            navigate('/admin/dashboard');
+            navigate('/admin');
         }
     }, [navigate]);
 
@@ -36,7 +36,7 @@ const AdminLogin = () => {
                     role: 'admin'
                 }));
 
-                navigate('/admin/dashboard');
+                navigate('/admin');
             } else {
                 throw new Error('Thông tin đăng nhập không chính xác');
             }

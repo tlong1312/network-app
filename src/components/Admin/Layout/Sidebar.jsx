@@ -5,11 +5,6 @@ const AdminSidebar = () => {
 
     const menuItems = [
         {
-            title: 'Tổng quan',
-            icon: 'fas fa-chart-pie',
-            path: '/admin/dashboard'
-        },
-        {
             title: 'Quản lý người dùng',
             icon: 'fas fa-user-cog',
             path: '/admin/user-management'

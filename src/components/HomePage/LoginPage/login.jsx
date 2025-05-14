@@ -29,7 +29,7 @@ const Login = () => {
         localStorage.setItem("role", data.role);
         localStorage.setItem("user", JSON.stringify(data.user));
         if (data.role === "ROLE_ADMIN") {
-          naviage("/admin/dashboard");
+          naviage("/admin");
         } else if (data.role === "ROLE_USER") {
           naviage("/");
         }

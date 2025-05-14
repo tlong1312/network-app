@@ -4,7 +4,6 @@ import MainLayout from "./components/Layouts/MainLayout";
 import AdminLayout from "./components/Layouts/AdminLayout";
 import SearchPage from "./components/HomePage/SearchPage/searchPage";
 import ProtectedRoute from "./components/Admin/ProtectedRoute";
-import Dashboard from "./components/Admin/Content/Dashboard";
 import HomePage from "./components/HomePage/HomePage";
 import UserManagement from "./components/Admin/Content/UserManagement";
 import PostManagement from "./components/Admin/Content/PostManagement";
@@ -41,8 +40,7 @@ function App() {
                             <ProtectedRoute allowedRoles={["ROLE_ADMIN"]} />
                         }
                     >
-                        <Route index element={<Dashboard />} />
-                        <Route path="dashboard" element={<Dashboard />} />
+                        <Route index element={<UserManagement />} />
                         <Route path="user-management" element={<UserManagement />} />
                         <Route path="post-management" element={<PostManagement />} />
                     </Route>
