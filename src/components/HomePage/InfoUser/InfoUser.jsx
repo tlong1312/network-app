@@ -39,7 +39,7 @@ const InfoUser = () => {
   const fetchPosts = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:8081/api/posts', {
+        const response = await fetch('http://localhost:8081/api/posts/my-posts', {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,
@@ -53,7 +53,7 @@ const InfoUser = () => {
             avatar: post.user.avatar,
             content: post.content,
             mediaUrl: post.mediaUrl,
-            timestamp: post.createdAt,
+            createdAt: post.createdAt,
             comments: post.comments,
             commentsCount: post.commentCount,
             likes: post.likeCount,
@@ -322,7 +322,7 @@ const InfoUser = () => {
             avatar: newPost.user.avatar,
             content: newPost.content,
             mediaUrl: newPost.mediaUrl,
-            timestamp: newPost.createdAt,
+            createdAt: newPost.createdAt,
             comments: newPost.comments,
             commentsCount: newPost.commentCount,
             likes: newPost.likeCount,

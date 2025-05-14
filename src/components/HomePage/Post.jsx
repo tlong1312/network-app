@@ -112,7 +112,7 @@ const Post = (props) => {
                             <div>
                                 <span className='fw-bold'>{post.author}</span>
                                 <br />
-                                <small className='text-muted'>{post.createdAt}</small>
+                                <small className='text-muted'>{new Date(post.createdAt).toLocaleString()}</small>
                             </div>
                         </div>
                         <p>{post.content}</p>
@@ -164,7 +164,7 @@ const Post = (props) => {
                                         <div className="card p-2 rounded shadow w-100">
                                             <div className="fw-bold">{cmt.user.fullName}</div>
                                             <p className="mb-0">{cmt.content}</p>
-                                            <small className="text-muted">{cmt.createdAt}</small>
+                                            <small className="text-muted">{new Date(cmt.createdAt).toLocaleString()}</small>
                                         </div>
                                     </div>
                                 ))

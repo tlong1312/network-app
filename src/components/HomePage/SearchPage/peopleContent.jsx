@@ -3,6 +3,7 @@ import React, { useState } from "react";
 const PeopleContent = ({ people }) => {
     const [showAll, setShowAll] = useState(false);
     const displayedPeople = showAll ? people : people.slice(0, 5);
+    console.log("👤 Đang render PeopleContent với:", people);
 
     return (
         <div className="content d-flex flex-column p-3 rounded-lg shadow-sm mb-4">
@@ -12,12 +13,12 @@ const PeopleContent = ({ people }) => {
                     <div key={person.id} className="d-flex justify-content-between list-user align-items-center mb-1">
                         <div className="d-flex align-items-center info-user">
                             <img
-                                alt={`Profile picture of ${person.name}`}
+                                alt={`Avatar của ${person.username}`}
                                 className="rounded-circle mr-3"
-                                src={person.img}
+                                src={person.avatar || "https://placehold.co/40x40"}
                                 style={{ width: "40px", height: "40px" }}
                             />
-                            <span className="font-weight-medium mx-2 ">{person.name}</span>
+                            <span className="font-weight-medium mx-2">{person.username}</span>
                         </div>
                         <button className="btn btn-add-friend btn-sm">Thêm bạn bè</button>
                     </div>
