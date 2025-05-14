@@ -97,7 +97,7 @@ const InfoUser = () => {
           const data = await response.json();
           setPosts(data.map(post => ({
             id: post.id,
-            author: post.user.username,
+            author: post.user.fullName,
             avatar: post.user.avatar,
             content: post.content,
             mediaUrl: post.mediaUrl,
@@ -232,65 +232,68 @@ const handleAvatarUpload = async (e) => {
 
 
   const handlePost = async (content, mediaFile) => {
-    try {
-
-      const convertToBase64 = (file) => {
-        return new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.readAsDataURL(file);
-          reader.onload = () => resolve(reader.result);
-          reader.onerror = (error) => reject(error);
-        });
+          try {
+              
+              let mediaUrl = null;
+              if (mediaFile) {
+                  const formData = new FormData();
+                  formData.append('file', mediaFile);
+                  formData.append('upload_preset', 'upload-y8ouewvx');
+  
+                  const response = await fetch('https://api.cloudinary.com/v1_1/drbjicnlm/upload', {
+                      method: 'POST',
+                      body: formData,
+                  });
+  
+                  if (response.ok) {
+                      const data = await response.json();
+                      mediaUrl = data.secure_url;
+                  } else {
+                      console.error('Upload file lên cloud thất bại: ', response.statusText);
+                      return;
+                  }
+  
+              }
+              
+              const payload = {
+                  content,
+                  mediaUrl,
+              };
+  
+              const apiResponse = await fetch('http://localhost:8081/api/posts', {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json',
+                      Authorization: `Bearer ${localStorage.getItem('token')}`,
+                  },
+                  body: JSON.stringify(payload),
+              });
+  
+              if (apiResponse.ok) {
+                  const newPost = await apiResponse.json();
+                  setPosts([
+                      {
+                          id: newPost.id,
+                          author: newPost.user.fullName,
+                          avatar: newPost.user.avatar,
+                          content: newPost.content,
+                          mediaUrl: newPost.mediaUrl,
+                          timestamp: newPost.createdAt,
+                          comments: newPost.comments,
+                          commentsCount: newPost.commentCount,
+                          likes: newPost.likeCount,
+                      },
+                      ...posts,
+                  ]);
+              } else {
+                  console.error('Lỗi khi đăng bài viết:', apiResponse.statusText);
+              }
+          } catch (error) {
+              console.error('Đã xảy ra lỗi:', error);
+          }
       };
-
-      let mediaUrl = null;
-      if (mediaFile) {
-        mediaUrl = await convertToBase64(mediaFile);
-      }
-
-      const payload = {
-        content,
-        mediaUrl,
-      };
-
-      console.log('Payload gửi lên server:', payload);
-
-      const response = await fetch('http://localhost:8081/api/posts', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (response.ok) {
-        const newPost = await response.json();
-        console.log('Bài viết mới:', newPost);
-
-        setPosts([
-          {
-            id: newPost.id,
-            author: newPost.user.username,
-            avatar: newPost.user.avatar,
-            content: newPost.content,
-            mediaUrl: newPost.mediaUrl,
-            timestamp: newPost.createdAt,
-            comments: newPost.comments,
-            commentsCount: newPost.commentCount,
-            likes: newPost.likeCount,
-          },
-          ...posts,
-        ]);
-      } else {
-        console.error('Lỗi khi đăng bài viết:', response.statusText);
-      }
-    } catch (error) {
-      console.error('Đã xảy ra lỗi:', error);
-    }
-  };
   return (
-    <div className="container-fluid" style={{ height: '100vh' }}>
+    <div className="container-fluid" style={{ height: '100%' }}>
       <div className="d-flex justify-content-center align-items-center mb-3">
         <img
           src={user.avatar}
