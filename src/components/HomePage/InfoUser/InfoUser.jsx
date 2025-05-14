@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import avatar from '../../../assets/icon/avatar.png';
 import Post from '../Post';
 import PostModal from '../PostModal';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -32,7 +31,6 @@ const InfoUser = () => {
   ];
   const [showLogout, setShowLogout] = useState(false);
   useEffect(() => {
-
     const fetchUser = async () => {
       try {
         const token = localStorage.getItem('token');
@@ -121,6 +119,55 @@ const InfoUser = () => {
     checkFriendStatus();
   }, [userId, currentUserId, friendStatus]);
 
+const handleAvatarUpload = async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', 'upload_jh0b9yxu');
+
+  try {
+    const response = await fetch(
+      'https://api.cloudinary.com/v1_1/dm8pwfst2/image/upload',
+      {
+        method: 'POST',
+        body: formData,
+      }
+    );
+
+    if (response.ok) {
+      const data = await response.json();
+      const uploadedUrl = data.secure_url;
+
+      // Cập nhật avatar vào backend
+      const token = localStorage.getItem('token');
+      const updateResponse = await fetch(`http://localhost:8081/api/users/${userId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ avatar: uploadedUrl }),
+      });
+
+      if (updateResponse.ok) {
+        setUser((prevUser) => ({
+          ...prevUser,
+          avatar: uploadedUrl, // Cập nhật state
+        }));
+        console.log('Avatar updated successfully!');
+        setShowInfoUser(false);
+      } else {
+        console.error('Failed to update avatar in backend:', updateResponse.statusText);
+      }
+    } else {
+      console.error('Failed to upload avatar:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error uploading avatar:', error);
+  }
+}
 
   const handleAddFriend = async () => {
     try {
@@ -242,15 +289,15 @@ const InfoUser = () => {
     }
   };
   return (
-    <div className="container-fluid">
+    <div className="container-fluid" style={{ height: '100vh' }}>
       <div className="d-flex justify-content-center align-items-center mb-3">
         <img
-          src={avatar}
+          src={user.avatar}
           alt="avatar"
           style={{ width: '70px', height: '70px' }}
-          className="me-3"
+          className="me-3 mt-3 rounded-circle"
         />
-        <h3>{user.name}</h3>
+        <h3 className='mt-4 ms-2'>{user.name}</h3>
       </div>
 
 
@@ -327,11 +374,10 @@ const InfoUser = () => {
                 <div className="mb-3">
                   <label className="form-label">Avatar URL</label>
                   <input
-                    type="text"
+                    type="file"
                     className="form-control"
                     id="avatar"
-                    defaultValue={user.avatar}
-
+                    onChange={(e) => handleAvatarUpload(e)}
                   />
                 </div>
                 <div className="d-flex justify-content-end">
@@ -442,7 +488,7 @@ const InfoUser = () => {
         <div className="p-3 shadow d-flex flex-column" style={{ width: '80%' }}>
           <div className="d-flex align-items-center mb-3">
             <img
-              src={avatar}
+              src={user.avatar}
               alt="avatar"
               style={{ width: '50px', height: '50px' }}
               className="me-3 rounded-circle"

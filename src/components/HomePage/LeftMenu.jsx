@@ -7,12 +7,12 @@ import { useNavigate, Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const LeftMenu = () => {
-
     const user = localStorage.getItem('user');
     const [showFriendsPopup, setShowFriendsPopup] = useState(false);
     const navigate = useNavigate();
     const fullName = user ? JSON.parse(user).fullName : 'User';
     const currentUserId = user ? JSON.parse(user).id : null;
+    const avatar = user ? JSON.parse(user).avatar || icon : icon; // Lấy avatar từ localStorage hoặc dùng hình mặc định
     const [showLogout, setShowLogout] = useState(false);
     const [friends, setFriends] = useState([]);
 
@@ -38,38 +38,37 @@ const LeftMenu = () => {
             }
         };
 
-        fetchFriends();
+        if (currentUserId) {
+            fetchFriends();
+        }
     }, [currentUserId]);
 
     const handleSettingsClick = () => {
         setShowLogout(!showLogout);
-    }
+    };
 
     const handleLogout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('role');
         localStorage.removeItem('user');
         navigate('/login');
-    }
-
+    };
 
     return (
         <div className="col-lg-2 bg-light p-3 d-none d-lg-block">
             <ul className="list-unstyled">
                 {/* Profile */}
                 <li className="d-flex align-items-center mb-3">
-
                     <Link to={`/info-user/${currentUserId}`} className="text-decoration-none text-dark cursor-pointer">
                         <img
-                            src={icon}
+                            src={avatar}
                             alt="profile"
-                            className="me-3"
+                            className="me-3 rounded-circle"
                             style={{ width: '40px', height: '40px' }}
                         />
                         <span>{fullName}</span>
                     </Link>
                 </li>
-
 
                 {/* Friends */}
                 <li className="d-flex align-items-center mb-3">
@@ -125,7 +124,7 @@ const LeftMenu = () => {
                         >
                             <button
                                 className="btn btn-danger w-100"
-                                onClick={handleLogout} // Xử lý logout khi nhấn
+                                onClick={handleLogout}
                             >
                                 Logout
                             </button>
@@ -193,7 +192,7 @@ const LeftMenu = () => {
                                             <li
                                                 key={friend.id}
                                                 className="list-group-item d-flex align-items-center"
-                                                onClick={() => navigate(`/info-user/${friend.id}`)} 
+                                                onClick={() => navigate(`/info-user/${friend.id}`)}
                                                 style={{ cursor: 'pointer' }}
                                             >
                                                 <img

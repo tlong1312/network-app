@@ -1,18 +1,13 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 
 const AdminSidebar = () => {
-    const navigate = useNavigate();
+    const Navigate = useNavigate();
 
     const menuItems = [
         {
             title: 'Tổng quan',
             icon: 'fas fa-chart-pie',
             path: '/admin/dashboard'
-        },
-        {
-            title: 'Thống kê người dùng',
-            icon: 'fas fa-users',
-            path: '/admin/statistical-management'
         },
         {
             title: 'Quản lý người dùng',

@@ -1,13 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo.png';
-import avatar from '../../assets/icon/avatar.png';
+import defaultAvatar from '../../assets/icon/avatar.png';
 import notification from '../../assets/notification.png';
-
 
 const Navbar = () => {
     const [query, setQuery] = useState('');
+    const [avatarUrl, setAvatarUrl] = useState(defaultAvatar);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                const user = localStorage.getItem('user');
+                const userId = user ? JSON.parse(user).id : null;
+
+                if (userId) {
+                    const response = await fetch(`http://localhost:8081/api/users/${userId}`, {
+                        method: 'GET',
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        setAvatarUrl(data.avatar || defaultAvatar);
+                    } else {
+                        console.error('Tải user thất bại:', response.statusText);
+                    }
+                }
+            } catch (error) {
+                console.error('Lỗi trong quá trình tải:', error);
+            }
+        };
+
+        fetchUser();
+    }, []);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -15,6 +45,7 @@ const Navbar = () => {
             navigate(`/search?q=${query}`);
         }
     };
+
     return (
         <div className='navbar navbar-expand-lg navbar-light main-color py-3'>
             <div className='container-fluid'>
@@ -55,7 +86,7 @@ const Navbar = () => {
                                 <div className='bg-dark rounded-circle d-flex align-items-center justify-content-center' style={{ width: '40px', height: '40px', marginRight: '10px' }}>
                                     <img
                                         src={notification}
-                                        alt='logo'
+                                        alt='notification'
                                         style={{ width: '30px', height: '30px'}}
                                     />
                                 </div>                                
@@ -64,8 +95,8 @@ const Navbar = () => {
                         <li className='nav-item mb-3 mb-lg-0'>
                             <a href="#" target='_blank' className='cursor-pointer'>
                                 <img
-                                    src={avatar}
-                                    alt='logo'
+                                    src={avatarUrl} // Hiển thị avatar từ state
+                                    alt='profile'
                                     className='rounded-circle'
                                     style={{ width: '40px', height: '40px', marginRight: '10px' }}
                                 />
@@ -75,7 +106,7 @@ const Navbar = () => {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Navbar
+export default Navbar;
