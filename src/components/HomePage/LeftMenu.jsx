@@ -11,7 +11,7 @@ const LeftMenu = () => {
     const navigate = useNavigate();
     const fullName = user ? JSON.parse(user).fullName : 'User';
     const currentUserId = user ? JSON.parse(user).id : null;
-    const avatar = user ? JSON.parse(user).avatar || icon : icon; // Lấy avatar từ localStorage hoặc dùng hình mặc định
+    const avatar = user ? JSON.parse(user).avatar || icon : icon;  
     const [showLogout, setShowLogout] = useState(false);
     const [friends, setFriends] = useState([]);
 
@@ -74,7 +74,7 @@ const LeftMenu = () => {
                     <a
                         href="#"
                         className="text-decoration-none text-dark cursor-pointer"
-                        onClick={() => setShowFriendsPopup(true)} // Hiển thị pop-up
+                        onClick={() => setShowFriendsPopup(true)}
                     >
                         <img
                             src={friendIcon}

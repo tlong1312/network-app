@@ -17,6 +17,33 @@ const InfoUser = () => {
   const currentUserId = currentUser ? JSON.parse(currentUser).id : null;
   const [friendStatus, setFriendStatus] = useState("none");
   const [isReceiver, setIsReceiver] = useState(false);
+  const [friends, setFriends] = useState([]);
+  useEffect(() => {
+          const fetchFriends = async () => {
+              try {
+                  const token = localStorage.getItem('token');
+                  const response = await fetch(`http://localhost:8081/api/friends?userId=${currentUserId}`, {
+                      method: 'GET',
+                      headers: {
+                          Authorization: `Bearer ${token}`,
+                      },
+                  });
+  
+                  if (response.ok) {
+                      const data = await response.json();
+                      setFriends(data);
+                  } else {
+                      console.error('Failed to fetch friends:', response.statusText);
+                  }
+              } catch (error) {
+                  console.error('Error fetching friends:', error);
+              }
+          };
+  
+          if (currentUserId) {
+              fetchFriends();
+          }
+      }, [currentUserId]);
   const [editedUser, setEditedUser] = useState({
     name: user.name,
     email: user.email,
@@ -29,11 +56,6 @@ const InfoUser = () => {
     localStorage.removeItem('user');
     navigate('/login');
   }
-  const users = [
-    { id: 1, name: 'Tiểu Long', avatar: 'https://i.pravatar.cc/40?img=1' },
-    { id: 2, name: 'Hoàng Long', avatar: 'https://i.pravatar.cc/40?img=2' },
-    { id: 3, name: 'Nguyễn Thị Ngọc A', avatar: 'https://i.pravatar.cc/40?img=3' },
-  ];
   const [showLogout, setShowLogout] = useState(false);
 
   const fetchPosts = async () => {
@@ -356,7 +378,7 @@ const InfoUser = () => {
               Unfriend
             </button>
           ) : friendStatus === "pending" ? (
-            isReceiver ? ( // Nếu là người nhận yêu cầu
+            isReceiver ? (
               <div>
                 <button className="btn btn-outline-success me-2" onClick={handleAcceptFriend}>
                   Accept Friend
@@ -365,7 +387,7 @@ const InfoUser = () => {
                   Decline
                 </button>
               </div>
-            ) : ( // Nếu là người gửi yêu cầu
+            ) : (
               <button className="btn btn-outline-secondary" disabled>
                 Pending
               </button>
@@ -496,52 +518,82 @@ const InfoUser = () => {
           </li>
 
           {showFriendsPopup && (
-            <div className="container-fluid d-flex flex-column modal show d-block shadow"
-              tabIndex="-1"
-              role="dialog"
-              style={{
-                position: 'fixed', // Cố định pop-up
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                zIndex: 1050,
-              }}>
-              <div className="modal-dialog"
-                role="document"
-                style={{
-                  width: '600px', // Cố định chiều rộng
-                  height: '800px',
-                  maxWidth: '75%',
-                }}>
-                <div className="modal-content" style={{ height: '100%' }}>
-                  <div className="modal-header">
-                    <h5 className="modal-title">Friends List</h5>
-                    <button
-                      type="button"
-                      className="btn-close"
-                      aria-label="Close"
-                      onClick={() => setShowFriendsPopup(false)}
-                    ></button>
-                  </div>
-                  <div className="modal-body" style={{ overflowY: 'auto' }}>
-                    <ul className="list-group">
-                      {users.map((user) => (
-                        <li key={user.id} className="list-group-item d-flex align-items-center">
-                          <img
-                            src={user.avatar}
-                            alt={user.name}
-                            className="me-3 rounded-circle"
-                            style={{ width: '40px', height: '40px' }}
-                          />
-                          {user.name}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                <div
+                    className="modal-overlay"
+                    style={{
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                        zIndex: 1040,
+                    }}
+                    onClick={() => setShowFriendsPopup(false)}
+                >
+                    <div
+                        className="container-fluid d-flex flex-column modal show d-block shadow"
+                        tabIndex="-1"
+                        role="dialog"
+                        style={{
+                            position: 'fixed',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            zIndex: 1050,
+                        }}
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div
+                            className="modal-dialog"
+                            role="document"
+                            style={{
+                                width: '600px',
+                                height: '800px',
+                                maxWidth: '75%',
+                            }}
+                        >
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    <h5 className="modal-title">Friends List</h5>
+                                    <button
+                                        type="button"
+                                        className="btn-close"
+                                        aria-label="Close"
+                                        onClick={() => setShowFriendsPopup(false)}
+                                    ></button>
+                                </div>
+                                <div
+                                    className="modal-body"
+                                    style={{
+                                        maxHeight: '700px',
+                                        overflowY: 'auto',
+                                    }}
+                                >
+                                    <ul className="list-group">
+                                        {friends.map((friend) => (
+                                            <li
+                                                key={friend.id}
+                                                className="list-group-item d-flex align-items-center"
+                                                onClick={() => navigate(`/info-user/${friend.id}`)}
+                                                style={{ cursor: 'pointer' }}
+                                            >
+                                                <img
+                                                    src={friend.avatar}
+                                                    alt={friend.fullName}
+                                                    className="me-3 rounded-circle"
+                                                    style={{ width: '40px', height: '40px' }}
+                                                />
+                                                {friend.fullName}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-            </div>
-          )}
+            )}
         </div>
 
         <div className="p-3 shadow d-flex flex-column" style={{ width: '80%' }}>

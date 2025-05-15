@@ -21,8 +21,8 @@ const MainContent = () => {
         const parsedUser = JSON.parse(userFromStorage);
         return {
             id: parsedUser.id,
-            name: parsedUser.username, // Điều chỉnh tên trường theo dữ liệu thực tế của bạn
-            avatar: parsedUser.avatar || avatar, // Sử dụng avatar mặc định nếu không có
+            name: parsedUser.username,
+            avatar: parsedUser.avatar || avatar,
         };
     } else {
         return {
@@ -33,7 +33,6 @@ const MainContent = () => {
     }
 });
 
-// Thêm useEffect để lắng nghe thay đổi trong localStorage
 useEffect(() => {
     const handleUserUpdate = () => {
         const userFromStorage = localStorage.getItem('user');
@@ -41,21 +40,18 @@ useEffect(() => {
             const parsedUser = JSON.parse(userFromStorage);
             setCurrentUser({
                 id: parsedUser.id,
-                name: parsedUser.username, // Điều chỉnh tên trường theo dữ liệu thực tế 
+                name: parsedUser.username,
                 avatar: parsedUser.avatar || avatar,
             });
         }
     };
 
-    // Lắng nghe sự kiện user-updated
     window.addEventListener('user-updated', handleUserUpdate);
     
-    // Cleanup
     return () => {
         window.removeEventListener('user-updated', handleUserUpdate);
     };
 }, []);
-
 
 const fetchStories = async () => {
         try {
@@ -72,7 +68,6 @@ const fetchStories = async () => {
             if (response.ok) {
                 const data = await response.json();
                 
-                // Chỉ lấy những người dùng có ít nhất 1 story
                 const formattedStories = data
                     .filter(user => user.images && user.images.length > 0)
                     .map(user => ({
@@ -99,10 +94,6 @@ const fetchStories = async () => {
         fetchStories();
     }, []);
 
-
-    
-
-    // Auto-play stories with progress bar
     useEffect(() => {
         if (!selectedStory || isPaused) return;
 
@@ -136,7 +127,6 @@ const fetchStories = async () => {
             if (currentStoryIndex < selectedStory.stories.length - 1) {
                 setCurrentStoryIndex(currentStoryIndex + 1);
             } else {
-                // If it's the last story, close the modal
                 setSelectedStory(null);
                 setCurrentStoryIndex(0);
             }
@@ -151,13 +141,10 @@ const fetchStories = async () => {
         }
     };
 
-    // Sửa hàm handStory trong MainContent.jsx
-
 const handStory = (imageInput) => {
-    // Kiểm tra xem đầu vào có phải URL string hay không
     const imageUrl = typeof imageInput === 'string' 
-        ? imageInput  // Nếu là string (URL), sử dụng trực tiếp
-        : URL.createObjectURL(imageInput);  // Nếu là file, tạo URL
+        ? imageInput
+        : URL.createObjectURL(imageInput);
 
     const newStory = {
         id: Date.now(),
@@ -166,11 +153,9 @@ const handStory = (imageInput) => {
     };
     
     setStories((prevStories) => {
-        // Kiểm tra xem user đã có trong stories chưa
         const userStoryIndex = prevStories.findIndex(story => story.id === currentUser.id);
         
         if (userStoryIndex !== -1) {
-            // Nếu user đã có story, thêm vào mảng stories của user đó
             const updatedStories = [...prevStories];
             updatedStories[userStoryIndex] = {
                 ...updatedStories[userStoryIndex],
@@ -178,7 +163,6 @@ const handStory = (imageInput) => {
             };
             return updatedStories;
         } else {
-            // Nếu user chưa có story, tạo mới
             return [
                 ...prevStories,
                 {
@@ -190,10 +174,9 @@ const handStory = (imageInput) => {
             ];
         }
     });
-    fetchStories(); // Gọi lại hàm fetchStories để cập nhật danh sách stories
+    fetchStories();
 };
 
-    // Fetch posts from API
     useEffect(() => {
         const fetchPosts = async () => {
             try {

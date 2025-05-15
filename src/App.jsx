@@ -15,17 +15,13 @@ function App() {
     return (
         <Router>
             <Routes>
-                {/* Public Routes */}
                 <Route path="/login" element={<Login />} />
                 <Route path="/RegisterPage" element={<RegisterPage />} />
 
-                {/* Protected Routes for Users */}
                 <Route element={<MainLayout />}>
-                    <Route
-                        element={
+                    <Route element={
                             <ProtectedRoute allowedRoles={["ROLE_USER"]} />
-                        }
-                    >
+                        }>
                         <Route index element={<HomePage />} />
                         <Route path="search" element={<SearchPage />} />
                         <Route path="info-user" element={<InfoUser />} />
@@ -33,7 +29,6 @@ function App() {
                     </Route>
                 </Route>
 
-                {/* Protected Routes for Admin */}
                 <Route path="admin" element={<AdminLayout />}>
                     <Route
                         element={

@@ -1,11 +1,9 @@
-// components/Admin/Dashboard.jsx
 import React, { useEffect, useState } from "react";
 import { Table, InputGroup, FormControl, Button, Modal } from "react-bootstrap";
 import { FaSearch, FaArrowLeft, FaEdit, FaTrash } from "react-icons/fa";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "../../../App.css"; // Import your CSS file for styling
-// Phải có export default
-// components/Admin/Dashboard.jsx
+import "../../../App.css";
+
 const PostManagement = () => {
   const [users, setUsers] = useState([]);
   const [posts, setPosts] = useState([]);
@@ -28,7 +26,7 @@ const PostManagement = () => {
       ]);
 
       const userData = await userRes.json();
-      console.log("✅ users:", userData); // ⬅ log kết quả để biết có phải mảng không
+      console.log("✅ users:", userData);
       const postData = await postRes.json();
 
       setUsers(userData);

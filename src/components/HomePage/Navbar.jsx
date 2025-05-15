@@ -114,7 +114,7 @@ const Navbar = () => {
                         <li className='nav-item mb-3 mb-lg-0'>
                             <a href="#" target='_blank' className='cursor-pointer'>
                                 <img
-                                    src={avatarUrl} // Hiển thị avatar từ state
+                                    src={avatarUrl}
                                     alt='profile'
                                     className='rounded-circle'
                                     style={{ width: '40px', height: '40px', marginRight: '10px' }}
