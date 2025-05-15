@@ -120,7 +120,6 @@ const LeftMenu = () => {
                 </li>
             </ul>
 
-            {/* Pop-up hiển thị danh sách bạn bè */}
             {showFriendsPopup && (
                 <div
                     className="modal-overlay"
