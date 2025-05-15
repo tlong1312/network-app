@@ -18,10 +18,8 @@ const Navbar = () => {
             }
         };
 
-        // Tạo một custom event để các component khác có thể trigger
         window.addEventListener('user-updated', handleStorageChange);
         
-        // Cũng fetch dữ liệu khi component mount
         handleStorageChange();
 
         return () => {
@@ -73,11 +71,12 @@ const Navbar = () => {
                     <img 
                         src={logo} 
                         alt='logo' 
-                        className='rounded-circle' 
+                        className='rounded-circle'
+                        onClick={() => navigate('/')} 
                         style={{ width: '50px', height: '50px', marginRight: '10px' }} 
                     />
                 </a>
-                <span className='navbar-brand'>Network App</span>
+                <span className='navbar-brand' onClick={() => navigate('/')}>Network App</span>
                 <button className='navbar-toggler' type='button'
                     data-bs-toggle='collapse' data-bs-target='#navbarNavDropdown'
                     aria-controls='navbarNavDropdown' aria-expanded='false'
