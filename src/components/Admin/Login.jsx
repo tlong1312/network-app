@@ -11,7 +11,6 @@ const AdminLogin = () => {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    // Kiểm tra session khi component mount
     useEffect(() => {
         const token = localStorage.getItem('adminToken');
         if (token) {
@@ -25,9 +24,7 @@ const AdminLogin = () => {
         setError('');
 
         try {
-            // Demo credentials
             if (formData.username === 'admin' && formData.password === '12345') {
-                // Giả lập API call với timeout
                 await new Promise(resolve => setTimeout(resolve, 500));
 
                 localStorage.setItem('adminToken', 'demo-token-' + Date.now());

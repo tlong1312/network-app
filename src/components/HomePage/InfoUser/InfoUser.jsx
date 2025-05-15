@@ -378,7 +378,7 @@ const InfoUser = () => {
               Unfriend
             </button>
           ) : friendStatus === "pending" ? (
-            isReceiver ? ( // Nếu là người nhận yêu cầu
+            isReceiver ? (
               <div>
                 <button className="btn btn-outline-success me-2" onClick={handleAcceptFriend}>
                   Accept Friend
@@ -387,7 +387,7 @@ const InfoUser = () => {
                   Decline
                 </button>
               </div>
-            ) : ( // Nếu là người gửi yêu cầu
+            ) : (
               <button className="btn btn-outline-secondary" disabled>
                 Pending
               </button>

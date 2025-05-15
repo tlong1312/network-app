@@ -20,7 +20,6 @@ const PostsContent = ({ posts }) => {
             <h2 className="h5 font-weight-bold mb-4">Bài viết</h2>
             {posts.map((post) => (
                 <div key={post.id} className="border-content bg-white p-3 mb-4">
-                    {/* Header */}
                     <div className="d-flex align-items-center justify-content-between">
                         <div className="d-flex align-items-center">
                             <img
