@@ -337,7 +337,7 @@ const InfoUser = () => {
     }
   };
   return (
-    <div className="container-fluid" style={{ height: '100%' }}>
+    <div className="container-fluid" style={{ minHeight: '100vh',height: '100%' }}>
       <div className="d-flex justify-content-center align-items-center mb-3">
         <img
           src={user.avatar}
