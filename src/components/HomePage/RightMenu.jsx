@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import Message from './Message';
 
 
 const RightMenu = () => {
@@ -9,7 +10,7 @@ const RightMenu = () => {
     const [friendsRequests, setFriendsRequests] = useState([]);
     const currentUser = localStorage.getItem('user');
     const currentUserId = currentUser ? JSON.parse(currentUser).id : null;
-
+    const [showMessage, setShowMessage] = useState(false);
 
     useEffect(() => {
         const fetchPeople = async () => {
@@ -134,15 +135,15 @@ const RightMenu = () => {
         <div className="col-lg-3 bg-light p-3 d-none d-lg-block">
             <div className='card mb-4 shadow p-3 mb-4'>
                 <h5 className='fw-bold'>People you may know</h5>
-                <div className="scrollable"> 
+                <div className="scrollable">
                     <ul className='list-unstyled'>
                         {people.map((person) => (
                             <li key={person.id} className='d-flex align-items-center justify-content-between mb-3'>
                                 <div
-                className='d-flex align-items-center cursor-pointer'
-                onClick={() => navigate(`/info-user/${person.id}`)} 
-                style={{ cursor: 'pointer' }}
-            >
+                                    className='d-flex align-items-center cursor-pointer'
+                                    onClick={() => navigate(`/info-user/${person.id}`)}
+                                    style={{ cursor: 'pointer' }}
+                                >
                                     <img
                                         src={person.avatar}
                                         alt={person.name}
@@ -170,15 +171,15 @@ const RightMenu = () => {
                 <hr />
 
                 <h5 className='fw-bold'>Friend Requests</h5>
-                <div className="scrollable"> 
+                <div className="scrollable">
                     <ul className='list-unstyled'>
                         {friendsRequests.map((request) => (
                             <li key={request.id} className='d-flex align-items-center justify-content-between mb-3'>
                                 <div
-                className='d-flex align-items-center cursor-pointer'
-                onClick={() => navigate(`/info-user/${request.id}`)} 
-                style={{ cursor: 'pointer' }}
-            >
+                                    className='d-flex align-items-center cursor-pointer'
+                                    onClick={() => navigate(`/info-user/${request.id}`)}
+                                    style={{ cursor: 'pointer' }}
+                                >
                                     <img
                                         src={request.avatar}
                                         alt={request.fullName}
@@ -219,6 +220,32 @@ const RightMenu = () => {
                     ))}
                 </ul>
             </div>
+
+            <button
+                className="btn rounded-circle position-fixed text-white"
+                style={{
+                    bottom: '20px',
+                    right: '20px',
+                    width: '60px',
+                    height: '60px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: '#da2dbd',
+                    fontSize: '1.5rem',
+                    boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
+                    zIndex: 1000
+                }}
+                onClick={() => setShowMessage(true)}
+            >
+                <i className="fas fa-comment"></i>
+            </button>
+
+            <Message
+                show={showMessage}
+                onClose={() => setShowMessage(false)}
+                onMinimize={() => setShowMessage(false)}
+            />
 
         </div>
     )
