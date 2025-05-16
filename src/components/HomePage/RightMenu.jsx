@@ -134,15 +134,15 @@ const RightMenu = () => {
         <div className="col-lg-3 bg-light p-3 d-none d-lg-block">
             <div className='card mb-4 shadow p-3 mb-4'>
                 <h5 className='fw-bold'>People you may know</h5>
-                <div className="scrollable"> 
+                <div className="scrollable">
                     <ul className='list-unstyled'>
                         {people.map((person) => (
                             <li key={person.id} className='d-flex align-items-center justify-content-between mb-3'>
                                 <div
-                className='d-flex align-items-center cursor-pointer'
-                onClick={() => navigate(`/info-user/${person.id}`)} 
-                style={{ cursor: 'pointer' }}
-            >
+                                    className='d-flex align-items-center cursor-pointer'
+                                    onClick={() => navigate(`/info-user/${person.id}`)}
+                                    style={{ cursor: 'pointer' }}
+                                >
                                     <img
                                         src={person.avatar}
                                         alt={person.name}
@@ -170,15 +170,15 @@ const RightMenu = () => {
                 <hr />
 
                 <h5 className='fw-bold'>Friend Requests</h5>
-                <div className="scrollable"> 
+                <div className="scrollable">
                     <ul className='list-unstyled'>
                         {friendsRequests.map((request) => (
                             <li key={request.id} className='d-flex align-items-center justify-content-between mb-3'>
                                 <div
-                className='d-flex align-items-center cursor-pointer'
-                onClick={() => navigate(`/info-user/${request.id}`)} 
-                style={{ cursor: 'pointer' }}
-            >
+                                    className='d-flex align-items-center cursor-pointer'
+                                    onClick={() => navigate(`/info-user/${request.id}`)}
+                                    style={{ cursor: 'pointer' }}
+                                >
                                     <img
                                         src={request.avatar}
                                         alt={request.fullName}

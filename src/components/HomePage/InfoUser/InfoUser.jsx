@@ -19,31 +19,31 @@ const InfoUser = () => {
   const [isReceiver, setIsReceiver] = useState(false);
   const [friends, setFriends] = useState([]);
   useEffect(() => {
-          const fetchFriends = async () => {
-              try {
-                  const token = localStorage.getItem('token');
-                  const response = await fetch(`http://localhost:8081/api/friends?userId=${currentUserId}`, {
-                      method: 'GET',
-                      headers: {
-                          Authorization: `Bearer ${token}`,
-                      },
-                  });
-  
-                  if (response.ok) {
-                      const data = await response.json();
-                      setFriends(data);
-                  } else {
-                      console.error('Failed to fetch friends:', response.statusText);
-                  }
-              } catch (error) {
-                  console.error('Error fetching friends:', error);
-              }
-          };
-  
-          if (currentUserId) {
-              fetchFriends();
-          }
-      }, [currentUserId]);
+    const fetchFriends = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`http://localhost:8081/api/friends?userId=${currentUserId}`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setFriends(data);
+        } else {
+          console.error('Failed to fetch friends:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error fetching friends:', error);
+      }
+    };
+
+    if (currentUserId) {
+      fetchFriends();
+    }
+  }, [currentUserId]);
   const [editedUser, setEditedUser] = useState({
     name: user.name,
     email: user.email,
@@ -59,36 +59,36 @@ const InfoUser = () => {
   const [showLogout, setShowLogout] = useState(false);
 
   const fetchPosts = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:8081/api/posts/my-posts', {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        if (response.ok) {
-          const data = await response.json();
-          setPosts(data.map(post => ({
-            id: post.id,
-            author: post.user.fullName,
-            avatar: post.user.avatar,
-            content: post.content,
-            mediaUrl: post.mediaUrl,
-            createdAt: post.createdAt,
-            comments: post.comments,
-            commentsCount: post.commentCount,
-            likes: post.likeCount,
-            isLiked: post.liked,
-          })));
-          console.log(data);
-        } else {
-          console.error('Failed to fetch posts:', response.statusText);
-        }
-      } catch (error) {
-        console.error('Error fetching posts:', error);
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://localhost:8081/api/posts/my-posts', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setPosts(data.map(post => ({
+          id: post.id,
+          author: post.user.fullName,
+          avatar: post.user.avatar,
+          content: post.content,
+          mediaUrl: post.mediaUrl,
+          createdAt: post.createdAt,
+          comments: post.comments,
+          commentsCount: post.commentCount,
+          likes: post.likeCount,
+          isLiked: post.liked,
+        })));
+        console.log(data);
+      } else {
+        console.error('Failed to fetch posts:', response.statusText);
       }
-    };
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+    }
+  };
 
 
   useEffect(() => {
@@ -144,7 +144,7 @@ const InfoUser = () => {
       }
     };
 
-    
+
     fetchUser();
     fetchPosts();
     checkFriendStatus();
@@ -359,7 +359,7 @@ const InfoUser = () => {
     }
   };
   return (
-    <div className="container-fluid" style={{ minHeight: '100vh',height: '100%' }}>
+    <div className="container-fluid" style={{ minHeight: '100vh', height: '100%' }}>
       <div className="d-flex justify-content-center align-items-center mb-3">
         <img
           src={user.avatar}
@@ -518,82 +518,82 @@ const InfoUser = () => {
           </li>
 
           {showFriendsPopup && (
+            <div
+              className="modal-overlay"
+              style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                zIndex: 1040,
+              }}
+              onClick={() => setShowFriendsPopup(false)}
+            >
+              <div
+                className="container-fluid d-flex flex-column modal show d-block shadow"
+                tabIndex="-1"
+                role="dialog"
+                style={{
+                  position: 'fixed',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  zIndex: 1050,
+                }}
+                onClick={(e) => e.stopPropagation()}
+              >
                 <div
-                    className="modal-overlay"
-                    style={{
-                        position: 'fixed',
-                        top: 0,
-                        left: 0,
-                        width: '100%',
-                        height: '100%',
-                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                        zIndex: 1040,
-                    }}
-                    onClick={() => setShowFriendsPopup(false)}
+                  className="modal-dialog"
+                  role="document"
+                  style={{
+                    width: '600px',
+                    height: '800px',
+                    maxWidth: '75%',
+                  }}
                 >
-                    <div
-                        className="container-fluid d-flex flex-column modal show d-block shadow"
-                        tabIndex="-1"
-                        role="dialog"
-                        style={{
-                            position: 'fixed',
-                            top: '50%',
-                            left: '50%',
-                            transform: 'translate(-50%, -50%)',
-                            zIndex: 1050,
-                        }}
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <div
-                            className="modal-dialog"
-                            role="document"
-                            style={{
-                                width: '600px',
-                                height: '800px',
-                                maxWidth: '75%',
-                            }}
-                        >
-                            <div className="modal-content">
-                                <div className="modal-header">
-                                    <h5 className="modal-title">Friends List</h5>
-                                    <button
-                                        type="button"
-                                        className="btn-close"
-                                        aria-label="Close"
-                                        onClick={() => setShowFriendsPopup(false)}
-                                    ></button>
-                                </div>
-                                <div
-                                    className="modal-body"
-                                    style={{
-                                        maxHeight: '700px',
-                                        overflowY: 'auto',
-                                    }}
-                                >
-                                    <ul className="list-group">
-                                        {friends.map((friend) => (
-                                            <li
-                                                key={friend.id}
-                                                className="list-group-item d-flex align-items-center"
-                                                onClick={() => navigate(`/info-user/${friend.id}`)}
-                                                style={{ cursor: 'pointer' }}
-                                            >
-                                                <img
-                                                    src={friend.avatar}
-                                                    alt={friend.fullName}
-                                                    className="me-3 rounded-circle"
-                                                    style={{ width: '40px', height: '40px' }}
-                                                />
-                                                {friend.fullName}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
+                  <div className="modal-content">
+                    <div className="modal-header">
+                      <h5 className="modal-title">Friends List</h5>
+                      <button
+                        type="button"
+                        className="btn-close"
+                        aria-label="Close"
+                        onClick={() => setShowFriendsPopup(false)}
+                      ></button>
                     </div>
+                    <div
+                      className="modal-body"
+                      style={{
+                        maxHeight: '700px',
+                        overflowY: 'auto',
+                      }}
+                    >
+                      <ul className="list-group">
+                        {friends.map((friend) => (
+                          <li
+                            key={friend.id}
+                            className="list-group-item d-flex align-items-center"
+                            onClick={() => navigate(`/info-user/${friend.id}`)}
+                            style={{ cursor: 'pointer' }}
+                          >
+                            <img
+                              src={friend.avatar}
+                              alt={friend.fullName}
+                              className="me-3 rounded-circle"
+                              style={{ width: '40px', height: '40px' }}
+                            />
+                            {friend.fullName}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
                 </div>
-            )}
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="p-3 shadow d-flex flex-column" style={{ width: '80%' }}>

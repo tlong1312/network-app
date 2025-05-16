@@ -80,52 +80,52 @@ const RegisterPage = () => {
 
   return (
     <div className="d-flex flex-column" style={{ minHeight: "100vh" }}>
-  <div
-    className="d-flex flex-grow-1 justify-content-center align-items-center"
-    style={{ minHeight: "calc(100vh - 130px)" }}
-  >
-    <div className="card p-4 shadow" style={{ width: "22rem" }}>
-      <h3 className="text-center mb-3 app-name">Đăng Ký</h3>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label className="form-label">Tên đăng nhập</label>
-          <input type="text" name="username" className="form-control" placeholder="Nhập tên đăng nhập" onChange={handleChange} required />
-        </div>
-        <div className="mb-3">
-          <label className="form-label">Họ tên</label>
-          <input type="text" name="fullName" className="form-control" placeholder="Nhập họ tên" onChange={handleChange} required />
-        </div>
-        <div className="mb-3">
-          <label className="form-label">Email</label>
-          <input type="email" name="email" className="form-control" placeholder="Nhập email" onChange={handleChange} required />
-        </div>
-        <div className="mb-3">
-          <label className="form-label">Mật khẩu</label>
-          <input type="password" name="password" className="form-control" placeholder="Nhập mật khẩu" onChange={handleChange} required />
-        </div>
-        <div className="mb-3">
-          <label className="form-label">Xác nhận mật khẩu</label>
-          <input type="password" name="confirmPassword" className="form-control" placeholder="Nhập lại mật khẩu" onChange={handleChange} required />
-        </div>
-        {error && <div className="alert alert-danger">{error}</div>}
-        <button type="submit" className="btn btn-secondary w-100 main-color">Đăng ký</button>
-      </form>
+      <div
+        className="d-flex flex-grow-1 justify-content-center align-items-center"
+        style={{ minHeight: "calc(100vh - 130px)" }}
+      >
+        <div className="card p-4 shadow" style={{ width: "22rem" }}>
+          <h3 className="text-center mb-3 app-name">Đăng Ký</h3>
+          <form onSubmit={handleSubmit}>
+            <div className="mb-3">
+              <label className="form-label">Tên đăng nhập</label>
+              <input type="text" name="username" className="form-control" placeholder="Nhập tên đăng nhập" onChange={handleChange} required />
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Họ tên</label>
+              <input type="text" name="fullName" className="form-control" placeholder="Nhập họ tên" onChange={handleChange} required />
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Email</label>
+              <input type="email" name="email" className="form-control" placeholder="Nhập email" onChange={handleChange} required />
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Mật khẩu</label>
+              <input type="password" name="password" className="form-control" placeholder="Nhập mật khẩu" onChange={handleChange} required />
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Xác nhận mật khẩu</label>
+              <input type="password" name="confirmPassword" className="form-control" placeholder="Nhập lại mật khẩu" onChange={handleChange} required />
+            </div>
+            {error && <div className="alert alert-danger">{error}</div>}
+            <button type="submit" className="btn btn-secondary w-100 main-color">Đăng ký</button>
+          </form>
 
-      <button className="btn btn-outline-secondary w-100 mt-3" onClick={() => navigate("/login")}>
-        Quay lại đăng nhập
-      </button>
+          <button className="btn btn-outline-secondary w-100 mt-3" onClick={() => navigate("/login")}>
+            Quay lại đăng nhập
+          </button>
+        </div>
+      </div>
+
+      {/* Footer sóng dưới */}
+      <footer
+        style={{
+          backgroundImage: `url(${Loginicon})`,
+          backgroundSize: "cover",
+          height: "130px",
+        }}
+      ></footer>
     </div>
-  </div>
-
-  {/* Footer sóng dưới */}
-  <footer
-    style={{
-      backgroundImage: `url(${Loginicon})`,
-      backgroundSize: "cover",
-      height: "130px",
-    }}
-  ></footer>
-</div>
   );
 };
 

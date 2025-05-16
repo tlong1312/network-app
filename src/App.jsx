@@ -20,8 +20,8 @@ function App() {
 
                 <Route element={<MainLayout />}>
                     <Route element={
-                            <ProtectedRoute allowedRoles={["ROLE_USER"]} />
-                        }>
+                        <ProtectedRoute allowedRoles={["ROLE_USER"]} />
+                    }>
                         <Route index element={<HomePage />} />
                         <Route path="search" element={<SearchPage />} />
                         <Route path="info-user" element={<InfoUser />} />
