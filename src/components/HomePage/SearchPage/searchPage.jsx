@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import PeopleContent from "./peopleContent";
 import PostsContent from "./postsContent";
-
 function SearchPage() {
     const [searchParams] = useSearchParams();
     const query = searchParams.get("q");
@@ -61,15 +60,16 @@ function SearchPage() {
             </div>
 
             <div className="p-3 form-content" style={{ width: "80%" }}>
-                {activeTab === "all" && (
-                    <>
-                        <PeopleContent people={people} />
-                        <PostsContent posts={posts} />
-                    </>
-                )}
-                {activeTab === "people" && <PeopleContent people={people} />}
-                {activeTab === "posts" && <PostsContent posts={posts} />}
-            </div>
+    {activeTab === "all" && (
+        <>
+            <PeopleContent people={people} />
+            <PostsContent posts={posts} setPosts={setPosts} />
+        </>
+    )}
+    {activeTab === "people" && <PeopleContent people={people} />}
+    {activeTab === "posts" && <PostsContent posts={posts} setPosts={setPosts} />}
+</div>
+
         </div>
     );
 }
