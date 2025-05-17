@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import PeopleContent from "./peopleContent";
 import PostsContent from "./postsContent";
+
 function SearchPage() {
     const [searchParams] = useSearchParams();
     const query = searchParams.get("q");
@@ -9,6 +10,9 @@ function SearchPage() {
 
     const [people, setPeople] = useState([]);
     const [posts, setPosts] = useState([]);
+
+    // ✅ Lấy userId từ localStorage (lưu khi login)
+    const currentUserId = localStorage.getItem("userId");
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -37,6 +41,7 @@ function SearchPage() {
 
     return (
         <div className="d-flex min-vh-100 bg-light">
+            {/* Sidebar */}
             <div className="sidebar p-4" style={{ width: "20%" }}>
                 <h2 className="h5 font-weight-bold mb-4">Kết quả tìm kiếm: {query}</h2>
                 <ul className="list-unstyled list-menu-search">
@@ -59,17 +64,17 @@ function SearchPage() {
                 </ul>
             </div>
 
+            {/* Main content */}
             <div className="p-3 form-content" style={{ width: "80%" }}>
-    {activeTab === "all" && (
-        <>
-            <PeopleContent people={people} />
-            <PostsContent posts={posts} setPosts={setPosts} />
-        </>
-    )}
-    {activeTab === "people" && <PeopleContent people={people} />}
-    {activeTab === "posts" && <PostsContent posts={posts} setPosts={setPosts} />}
-</div>
-
+                {activeTab === "all" && (
+                    <>
+                        <PeopleContent people={people} currentUserId={currentUserId} />
+                        <PostsContent posts={posts} setPosts={setPosts} />
+                    </>
+                )}
+                {activeTab === "people" && <PeopleContent people={people} currentUserId={currentUserId} />}
+                {activeTab === "posts" && <PostsContent posts={posts} setPosts={setPosts} />}
+            </div>
         </div>
     );
 }
