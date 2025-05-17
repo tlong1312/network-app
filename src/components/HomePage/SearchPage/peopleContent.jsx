@@ -15,7 +15,7 @@ const PeopleContent = ({ people }) => {
             try {
                 const token = localStorage.getItem("token");
                 if (!token || !currentUserId) return;
-
+                    
                 const validPeople = people.filter(p => parseInt(p.id) !== parseInt(currentUserId));
                 const promises = validPeople.map(person =>
                     fetch(`http://localhost:8081/api/friends/status?userId=${currentUserId}&friendId=${person.id}`, {
