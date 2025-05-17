@@ -51,7 +51,8 @@ const UserManagement = () => {
       alert('Có lỗi xảy ra khi xoá user!');
     }
   };
-
+  
+  
   return (
     <div className="dashboard">
       <h1>Quản lý người dùng</h1>
@@ -65,7 +66,9 @@ const UserManagement = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
+            {users
+              .filter(user => user.username !== "admin")
+              .map((user) => (
               <tr key={user.id}>
                 <td>{user.id}</td>
                 <td>{user.fullName}</td>

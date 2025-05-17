@@ -19,6 +19,7 @@ const Navbar = () => {
         };
 
         window.addEventListener('user-updated', handleStorageChange);
+        
         handleStorageChange();
 
         return () => {
@@ -66,15 +67,15 @@ const Navbar = () => {
     return (
         <div className='navbar navbar-expand-lg navbar-light main-color py-3'>
             <div className='container-fluid'>
-                <a href="#" className='cursor-pointer'>
-                    <img
-                        src={logo}
-                        alt='logo'
-                        className='rounded-circle'
-                        style={{ width: '50px', height: '50px', marginRight: '10px' }}
+                <a href="#" className='cursor-pointer' onClick={() => navigate('/')}>
+                    <img 
+                        src={logo} 
+                        alt='logo' 
+                        className='rounded-circle' 
+                        style={{ width: '50px', height: '50px', marginRight: '10px' }} 
                     />
                 </a>
-                <span className='navbar-brand'>Network App</span>
+                <span className='navbar-brand' onClick={() => navigate('/')}>Network App</span>
                 <button className='navbar-toggler' type='button'
                     data-bs-toggle='collapse' data-bs-target='#navbarNavDropdown'
                     aria-controls='navbarNavDropdown' aria-expanded='false'

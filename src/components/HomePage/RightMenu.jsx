@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import Message from './Message';
 
 
 const RightMenu = () => {
@@ -9,7 +10,7 @@ const RightMenu = () => {
     const [friendsRequests, setFriendsRequests] = useState([]);
     const currentUser = localStorage.getItem('user');
     const currentUserId = currentUser ? JSON.parse(currentUser).id : null;
-
+    const [showMessage, setShowMessage] = useState(false);
 
     useEffect(() => {
         const fetchPeople = async () => {
@@ -219,6 +220,32 @@ const RightMenu = () => {
                     ))}
                 </ul>
             </div>
+
+            <button
+                className="btn rounded-circle position-fixed text-white"
+                style={{
+                    bottom: '20px',
+                    right: '20px',
+                    width: '60px',
+                    height: '60px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: '#da2dbd',
+                    fontSize: '1.5rem',
+                    boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
+                    zIndex: 1000
+                }}
+                onClick={() => setShowMessage(true)}
+            >
+                <i className="fas fa-comment"></i>
+            </button>
+
+            <Message
+                show={showMessage}
+                onClose={() => setShowMessage(false)}
+                onMinimize={() => setShowMessage(false)}
+            />
 
         </div>
     )
