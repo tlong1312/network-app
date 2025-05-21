@@ -45,13 +45,14 @@ const InfoUser = () => {
     }
   }, [userId]);
 
-
   const [editedUser, setEditedUser] = useState({
     name: user.name,
     email: user.email,
     avatar: user.avatar,
   });
+
   const navigate = useNavigate();
+
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('role');
@@ -403,34 +404,34 @@ const InfoUser = () => {
       </div>
 
       <div className="d-flex gap-4">
-        <div className="p-4 shadow" 
-            style={{ 
-              width: '25%', 
-              height: 'fit-content', 
-              position: 'sticky',
-              top:100,
-              }}>
-          <h4 className= "mb-2 ms-2">Introduce</h4>
+        <div className="p-4 shadow"
+          style={{
+            width: '25%',
+            height: 'fit-content',
+            position: 'sticky',
+            top: 100,
+          }}>
+          <h4 className="mb-2 ms-2">Introduce</h4>
           <span className="text-muted">Name: {user.name}</span>
           <p className="text-muted" onClick={() => setShowInfoUser(true)}>Email: {user.email ? user.email : 'Chưa cập nhật email'}</p>
           <h4 className="mb-4">Menu</h4>
           {/* Information */}
           {parseInt(userId) === parseInt(currentUserId) && (
-          <li className="d-flex align-items-center mb-3">
-            <a
-              href="#"
-              className="text-decoration-none text-dark cursor-pointer"
-              onClick={() => setShowInfoUser(true)}
-            >
-              <img
-                src={friendIcon}
-                alt="friends"
-                className="me-3"
-                style={{ width: '40px', height: '40px' }}
-              />
-              <span>Update Information</span>
-            </a>
-          </li>
+            <li className="d-flex align-items-center mb-3">
+              <a
+                href="#"
+                className="text-decoration-none text-dark cursor-pointer"
+                onClick={() => setShowInfoUser(true)}
+              >
+                <img
+                  src={friendIcon}
+                  alt="friends"
+                  className="me-3"
+                  style={{ width: '40px', height: '40px' }}
+                />
+                <span>Update Information</span>
+              </a>
+            </li>
           )}
 
           {/* Friends */}
@@ -477,136 +478,136 @@ const InfoUser = () => {
         </div>
 
         {showFriendsPopup && (
+          <div
+            className="modal-overlay"
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              zIndex: 1040,
+            }}
+            onClick={() => setShowFriendsPopup(false)}
+          >
             <div
-              className="modal-overlay"
+              className="container-fluid d-flex flex-column modal show d-block shadow"
+              tabIndex="-1"
+              role="dialog"
               style={{
                 position: 'fixed',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                zIndex: 1040,
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                zIndex: 1050,
               }}
-              onClick={() => setShowFriendsPopup(false)}
+              onClick={(e) => e.stopPropagation()}
             >
               <div
-                className="container-fluid d-flex flex-column modal show d-block shadow"
-                tabIndex="-1"
-                role="dialog"
+                className="modal-dialog"
+                role="document"
                 style={{
-                  position: 'fixed',
-                  top: '50%',
-                  left: '50%',
-                  transform: 'translate(-50%, -50%)',
-                  zIndex: 1050,
+                  width: '600px',
+                  height: '800px',
+                  maxWidth: '75%',
                 }}
-                onClick={(e) => e.stopPropagation()}
               >
-                <div
-                  className="modal-dialog"
-                  role="document"
-                  style={{
-                    width: '600px',
-                    height: '800px',
-                    maxWidth: '75%',
-                  }}
-                >
-                  <div className="modal-content">
-                    <div className="modal-header">
-                      <h5 className="modal-title">Friends List</h5>
-                      <button
-                        type="button"
-                        className="btn-close"
-                        aria-label="Close"
-                        onClick={() => setShowFriendsPopup(false)}
-                      ></button>
-                    </div>
-                    <div
-                      className="modal-body"
-                      style={{
-                        maxHeight: '700px',
-                        overflowY: 'auto',
-                      }}
-                    >
-                      <ul className="list-group">
-                        {friends.map((friend) => (
-                          <li
-                            key={friend.id}
-                            className="list-group-item d-flex align-items-center"
-                            onClick={() => navigate(`/info-user/${friend.id}`)}
-                            style={{ cursor: 'pointer' }}
-                          >
-                            <img
-                              src={friend.avatar}
-                              alt={friend.fullName}
-                              className="me-3 rounded-circle"
-                              style={{ width: '40px', height: '40px' }}
-                            />
-                            {friend.fullName}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title">Friends List</h5>
+                    <button
+                      type="button"
+                      className="btn-close"
+                      aria-label="Close"
+                      onClick={() => setShowFriendsPopup(false)}
+                    ></button>
+                  </div>
+                  <div
+                    className="modal-body"
+                    style={{
+                      maxHeight: '700px',
+                      overflowY: 'auto',
+                    }}
+                  >
+                    <ul className="list-group">
+                      {friends.map((friend) => (
+                        <li
+                          key={friend.id}
+                          className="list-group-item d-flex align-items-center"
+                          onClick={() => navigate(`/info-user/${friend.id}`)}
+                          style={{ cursor: 'pointer' }}
+                        >
+                          <img
+                            src={friend.avatar}
+                            alt={friend.fullName}
+                            className="me-3 rounded-circle"
+                            style={{ width: '40px', height: '40px' }}
+                          />
+                          {friend.fullName}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </div>
               </div>
             </div>
-          )}
+          </div>
+        )}
 
         {parseInt(userId) === parseInt(currentUserId) && showInfoUser && (
-            <div className="position-fixed top-50 start-50 translate-middle bg-white shadow rounded p-4" style={{ width: '400px', zIndex: 1050, top:100 }}>
-              <h5 className="mb-3">Update Information</h5>
-              <form onSubmit={handleUpdateUserInfo}>
-                <div className="mb-3">
-                  <label className="form-label">Họ Tên</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={editedUser.name || ''}
-                    onChange={(e) => setEditedUser({ ...editedUser, name: e.target.value })}
-                  />
-                </div>
-                <div className="mb-3">
-                  <label className="form-label">Email</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={editedUser.email || ''}
-                    onChange={(e) => setEditedUser({ ...editedUser, email: e.target.value })}
-                  />
-                </div>
-                <div className="mb-3">
-                  <label className="form-label">Avatar</label>
-                  {editedUser.avatar && (
-                    <div className="mb-2">
-                      <img
-                        src={editedUser.avatar}
-                        alt="Preview Avatar"
-                        style={{ width: '100px', height: '100px', objectFit: 'cover' }}
-                        className="rounded-circle"
-                      />
-                    </div>
-                  )}
-                  <input
-                    type="file"
-                    className="form-control"
-                    onChange={handleAvatarChange}
-                  />
-                </div>
-                <div className="d-flex justify-content-end">
-                  <button
-                    type="button"
-                    className="btn btn-secondary me-2"
-                    onClick={() => setShowInfoUser(false)}
-                  >
-                    Cancel
-                  </button>
-                  <button type="submit" className="btn btn-primary">Save</button>
-                </div>
-              </form>
-            </div>
-          )}
+          <div className="position-fixed top-50 start-50 translate-middle bg-white shadow rounded p-4" style={{ width: '400px', zIndex: 1050, top: 100 }}>
+            <h5 className="mb-3">Update Information</h5>
+            <form onSubmit={handleUpdateUserInfo}>
+              <div className="mb-3">
+                <label className="form-label">Họ Tên</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={editedUser.name || ''}
+                  onChange={(e) => setEditedUser({ ...editedUser, name: e.target.value })}
+                />
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Email</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={editedUser.email || ''}
+                  onChange={(e) => setEditedUser({ ...editedUser, email: e.target.value })}
+                />
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Avatar</label>
+                {editedUser.avatar && (
+                  <div className="mb-2">
+                    <img
+                      src={editedUser.avatar}
+                      alt="Preview Avatar"
+                      style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+                      className="rounded-circle"
+                    />
+                  </div>
+                )}
+                <input
+                  type="file"
+                  className="form-control"
+                  onChange={handleAvatarChange}
+                />
+              </div>
+              <div className="d-flex justify-content-end">
+                <button
+                  type="button"
+                  className="btn btn-secondary me-2"
+                  onClick={() => setShowInfoUser(false)}
+                >
+                  Cancel
+                </button>
+                <button type="submit" className="btn btn-primary">Save</button>
+              </div>
+            </form>
+          </div>
+        )}
 
         <div className="p-3 shadow d-flex flex-column" style={{ width: '80%' }}>
           <div className="d-flex align-items-center mb-3">

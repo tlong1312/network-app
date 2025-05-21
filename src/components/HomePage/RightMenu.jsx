@@ -132,8 +132,9 @@ const RightMenu = () => {
     ];
 
     return (
-        <div className="col-lg-3 bg-light p-3 d-none d-lg-block">
-            <div className='card mb-4 shadow p-3 mb-4'>
+        <div className="col-lg-3 bg-light p-3 d-none d-lg-block" >
+            <div className='shadow' style ={{position: 'sticky', top: 100 }}>
+                <div className='card mb-4 shadow p-3 mb-4' >
                 <h5 className='fw-bold'>People you may know</h5>
                 <div className="scrollable">
                     <ul className='list-unstyled'>
@@ -220,7 +221,7 @@ const RightMenu = () => {
                     ))}
                 </ul>
             </div>
-
+            </div>
             <button
                 className="btn rounded-circle position-fixed text-white"
                 style={{
