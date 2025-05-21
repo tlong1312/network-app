@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Table, InputGroup, FormControl, Button, Modal } from "react-bootstrap";
-import { FaSearch, FaArrowLeft, FaEdit, FaTrash } from "react-icons/fa";
+import { FaSearch, FaArrowLeft, FaTrash } from "react-icons/fa";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../../../App.css";
 
@@ -10,7 +10,6 @@ const PostManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
-  const [editingPost, setEditingPost] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -26,7 +25,6 @@ const PostManagement = () => {
       ]);
 
       const userData = await userRes.json();
-      console.log("✅ users:", userData);
       const postData = await postRes.json();
 
       setUsers(userData);
@@ -62,60 +60,23 @@ const PostManagement = () => {
   };
 
   const handleDelete = async (postId) => {
-    const token = localStorage.getItem("token");
-    const res = await fetch(`http://localhost:8081/api/posts/${postId}`, {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${token}` },
-    });
+  const confirmDelete = window.confirm("Bạn có chắc chắn muốn xóa bài viết này không?");
+  if (!confirmDelete) return;
 
-    if (res.ok) {
-      alert("Xóa bài viết thành công");
-      setPosts(posts.filter((p) => p.id !== postId));
-    } else {
-      alert("Xóa thất bại");
-    }
-  };
+  const token = localStorage.getItem("token");
+  const res = await fetch(`http://localhost:8081/api/posts/${postId}`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${token}` },
+  });
 
-  const handleEdit = (post) => {
-    setEditingPost({ ...post });
-  };
+  if (res.ok) {
+    alert("Xóa bài viết thành công");
+    setPosts(posts.filter((p) => p.id !== postId));
+  } else {
+    alert("Xóa thất bại");
+  }
+};
 
-  const handleUpdate = async () => {
-    const token = localStorage.getItem("token");
-
-    const res = await fetch(`http://localhost:8081/api/posts/${editingPost.id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        content: editingPost.content,
-        mediaUrl: editingPost.mediaUrl,
-      }),
-    });
-
-    if (res.ok) {
-      alert("Cập nhật thành công");
-      const updated = await res.json();
-      setPosts((prev) =>
-        prev.map((p) => (p.id === updated.id ? updated : p))
-      );
-      setEditingPost(null);
-    } else {
-      alert("Cập nhật thất bại");
-    }
-  };
-
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      setEditingPost((prev) => ({ ...prev, mediaUrl: reader.result }));
-    };
-    reader.readAsDataURL(file);
-  };
 
   return (
     <div className="p-4">
@@ -186,14 +147,6 @@ const PostManagement = () => {
                 )}
                 <div className="mt-2 d-flex justify-content-end">
                   <Button
-                    variant="outline-secondary"
-                    className="me-2"
-                    size="sm"
-                    onClick={() => handleEdit(post)}
-                  >
-                    <FaEdit /> Sửa
-                  </Button>
-                  <Button
                     variant="outline-danger"
                     size="sm"
                     onClick={() => handleDelete(post.id)}
@@ -207,42 +160,6 @@ const PostManagement = () => {
             <p>Người dùng chưa có bài viết nào.</p>
           )}
         </Modal.Body>
-      </Modal>
-
-      {/* Modal sửa bài viết */}
-      <Modal show={!!editingPost} onHide={() => setEditingPost(null)} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Sửa bài viết</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {editingPost && (
-            <>
-              <textarea
-                className="form-control mb-2"
-                value={editingPost.content}
-                onChange={(e) =>
-                  setEditingPost((prev) => ({ ...prev, content: e.target.value }))
-                }
-              />
-              <input type="file" className="form-control mb-2" onChange={handleFileChange} />
-              {editingPost.mediaUrl && (
-                <img
-                  src={editingPost.mediaUrl}
-                  alt="preview"
-                  className="img-fluid rounded"
-                />
-              )}
-            </>
-          )}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setEditingPost(null)}>
-            Hủy
-          </Button>
-          <Button variant="primary" onClick={handleUpdate}>
-            Lưu thay đổi
-          </Button>
-        </Modal.Footer>
       </Modal>
     </div>
   );
