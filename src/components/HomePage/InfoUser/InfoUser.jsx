@@ -45,7 +45,7 @@ const InfoUser = () => {
     }
   }, [userId]);
 
-  
+
   const [editedUser, setEditedUser] = useState({
     name: user.name,
     email: user.email,
@@ -410,7 +410,7 @@ const InfoUser = () => {
               position: 'sticky',
               top:100,
               }}>
-          <h4 classname= "mb-2 ms-2">Introduce</h4>
+          <h4 className= "mb-2 ms-2">Introduce</h4>
           <span className="text-muted">Name: {user.name}</span>
           <p className="text-muted" onClick={() => setShowInfoUser(true)}>Email: {user.email ? user.email : 'Chưa cập nhật email'}</p>
           <h4 className="mb-4">Menu</h4>
