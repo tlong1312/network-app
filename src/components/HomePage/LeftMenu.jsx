@@ -55,7 +55,7 @@ const LeftMenu = () => {
 
     return (
         <div className="col-lg-2 bg-light p-3 d-none d-lg-block">
-            <ul className="list-unstyled">
+            <ul className="list-unstyled" style ={{position: 'sticky', top: 100 }}>
                 {/* Profile */}
                 <li className="d-flex align-items-center mb-3">
                     <Link to={`/info-user/${currentUserId}`} className="text-decoration-none text-dark cursor-pointer">
