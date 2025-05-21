@@ -64,7 +64,7 @@ const InfoUser = () => {
   const fetchPosts = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:8081/api/posts/my-posts', {
+      const response = await fetch(`http://localhost:8081/api/posts/info-post/${userId}`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,
