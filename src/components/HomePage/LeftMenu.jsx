@@ -11,7 +11,7 @@ const LeftMenu = () => {
     const navigate = useNavigate();
     const fullName = user ? JSON.parse(user).fullName : 'User';
     const currentUserId = user ? JSON.parse(user).id : null;
-    const avatar = user ? JSON.parse(user).avatar || icon : icon;  
+    const avatar = user ? JSON.parse(user).avatar || icon : icon;
     const [showLogout, setShowLogout] = useState(false);
     const [friends, setFriends] = useState([]);
 

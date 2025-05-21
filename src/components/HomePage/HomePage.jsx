@@ -1,4 +1,3 @@
-
 import React from 'react'
 import LeftMenu from './LeftMenu'
 import MainContent from './MainContent'

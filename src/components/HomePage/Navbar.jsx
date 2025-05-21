@@ -19,6 +19,7 @@ const Navbar = () => {
         };
 
         window.addEventListener('user-updated', handleStorageChange);
+        
         handleStorageChange();
 
         return () => {
@@ -66,7 +67,7 @@ const Navbar = () => {
     return (
         <div className='navbar navbar-expand-lg navbar-light main-color py-3'>
             <div className='container-fluid'>
-                <a href="#" className='cursor-pointer'>
+                <a href="#" className='cursor-pointer' onClick={() => navigate('/')}>
                     <img 
                         src={logo} 
                         alt='logo' 
@@ -74,7 +75,7 @@ const Navbar = () => {
                         style={{ width: '50px', height: '50px', marginRight: '10px' }} 
                     />
                 </a>
-                <span className='navbar-brand'>Network App</span>
+                <span className='navbar-brand' onClick={() => navigate('/')}>Network App</span>
                 <button className='navbar-toggler' type='button'
                     data-bs-toggle='collapse' data-bs-target='#navbarNavDropdown'
                     aria-controls='navbarNavDropdown' aria-expanded='false'
@@ -83,7 +84,7 @@ const Navbar = () => {
                     <span className='navbar-toggler-icon'></span>
                 </button>
                 <div className='collapse navbar-collapse' id='navbarNavDropdown'>
-                     <ul className='navbar-nav mx-auto w-100 d-flex justify-content-center'>
+                    <ul className='navbar-nav mx-auto w-100 d-flex justify-content-center'>
                         <li className='nav-item w-100 mb-3 mb-lg-0 mt-3 mt-lg-0' style={{ maxWidth: '600px' }}>
                             <form className="search-form d-flex" onSubmit={handleSubmit}>
                                 <i className="fa fa-search search-icon position-absolute"></i>
@@ -104,10 +105,10 @@ const Navbar = () => {
                                     <img
                                         src={notification}
                                         alt='notification'
-                                        style={{ width: '30px', height: '30px'}}
+                                        style={{ width: '30px', height: '30px' }}
                                     />
-                                </div>                                
-                            </a>                           
+                                </div>
+                            </a>
                         </li>
                         <li className='nav-item mb-3 mb-lg-0'>
                             <a href="#" target='_blank' className='cursor-pointer'>
@@ -117,7 +118,7 @@ const Navbar = () => {
                                     className='rounded-circle'
                                     style={{ width: '40px', height: '40px', marginRight: '10px' }}
                                 />
-                            </a>                            
+                            </a>
                         </li>
                     </ul>
                 </div>

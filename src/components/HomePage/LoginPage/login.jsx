@@ -8,7 +8,7 @@ const Login = () => {
   const [password, setPassword] = React.useState("");
   const [error, setError] = React.useState("");
   const naviage = useNavigate();
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -34,7 +34,7 @@ const Login = () => {
           naviage("/");
         }
 
-      }else {
+      } else {
         setError("Đăng nhập không thành công. Vui lòng kiểm tra lại thông tin.");
       }
     } catch (err) {
@@ -47,10 +47,10 @@ const Login = () => {
     <div className="d-flex flex-column vh-100">
       {/* Nội dung chính */}
       <div className="container-fluid flex-grow-1 d-flex align-items-center justify-content-center">
-        <div className="row w-100"> 
+        <div className="row w-100">
           {/* Cột bên trái */}
           <div className="col-lg-6 d-flex flex-column justify-content-center align-items-center text-center" style={{ height: "75vh" }}>
-            <h1 className="app-name">Network App</h1>  
+            <h1 className="app-name">Network App</h1>
             <h4 className="mt-2">
               Giúp bạn kết nối và chia sẻ với mọi người <br />
               cuộc sống của bạn.
@@ -64,21 +64,21 @@ const Login = () => {
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                   <label className="form-label">Username</label>
-                  <input 
-                    type="text" 
-                    value={username} 
-                    className="form-control" 
-                    placeholder="Nhập username" 
-                    onChange={(e) => setUsername(e.target.value)} 
+                  <input
+                    type="text"
+                    value={username}
+                    className="form-control"
+                    placeholder="Nhập username"
+                    onChange={(e) => setUsername(e.target.value)}
                     required
                   />
                 </div>
                 <div className="mb-3">
                   <label className="form-label">Mật khẩu</label>
-                  <input 
-                    type="password" 
-                    className="form-control" 
-                    placeholder="Nhập mật khẩu" 
+                  <input
+                    type="password"
+                    className="form-control"
+                    placeholder="Nhập mật khẩu"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
@@ -86,7 +86,7 @@ const Login = () => {
                 {error && <div className="alert alert-danger">{error}</div>}
                 <button type="submit" className="btn btn-secondary w-100 main-color">Đăng nhập</button>
               </form>
-              
+
               {/* Nút Đăng Ký */}
               <button className="btn btn-outline-secondary w-100 mt-3" onClick={() => naviage("/RegisterPage")}>Đăng Ký</button>
             </div>
@@ -96,9 +96,9 @@ const Login = () => {
 
       {/* Footer */}
       <footer className="h-100"
-       style={{
+        style={{
           backgroundImage: `url(${Loginicon})`,
-          backgroundSize: "cover",  
+          backgroundSize: "cover",
           height: "130px",
         }}>
       </footer>

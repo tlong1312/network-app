@@ -16,58 +16,58 @@ const MainContent = () => {
     const [stories, setStories] = useState([]);
 
     const [currentUser, setCurrentUser] = useState(() => {
-    const userFromStorage = localStorage.getItem('user');
-    if (userFromStorage) {
-        const parsedUser = JSON.parse(userFromStorage);
-        return {
-            id: parsedUser.id,
-            name: parsedUser.username,
-            avatar: parsedUser.avatar || avatar,
-        };
-    } else {
-        return {
-            id: 1,
-            name: 'Guest User',
-            avatar: avatar,
-        };
-    }
-});
-
-useEffect(() => {
-    const handleUserUpdate = () => {
         const userFromStorage = localStorage.getItem('user');
         if (userFromStorage) {
             const parsedUser = JSON.parse(userFromStorage);
-            setCurrentUser({
+            return {
                 id: parsedUser.id,
                 name: parsedUser.username,
                 avatar: parsedUser.avatar || avatar,
-            });
+            };
+        } else {
+            return {
+                id: 1,
+                name: 'Guest User',
+                avatar: avatar,
+            };
         }
-    };
+    });
 
-    window.addEventListener('user-updated', handleUserUpdate);
-    
-    return () => {
-        window.removeEventListener('user-updated', handleUserUpdate);
-    };
-}, []);
+    useEffect(() => {
+        const handleUserUpdate = () => {
+            const userFromStorage = localStorage.getItem('user');
+            if (userFromStorage) {
+                const parsedUser = JSON.parse(userFromStorage);
+                setCurrentUser({
+                    id: parsedUser.id,
+                    name: parsedUser.username,
+                    avatar: parsedUser.avatar || avatar,
+                });
+            }
+        };
 
-const fetchStories = async () => {
+        window.addEventListener('user-updated', handleUserUpdate);
+
+        return () => {
+            window.removeEventListener('user-updated', handleUserUpdate);
+        };
+    }, []);
+
+    const fetchStories = async () => {
         try {
             const token = localStorage.getItem('token');
             if (!token) return;
-            
+
             const response = await fetch('http://localhost:8081/api/stories', {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            
+
             if (response.ok) {
                 const data = await response.json();
-                
+
                 const formattedStories = data
                     .filter(user => user.images && user.images.length > 0)
                     .map(user => ({
@@ -80,7 +80,7 @@ const fetchStories = async () => {
                             duration: image.duration || 5000
                         }))
                     }));
-                
+
                 setStories(formattedStories);
             } else {
                 console.error('Failed to fetch stories:', response.statusText);
@@ -97,8 +97,8 @@ const fetchStories = async () => {
     useEffect(() => {
         if (!selectedStory || isPaused) return;
 
-        if (!selectedStory.stories || 
-            selectedStory.stories.length === 0 || 
+        if (!selectedStory.stories ||
+            selectedStory.stories.length === 0 ||
             !selectedStory.stories[currentStoryIndex]) {
             setSelectedStory(null);
             return;
@@ -141,41 +141,41 @@ const fetchStories = async () => {
         }
     };
 
-const handStory = (imageInput) => {
-    const imageUrl = typeof imageInput === 'string' 
-        ? imageInput
-        : URL.createObjectURL(imageInput);
+    const handStory = (imageInput) => {
+        const imageUrl = typeof imageInput === 'string'
+            ? imageInput
+            : URL.createObjectURL(imageInput);
 
-    const newStory = {
-        id: Date.now(),
-        image: imageUrl,
-        duration: 5000
+        const newStory = {
+            id: Date.now(),
+            image: imageUrl,
+            duration: 5000
+        };
+
+        setStories((prevStories) => {
+            const userStoryIndex = prevStories.findIndex(story => story.id === currentUser.id);
+
+            if (userStoryIndex !== -1) {
+                const updatedStories = [...prevStories];
+                updatedStories[userStoryIndex] = {
+                    ...updatedStories[userStoryIndex],
+                    stories: [...updatedStories[userStoryIndex].stories, newStory]
+                };
+                return updatedStories;
+            } else {
+                return [
+                    ...prevStories,
+                    {
+                        id: currentUser.id,
+                        authorName: currentUser.name,
+                        avatar: currentUser.avatar,
+                        stories: [newStory]
+                    }
+                ];
+            }
+        });
+        fetchStories();
     };
-    
-    setStories((prevStories) => {
-        const userStoryIndex = prevStories.findIndex(story => story.id === currentUser.id);
-        
-        if (userStoryIndex !== -1) {
-            const updatedStories = [...prevStories];
-            updatedStories[userStoryIndex] = {
-                ...updatedStories[userStoryIndex],
-                stories: [...updatedStories[userStoryIndex].stories, newStory]
-            };
-            return updatedStories;
-        } else {
-            return [
-                ...prevStories,
-                {
-                    id: currentUser.id,
-                    authorName: currentUser.name,
-                    avatar: currentUser.avatar,
-                    stories: [newStory]
-                }
-            ];
-        }
-    });
-    fetchStories();
-};
 
     useEffect(() => {
         const fetchPosts = async () => {
@@ -216,7 +216,7 @@ const handStory = (imageInput) => {
 
     const handlePost = async (content, mediaFile) => {
         try {
-            
+
             let mediaUrl = null;
             if (mediaFile) {
                 const formData = new FormData();
@@ -237,7 +237,7 @@ const handStory = (imageInput) => {
                 }
 
             }
-            
+
             const payload = {
                 content,
                 mediaUrl,
@@ -409,23 +409,23 @@ const handStory = (imageInput) => {
 
                         {/* Story content with navigation controls */}
                         <div className="position-relative">
-    {selectedStory.stories && selectedStory.stories[currentStoryIndex] ? (
-        <img
-            src={selectedStory.stories[currentStoryIndex].image}
-            alt={`Story ${currentStoryIndex + 1}`}
-            style={{
-                width: '100%',
-                height: 'auto',
-                maxHeight: '90vh',
-                objectFit: 'contain',
-                borderRadius: '8px'
-            }}
-        />
-    ) : (
-        <div className="text-center p-5 text-white">
-            <p>No story content available</p>
-        </div>
-    )}
+                            {selectedStory.stories && selectedStory.stories[currentStoryIndex] ? (
+                                <img
+                                    src={selectedStory.stories[currentStoryIndex].image}
+                                    alt={`Story ${currentStoryIndex + 1}`}
+                                    style={{
+                                        width: '100%',
+                                        height: 'auto',
+                                        maxHeight: '90vh',
+                                        objectFit: 'contain',
+                                        borderRadius: '8px'
+                                    }}
+                                />
+                            ) : (
+                                <div className="text-center p-5 text-white">
+                                    <p>No story content available</p>
+                                </div>
+                            )}
 
                             {/* Invisible navigation areas */}
                             <div
