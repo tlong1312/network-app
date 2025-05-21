@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo.png';
 import defaultAvatar from '../../assets/icon/avatar.png';
 import notification from '../../assets/notification.png';
@@ -8,7 +8,8 @@ const Navbar = () => {
     const [query, setQuery] = useState('');
     const [avatarUrl, setAvatarUrl] = useState(defaultAvatar);
     const navigate = useNavigate();
-
+    const currentUserString = localStorage.getItem('user');
+    const currentUser = currentUserString ? JSON.parse(currentUserString) : null;
     useEffect(() => {
         const handleStorageChange = () => {
             const user = localStorage.getItem('user');
@@ -65,7 +66,7 @@ const Navbar = () => {
     };
 
     return (
-        <div className='navbar navbar-expand-lg navbar-light main-color py-3'>
+        <div className='navbar navbar-expand-lg navbar-light main-color py-3' style={{ position: 'sticky', top: 0, zIndex: 1000 }}>
             <div className='container-fluid'>
                 <a href="#" className='cursor-pointer' onClick={() => navigate('/')}>
                     <img 
@@ -111,14 +112,14 @@ const Navbar = () => {
                             </a>
                         </li>
                         <li className='nav-item mb-3 mb-lg-0'>
-                            <a href="#" target='_blank' className='cursor-pointer'>
+                            <Link to={`/info-user/${currentUser?.id}`} className='cursor-pointer'>
                                 <img
                                     src={avatarUrl}
                                     alt='profile'
                                     className='rounded-circle'
                                     style={{ width: '40px', height: '40px', marginRight: '10px' }}
                                 />
-                            </a>
+                            </Link>
                         </li>
                     </ul>
                 </div>
