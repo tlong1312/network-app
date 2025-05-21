@@ -413,6 +413,7 @@ const InfoUser = () => {
           <p className="text-muted" onClick={() => setShowInfoUser(true)}>Email: {user.email ? user.email : 'Chưa cập nhật email'}</p>
           <h4 className="mb-4">Menu</h4>
           {/* Information */}
+          {parseInt(userId) === parseInt(currentUserId) && (
           <li className="d-flex align-items-center mb-3">
             <a
               href="#"
@@ -428,8 +429,7 @@ const InfoUser = () => {
               <span>Update Information</span>
             </a>
           </li>
-
-
+          )}
 
           {/* Friends */}
           <li className="d-flex align-items-center mb-3">
@@ -552,7 +552,7 @@ const InfoUser = () => {
             </div>
           )}
 
-        {showInfoUser && (
+        {parseInt(userId) === parseInt(currentUserId) && showInfoUser && (
             <div className="position-fixed top-50 start-50 translate-middle bg-white shadow rounded p-4" style={{ width: '400px', zIndex: 1050, top:100 }}>
               <h5 className="mb-3">Update Information</h5>
               <form onSubmit={handleUpdateUserInfo}>
