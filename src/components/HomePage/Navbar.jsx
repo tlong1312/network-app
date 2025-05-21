@@ -66,7 +66,7 @@ const Navbar = () => {
     };
 
     return (
-        <div className='navbar navbar-expand-lg navbar-light main-color py-3'>
+        <div className='navbar navbar-expand-lg navbar-light main-color py-3' style={{ position: 'sticky', top: 0, zIndex: 1000 }}>
             <div className='container-fluid'>
                 <a href="#" className='cursor-pointer' onClick={() => navigate('/')}>
                     <img 
