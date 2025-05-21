@@ -25,7 +25,10 @@ const RightMenu = () => {
 
                 if (response.ok) {
                     const data = await response.json();
-                    setPeople(data.map(user => ({
+                    console.log(data);
+                    const filteredPeople = data
+                    .slice(1) 
+                    setPeople(filteredPeople.map(user => ({
                         id: user.id,
                         name: user.fullName,
                         avatar: user.avatar,
