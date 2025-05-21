@@ -22,7 +22,7 @@ const InfoUser = () => {
     const fetchFriends = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:8081/api/friends?userId=${currentUserId}`, {
+        const response = await fetch(`http://localhost:8081/api/friends?userId=${userId}`, {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,
@@ -40,10 +40,12 @@ const InfoUser = () => {
       }
     };
 
-    if (currentUserId) {
+    if (userId) {
       fetchFriends();
     }
-  }, [currentUserId]);
+  }, [userId]);
+
+  
   const [editedUser, setEditedUser] = useState({
     name: user.name,
     email: user.email,
