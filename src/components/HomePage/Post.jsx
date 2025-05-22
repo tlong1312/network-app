@@ -2,6 +2,18 @@ import React, { useState } from 'react'
 
 const Post = (props) => {
 
+    const userString = localStorage.getItem('user');
+    let avatar
+    if (userString) {
+        try {
+            const userObject = JSON.parse(userString);
+            avatar = userObject.avatar;
+        } catch (error) {
+            console.error('Error parsing user data from localStorage:', error);
+        }
+    }
+
+
     const { posts, setPosts } = props;
 
     const [comment, setComment] = useState('');
@@ -173,7 +185,7 @@ const Post = (props) => {
                         )}
                         <div className='d-flex align-items-center mb-2'>
                             <img
-                                src={post.avatar}
+                                src={avatar}
                                 alt="User 1"
                                 className='me-3 rounded-circle'
                                 style={{ width: '30px', height: '30px' }}
