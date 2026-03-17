@@ -1,10 +1,3 @@
----
-
-### 2. README cho Repository Frontend (Dành cho repo FE)
-
-Ông copy đoạn này bỏ vào repo Frontend. Bản này tập trung vào UI/UX, cách giao tiếp với API và xử lý state real-time.
-
-```markdown
 # Social Network UI
 
 The client-side web application for the social networking platform. This frontend provides a responsive interface for user interactions, media sharing, and real-time updates.
