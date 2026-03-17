@@ -1,37 +1,33 @@
-# 🌐 Network App
+---
 
-Chào mừng bạn đến với **Network App** – một nền tảng mạng xã hội nơi bạn có thể kết nối, chia sẻ và tương tác với bạn bè của mình.
+### 2. README cho Repository Frontend (Dành cho repo FE)
 
-## Giới thiệu
-	Network App cho phép người dùng:
-	- Tạo và quản lý hồ sơ cá nhân như bài viết, story, danh sách bạn bè.
-	- Gửi và nhận lời mời kết bạn.
-	- Đăng bài viết, tương tác qua lượt thích và bình luận.
-	- Tìm kiếm người dùng khác trong hệ thống.
+Ông copy đoạn này bỏ vào repo Frontend. Bản này tập trung vào UI/UX, cách giao tiếp với API và xử lý state real-time.
 
-## Các chú ý khi sử dụng
-	- Phải điền đầy đủ thông tin khi đăng ký
-	- Đảm bảo bạn có kết nối internet ổn định khi sử dụng ứng dụng.
-	- Đăng nhập tài khoản trước khi thực hiện các chức năng như đăng bài hoặc gửi lời mời kết bạn.
-	- Mỗi người dùng chỉ có thể tạo một tài khoản duy nhất.
+```markdown
+# Social Network UI
 
-## Hướng dẫn cài đặt phần mềm
-	1. Yêu cầu hệ thống
-		- **Node.js** phiên bản >= v22.14.0
-		- **npm**
-		- Trình duyệt cơ bản(Chrome, Firefox, Edge...)
-	2. Cài đặt dự án
-	B1: cd đến đường dẫn muốn lưu trữ
-	B2: Clone repository về máy: "git clone https://github.com/your-username/network-app.git"
-	B3: Di chuyển vào thư mục dự án: "cd network-app"
-	B4: Cài đặt các gói phụ thuộc "npm install"
-	B5: Khởi chạy môi trường phát triển: "npm run dev"
+The client-side web application for the social networking platform. This frontend provides a responsive interface for user interactions, media sharing, and real-time updates.
 
-## Cách sử dụng cơ bản
-	- Đăng ký tài khoản: Truy cập trang đăng ký và điền thông tin.
-	- Đăng nhập: Sử dụng username và mật khẩu đã đăng ký để đăng nhập.
-	- Tạo bài viết: Truy cập trang chủ, bấm vào "Bạn đang nghĩ gì" để có thể chia sẻ.
-	- Thêm Story: Truy cập trang chủ, bấm thêm Story để chia sẻ khoảng khắc.
-	- Tìm và kết bạn: Sử dụng thanh tìm kiếm để tìm người dùng khác, nhấn “Kết bạn”.
-	- Xem thông tin cá nhân: Vào “Trang cá nhân” để cập nhật hoặc xem thông tin cũng như bài viết cá nhân của bạn.
-	- Nhắn tin: Trực tiếp tương tác online với đối tượng đã kết bạn.
+**Backend Repository:** [Insert Link to Backend Repo Here]
+
+## Key Features & Implementations
+
+* **Responsive UI:** Built dynamic and responsive components for the news feed, user profiles, and friend management interfaces.
+* **Real-time Client:** Established WebSocket connections (via STOMP) to receive and render real-time notifications for likes, comments, and incoming friend requests without page reloads.
+* **Secure Data Fetching:** Implemented seamless client-server communication using the Fetch API, including automated JWT attachment in HTTP headers for protected routes.
+* **Media Upload Handling:** Created optimized forms and components to handle direct image/media uploads, interfacing with the backend's Cloudinary integration.
+
+## Tech Stack
+
+* **Core:** ReactJS
+* **Network & API:** Fetch API, WebSocket / STOMP Client
+* **Styling:** CSS / Tailwind CSS (Update based on your actual styling tool)
+* **State Management:** React Context API / Redux (Update if used)
+
+## Local Environment Setup
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/tlong1312/network-app-be.git
+   cd network-app-be
