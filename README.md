@@ -22,5 +22,5 @@ The client-side web application for the social networking platform. This fronten
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/tlong1312/network-app-be.git
-   cd network-app-be
+   git clone https://github.com/tlong1312/network-app.git
+   cd network-app
