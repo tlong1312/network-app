@@ -7,10 +7,12 @@ const Login = () => {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [error, setError] = React.useState("");
-  const naviage = useNavigate();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Form submitted", { username, password });
+    
     try {
       const reponse = await fetch("http://localhost:8081/api/auth/login", {
         method: "POST",
@@ -23,18 +25,27 @@ const Login = () => {
         }),
       });
 
+      console.log("Response status:", reponse.status);
+
       if (reponse.ok) {
         const data = await reponse.json();
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("role", data.role);
-        localStorage.setItem("user", JSON.stringify(data.user));
+        console.log("Login successful:", data);
+        
+        sessionStorage.setItem("token", data.token);
+        sessionStorage.setItem("role", data.role);
+        sessionStorage.setItem("user", JSON.stringify(data.user));
+        
+        console.log("Data saved to sessionStorage");
+        
         if (data.role === "ROLE_ADMIN") {
-          naviage("/admin");
+          console.log("Navigating to /admin");
+          navigate("/admin");
         } else if (data.role === "ROLE_USER") {
-          naviage("/");
+          console.log("Navigating to /");
+          navigate("/");
         }
-
       } else {
+        console.log("Login failed");
         setError("Đăng nhập không thành công. Vui lòng kiểm tra lại thông tin.");
       }
     } catch (err) {
@@ -88,7 +99,7 @@ const Login = () => {
               </form>
 
               {/* Nút Đăng Ký */}
-              <button className="btn btn-outline-secondary w-100 mt-3" onClick={() => naviage("/RegisterPage")}>Đăng Ký</button>
+              <button className="btn btn-outline-secondary w-100 mt-3" onClick={() => navigate("/RegisterPage")}>Đăng Ký</button>
             </div>
           </div>
         </div>

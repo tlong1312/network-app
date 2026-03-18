@@ -2,7 +2,6 @@ import React from "react";
 import Post from "./../Post";
 
 const PostsContent = ({ posts, setPosts }) => {
-    // Chuyển đổi dữ liệu posts nếu cần
     const formattedPosts = posts.map(post => ({
         id: post.id,
         author: post.user?.fullName || post.author || "Unknown",

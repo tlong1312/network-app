@@ -8,14 +8,22 @@ const RightMenu = () => {
     const navigate = useNavigate();
     const [people, setPeople] = useState([]);
     const [friendsRequests, setFriendsRequests] = useState([]);
-    const currentUser = localStorage.getItem('user');
+    const currentUser = sessionStorage.getItem('user');
     const currentUserId = currentUser ? JSON.parse(currentUser).id : null;
     const [showMessage, setShowMessage] = useState(false);
 
     useEffect(() => {
         const fetchPeople = async () => {
             try {
-                const token = localStorage.getItem('token');
+                const token = sessionStorage.getItem('token');
+                console.log('RightMenu - Token:', token ? 'exists' : 'missing');
+                console.log('RightMenu - CurrentUserId:', currentUserId);
+                
+                if (!token) {
+                    console.error('No token found in sessionStorage');
+                    return;
+                }
+                
                 const response = await fetch(`http://localhost:8081/api/friends/not-friends?userId=${currentUserId}`, {
                     method: 'GET',
                     headers: {
@@ -44,7 +52,7 @@ const RightMenu = () => {
 
         const fetchFriendRequests = async () => {
             try {
-                const token = localStorage.getItem('token');
+                const token = sessionStorage.getItem('token');
                 const response = await fetch(`http://localhost:8081/api/friends/requests?userId=${currentUserId}`, {
                     method: 'GET',
                     headers: {
@@ -69,7 +77,7 @@ const RightMenu = () => {
 
     const handleSendFriendRequest = async (friendId) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = sessionStorage.getItem('token');
             const response = await fetch(`http://localhost:8081/api/friends/send-request?userId=${currentUserId}&friendId=${friendId}`, {
                 method: 'POST',
                 headers: {
@@ -91,7 +99,7 @@ const RightMenu = () => {
 
     const handleAcceptRequest = async (friendId) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = sessionStorage.getItem('token');
             const response = await fetch(`http://localhost:8081/api/friends/accept-request?userId=${currentUserId}&friendId=${friendId}`, {
                 method: 'POST',
                 headers: {
@@ -111,7 +119,7 @@ const RightMenu = () => {
 
     const handleRejectRequest = async (friendId) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = sessionStorage.getItem('token');
             const response = await fetch(`http://localhost:8081/api/friends/reject-request?userId=${currentUserId}&friendId=${friendId}`, {
                 method: 'POST',
                 headers: {

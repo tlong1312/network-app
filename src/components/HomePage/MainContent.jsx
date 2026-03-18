@@ -16,7 +16,7 @@ const MainContent = () => {
     const [stories, setStories] = useState([]);
 
     const [currentUser, setCurrentUser] = useState(() => {
-        const userFromStorage = localStorage.getItem('user');
+        const userFromStorage = sessionStorage.getItem('user');
         if (userFromStorage) {
             const parsedUser = JSON.parse(userFromStorage);
             return {
@@ -35,7 +35,7 @@ const MainContent = () => {
 
     useEffect(() => {
         const handleUserUpdate = () => {
-            const userFromStorage = localStorage.getItem('user');
+            const userFromStorage = sessionStorage.getItem('user');
             if (userFromStorage) {
                 const parsedUser = JSON.parse(userFromStorage);
                 setCurrentUser({
@@ -55,7 +55,7 @@ const MainContent = () => {
 
     const fetchStories = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = sessionStorage.getItem('token');
             if (!token) return;
 
             const response = await fetch('http://localhost:8081/api/stories', {
@@ -180,7 +180,7 @@ const MainContent = () => {
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const token = localStorage.getItem('token');
+                const token = sessionStorage.getItem('token');
                 const response = await fetch('http://localhost:8081/api/posts', {
                     method: 'GET',
                     headers: {
@@ -247,7 +247,7 @@ const MainContent = () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    Authorization: `Bearer ${sessionStorage.getItem('token')}`,
                 },
                 body: JSON.stringify(payload),
             });

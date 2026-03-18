@@ -13,7 +13,7 @@ const InfoUser = () => {
   const handleSettingsClick = () => { setShowLogout(!showLogout); }
   const [showFriendsPopup, setShowFriendsPopup] = useState(false);
   const [showInfoUser, setShowInfoUser] = useState(false);
-  const currentUser = localStorage.getItem('user');
+  const currentUser = sessionStorage.getItem('user');
   const currentUserId = currentUser ? JSON.parse(currentUser).id : null;
   const [friendStatus, setFriendStatus] = useState("none");
   const [isReceiver, setIsReceiver] = useState(false);
@@ -21,7 +21,7 @@ const InfoUser = () => {
   useEffect(() => {
     const fetchFriends = async () => {
       try {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         const response = await fetch(`http://localhost:8081/api/friends?userId=${userId}`, {
           method: 'GET',
           headers: {
@@ -54,16 +54,16 @@ const InfoUser = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('role');
-    localStorage.removeItem('user');
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('role');
+    sessionStorage.removeItem('user');
     navigate('/login');
   }
   const [showLogout, setShowLogout] = useState(false);
 
   const fetchPosts = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const response = await fetch(`http://localhost:8081/api/posts/info-post/${userId}`, {
         method: 'GET',
         headers: {
@@ -97,7 +97,7 @@ const InfoUser = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         const response = await fetch(`http://localhost:8081/api/users/${userId}`, {
           method: 'GET',
           headers: {
@@ -127,7 +127,7 @@ const InfoUser = () => {
         return;
       }
       try {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         const response = await fetch(`http://localhost:8081/api/friends/friendship-status?userId=${currentUserId}&friendId=${userId}`, {
           method: 'GET',
           headers: {
@@ -197,7 +197,7 @@ const InfoUser = () => {
     e.preventDefault();
 
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const updateResponse = await fetch(`http://localhost:8081/api/users/${userId}`, {
         method: 'PUT',
         headers: {
@@ -220,11 +220,11 @@ const InfoUser = () => {
         });
 
         if (parseInt(userId) === parseInt(currentUserId)) {
-          const currentUserData = JSON.parse(localStorage.getItem('user'));
+          const currentUserData = JSON.parse(sessionStorage.getItem('user'));
           if (currentUserData) {
             currentUserData.fullName = editedUser.name;
             currentUserData.avatar = editedUser.avatar;
-            localStorage.setItem('user', JSON.stringify(currentUserData));
+            sessionStorage.setItem('user', JSON.stringify(currentUserData));
             window.dispatchEvent(new Event('user-updated'));
           }
         }
@@ -241,7 +241,7 @@ const InfoUser = () => {
 
   const handleAddFriend = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const response = await fetch(`http://localhost:8081/api/friends/send-request?userId=${currentUserId}&friendId=${userId}`, {
         method: 'POST',
         headers: {
@@ -261,7 +261,7 @@ const InfoUser = () => {
 
   const handleUnfriend = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const response = await fetch(`http://localhost:8081/api/friends/unfriend?userId=${currentUserId}&friendId=${userId}`, {
         method: 'DELETE',
         headers: {
@@ -281,7 +281,7 @@ const InfoUser = () => {
 
   const handleAcceptFriend = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const response = await fetch(`http://localhost:8081/api/friends/accept-request?userId=${currentUserId}&friendId=${userId}`, {
         method: 'POST',
         headers: {
@@ -333,7 +333,7 @@ const InfoUser = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+           Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
         body: JSON.stringify(payload),
       });

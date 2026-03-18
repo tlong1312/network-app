@@ -5,15 +5,13 @@ const PeopleContent = ({ people }) => {
     const [friendStatuses, setFriendStatuses] = useState({});
     const navigate = useNavigate();
 
-    // ✅ Lấy user từ localStorage và lấy ra id
-    const currentUser = JSON.parse(localStorage.getItem("user"));
+    const currentUser = JSON.parse(sessionStorage.getItem("user"));
     const currentUserId = currentUser?.id;
 
-    // Gọi API để lấy trạng thái bạn bè của từng người
     useEffect(() => {
         const fetchStatuses = async () => {
             try {
-                const token = localStorage.getItem("token");
+                const token = sessionStorage.getItem("token");
                 if (!token || !currentUserId) return;
                     
                 const validPeople = people.filter(p => parseInt(p.id) !== parseInt(currentUserId));
@@ -42,7 +40,6 @@ const PeopleContent = ({ people }) => {
         }
     }, [people, currentUserId]);
 
-    // Xử lý kết bạn / huỷ kết bạn / chấp nhận kết bạn
     const handleFriendAction = async (type, friendId) => {
         console.log("handleFriendAction called with:", { type, friendId, currentUserId });
 
@@ -51,7 +48,7 @@ const PeopleContent = ({ people }) => {
             return;
         }
 
-        const token = localStorage.getItem("token");
+        const token = sessionStorage.getItem("token");
         if (!token) {
             console.error("❌ Token không tồn tại");
             return;
@@ -77,7 +74,6 @@ const PeopleContent = ({ people }) => {
                 return;
             }
 
-            // Cập nhật UI ngay
             setFriendStatuses(prev => ({
                 ...prev,
                 [friendId]: {
@@ -95,7 +91,6 @@ const PeopleContent = ({ people }) => {
         }
     };
 
-    // Hiển thị nút kết bạn phù hợp theo trạng thái
     const renderFriendButton = (userId) => {
         if (parseInt(userId) === parseInt(currentUserId)) return null;
 

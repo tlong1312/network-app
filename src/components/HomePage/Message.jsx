@@ -7,7 +7,7 @@ const Message = ({ show, onClose, onMinimize }) => {
     const [selectedFriend, setSelectedFriend] = useState(null);
     const [isMinimized, setIsMinimized] = useState(false);
     const messageEndRef = useRef(null);
-    const currentUser = JSON.parse(localStorage.getItem('user')) || {};
+    const currentUser = JSON.parse(sessionStorage.getItem('user')) || {};
 
     useEffect(() => {
         fetchFriends();
@@ -27,7 +27,7 @@ const Message = ({ show, onClose, onMinimize }) => {
 
     const fetchFriends = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = sessionStorage.getItem('token');
             const response = await fetch(`http://localhost:8081/api/friends?userId=${currentUser.id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -48,7 +48,7 @@ const Message = ({ show, onClose, onMinimize }) => {
 
     const fetchConversation = async (senderId, receiverId) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = sessionStorage.getItem('token');
             const response = await fetch(`http://localhost:8081/api/messages/conversation?senderId=${senderId}&receiverId=${receiverId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -69,7 +69,7 @@ const Message = ({ show, onClose, onMinimize }) => {
         if (!newMessage.trim() || !selectedFriend) return;
 
         try {
-            const token = localStorage.getItem('token');
+            const token = sessionStorage.getItem('token');
 
             const params = new URLSearchParams();
             params.append('senderId', currentUser.id);

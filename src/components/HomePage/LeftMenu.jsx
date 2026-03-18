@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import icon from '../../assets/icon/avatar.png';
 import friendIcon from '../../assets/icon/friends.png';
 import settingIcon from '../../assets/icon/setting.png';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const LeftMenu = () => {
-    const user = localStorage.getItem('user');
+    const user = sessionStorage.getItem('user');
     const [showFriendsPopup, setShowFriendsPopup] = useState(false);
     const navigate = useNavigate();
     const fullName = user ? JSON.parse(user).fullName : 'User';
@@ -18,7 +18,7 @@ const LeftMenu = () => {
     useEffect(() => {
         const fetchFriends = async () => {
             try {
-                const token = localStorage.getItem('token');
+                const token = sessionStorage.getItem('token');
                 const response = await fetch(`http://localhost:8081/api/friends?userId=${currentUserId}`, {
                     method: 'GET',
                     headers: {
@@ -47,9 +47,9 @@ const LeftMenu = () => {
     };
 
     const handleLogout = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('role');
-        localStorage.removeItem('user');
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('role');
+        sessionStorage.removeItem('user');
         navigate('/login');
     };
 

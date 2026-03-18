@@ -10,12 +10,10 @@ function SearchPage() {
 
     const [people, setPeople] = useState([]);
     const [posts, setPosts] = useState([]);
-
-    // ✅ Lấy userId từ localStorage (lưu khi login)
-    const currentUserId = localStorage.getItem("userId");
+    const currentUserId = sessionStorage.getItem("userId");
 
     useEffect(() => {
-        const token = localStorage.getItem("token");
+        const token = sessionStorage.getItem("token");
 
         if (query && token) {
             fetch(`http://localhost:8081/api/search?q=${query}`, {

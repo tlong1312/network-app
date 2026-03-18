@@ -12,7 +12,11 @@
 
   <title>Network App</title>
 </head>
-
+<script>
+  if (typeof global === 'undefined') {
+    window.global = window;
+  }
+</script>
 <body>
   <div id="root"></div>
   <script type="module" src="/src/main.jsx"></script>

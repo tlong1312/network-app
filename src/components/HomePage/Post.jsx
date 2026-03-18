@@ -2,14 +2,14 @@ import React, { useState } from 'react'
 
 const Post = (props) => {
 
-    const userString = localStorage.getItem('user');
+    const userString = sessionStorage.getItem('user');
     let avatar
     if (userString) {
         try {
             const userObject = JSON.parse(userString);
             avatar = userObject.avatar;
         } catch (error) {
-            console.error('Error parsing user data from localStorage:', error);
+            console.error('Error parsing user data from sessionStorage:', error);
         }
     }
 
@@ -36,7 +36,7 @@ const Post = (props) => {
 
 
         try {
-            const token = localStorage.getItem('token');
+            const token = sessionStorage.getItem('token');
             const response = await fetch(`http://localhost:8081/api/posts/${postId}/like`, {
                 method: 'PATCH',
                 headers: {
@@ -75,7 +75,7 @@ const Post = (props) => {
         if (comment.trim() !== '') {
 
             try {
-                const token = localStorage.getItem('token');
+                const token = sessionStorage.getItem('token');
                 const response = await fetch(`http://localhost:8081/api/comments/${postId}`, {
                     method: 'POST',
                     headers: {
